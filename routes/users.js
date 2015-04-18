@@ -5,7 +5,7 @@
 var db = require("./db");
 
 /**
- * Gets user project data depending on user tenany type
+ * Gets user project data depending on user tenant type
  */
 exports.getData = function(model, req, res) {
 	var userId = req.param("userId");
@@ -27,6 +27,8 @@ exports.getData = function(model, req, res) {
 			else {
 				console.log(result);
 				if (result.length > 0) {
+					var proj = "projectNaame";
+					console.log(result.$proj);
 					res.send(result);
 				} else
 					res.send({

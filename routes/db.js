@@ -2,7 +2,7 @@
  * New node file
  */
 
-var mongoURL = "mongodb://test:test@ds061611.mongolab.com:61611/cmpe281";
+var mongoURL = "mongodb://username:password@localhost:port/dbname";
 //var collections = [ "users" ];
 var mysql = require('mysql');
 var mongodb = require("mongojs")
