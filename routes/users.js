@@ -4,14 +4,54 @@
 
 var db = require("./db");
 
-exports.getData = function(req, res) {
+/**
+ * Gets user project data depending on user tenany type
+ */
+exports.getData = function(model, req, res) {
 	var userId = req.param("userId");
-	var mongo = db.mongo([ "waterfall" ]);
+	console.log(model);
+	if (!model || model === undefined)
+		res
+				.send({
+					"error" : "Something went wrong. User data doesn't contain any tenant type."
+				});
+	if (model.modelType === "waterfall") {
+		var mongo = db.mongo([ "waterfall" ]);
+		mongo.waterfall.find({
+			"userId" : userId
+		}, function(err, result) {
+			if (err || !result)
+				res.send({
+					"error" : "Something went wrong"
+				});
+			else {
+				console.log(result);
+				if (result.length > 0) {
+					res.send(result);
+				} else
+					res.send({
+						"Login" : "Fail",
+					});
+			}
+		});
+	} else if (model.modelType === "kanbon") {
 
-	db.find({
-		"userId" : userId
-	}, function(err, result) {
-		
-	});
+	} else if (model.modelType === "scrum") {
+
+	} else {
+		res.send({
+			"error" : "This new tenant not yet supported."
+		});
+	}
+
+}
+
+/**
+ * Fetches waterfall tenant type data
+ * 
+ * @param req
+ * @param res
+ */
+function getWaterFallData(req, res) {
 
 }

@@ -2,12 +2,13 @@
  * New node file
  */
 var db = require("./db");
+var userData = require("./users");
 exports.singIn = function(req, res) {
-	var email = req.param("email");
+	var email = req.param("userId");
 	var password = req.param("password");
 	console.log("Got a connection");
 	var input = {
-		"emailId" : email,
+		"userId" : email,
 		"password" : password
 	};
 	var mongo = db.mongo([ "users" ]);
@@ -19,18 +20,15 @@ exports.singIn = function(req, res) {
 			});
 		else {
 			console.log(result);
-			if (result.length > 0)
-				res.send({
-					"Login" : "Success"
-				});
-			else
+			if (result.length > 0) {
+				userData.getData({
+					"modelType" : result[0].modelType
+				}, req, res);
+			} else
 				res.send({
 					"Login" : "Fail",
-					"tasks" : ["1","2",3]
-					
 				});
 		}
 		mongo.close();
 	});
 }
-
