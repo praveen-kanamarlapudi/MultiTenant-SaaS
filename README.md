@@ -1,10 +1,11 @@
 
 
 # MultiTenant
-
+It's a multitenant application which supports tenants like Waterfall, Kanban and Agile(Scrum)
 
 
 ## Usage
+
 
 
 
