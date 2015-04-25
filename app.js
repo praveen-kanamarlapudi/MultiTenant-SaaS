@@ -27,12 +27,13 @@ if ('development' == app.get('env')) {
 }
 
 app.post('/signIn', login.singIn);
-app.post('/updateKanbanCard', users.updateKanbanCard);
-app.put('/updateWaterfallTask', users.updateWaterfallTask);
+app.post('/updateCardStatus', users.updateCardStatus);
+app.put('/updateTaskStatus', users.updateTaskStatus);
 app.put('/addTask', users.addTask);
 app.put('/addCard', users.addCard);
 app.post('/removeProject', users.removeProject);
 app.put('/updateUser', users.updateUser);
+app.put('/createProject', users.createProject);
 
 //app.post('/getData', login.singIn);
 

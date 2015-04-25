@@ -93,7 +93,7 @@ exports.getData = function(model, req, res) {
  * @param req
  * @param res
  */
-exports.updateKanbanCard = function(req, res) {
+exports.updateCardStatus = function(req, res) {
 	var userId = req.param("userId");
 	var projectName = req.param("projectName");
 	var cardId = req.param("cardId");
@@ -130,7 +130,7 @@ exports.updateKanbanCard = function(req, res) {
 /**
  * Updates task details in waterfall model
  */
-exports.updateWaterfallTask = function(req, res) {
+exports.updateTaskStatus = function(req, res) {
 	var userId = req.param("userId");
 	var projectName = req.param("projectName");
 	var taskId = req.param("taskId");
@@ -192,31 +192,48 @@ exports.addTask = function(req, res) {
 		});
 	} else {
 		var mongo = db.mongo;
-		mongo.collection("waterfall").update({
-			"userId" : userId,
+
+		mongo.collection('waterfall').find({
+			'userId' : userId,
 			'projectName' : projectName,
-		}, {
-			$push : {
-				'tasks' : {
-					'taskId' : taskId,
-					'taskName' : taskName,
-					'duration' : duration,
-					'startDate' : startDate,
-					'endDate' : endDate,
-					'predecessors' : predecessors,
-					'resources' : resources,
-					'risks' : risks,
-					'completed' : completed
+			tasks : {
+				$elemMatch : {
+					'taskId' : taskId
 				}
 			}
-		}, function(err, result) {
+		}).toArray(function(err, results) {
+			if (results.length > 0) {
+				res.send({
+					'error' : 'Task with given id already exists.'
+				});
+			} else {
+				mongo.collection("waterfall").update({
+					"userId" : userId,
+					'projectName' : projectName,
+				}, {
+					$push : {
+						'tasks' : {
+							'taskId' : taskId,
+							'taskName' : taskName,
+							'duration' : duration,
+							'startDate' : startDate,
+							'endDate' : endDate,
+							'predecessors' : predecessors,
+							'resources' : resources,
+							'risks' : risks,
+							'completed' : completed
+						}
+					}
+				}, function(err, result) {
 
-			res.send({
-				"result" : result
-			});
+					res.send({
+						"result" : result
+					});
+				});
+			}
 		});
-	}
 
+	}
 };
 
 /**
@@ -245,29 +262,46 @@ exports.addCard = function(req, res) {
 		});
 	} else {
 		var mongo = db.mongo;
-		mongo.collection("kanban").update({
-			"userId" : userId,
+		mongo.collection('kanban').find({
+			'userId' : userId,
 			'projectName' : projectName,
-		}, {
-			$push : {
-				'cards' : {
-					'cardId' : cardId,
-					'name' : name,
-					'duration' : duration,
-					'startDate' : startDate,
-					'endDate' : endDate,
-					'predecessors' : predecessors,
-					'resources' : resources,
-					'risks' : risks,
-					'status' : status
+			cards : {
+				$elemMatch : {
+					'cardId' : cardId
 				}
 			}
-		}, function(err, result) {
+		}).toArray(function(err, results) {
+			if (results.length > 0) {
+				res.send({
+					'error' : 'Card with given id already exists.'
+				});
+			} else {
+				mongo.collection("kanban").update({
+					"userId" : userId,
+					'projectName' : projectName,
+				}, {
+					$push : {
+						'cards' : {
+							'cardId' : cardId,
+							'name' : name,
+							'duration' : duration,
+							'startDate' : startDate,
+							'endDate' : endDate,
+							'predecessors' : predecessors,
+							'resources' : resources,
+							'risks' : risks,
+							'status' : status
+						}
+					}
+				}, function(err, result) {
 
-			res.send({
-				"result" : result
-			});
+					res.send({
+						"result" : result
+					});
+				});
+			}
 		});
+
 	}
 };
 /**
@@ -320,5 +354,32 @@ exports.updateUser = function(req, res) {
 			});
 		});
 	}
+}
 
+/**
+ * Creates a project of tenant type.
+ */
+exports.createProject = function(req, res) {
+	var userId = req.param('userId');
+	var projectName = req.param('projectName');
+	var projectDescription = req.param('projectDescription');
+	var modelType = req.param('modelType');
+	var taskType;
+	if (modelType === 'waterfall') {
+		taskType = 'tasks';
+	} else if (modelType === 'scrum') {
+		taskType = 'userStiries';
+	} else if (modelType === 'kanban') {
+		taskType = 'cards';
+	}
+	var mongo = db.mongo;
+	mongo.collection(modelType).insert({
+		'userId' : userId,
+		'modelType' : modelType,
+		'projectName' : projectName,
+		'projectDescription' : projectDescription,
+		taskType : []
+	}, function(err, results) {
+		res.send("results", results);
+	});
 }
