@@ -1,10 +1,10 @@
-
 /**
  * Module dependencies.
  */
 
 var express = require('express')
   , login = require('./routes/login')
+  , users = require('./routes/users')
   , http = require('http')
   , path = require('path');
 
@@ -28,7 +28,9 @@ if ('development' == app.get('env')) {
 
 
 app.post('/signIn', login.singIn);
-app.post('/getData', login.singIn);
+app.post('/updateKanbanCard', users.updateKanbanCard);
+app.post('/updateWaterfallTask', users.updateWaterfallTask);
+//app.post('/getData', login.singIn);
 
 
 http.createServer(app).listen(app.get('port'), function(){

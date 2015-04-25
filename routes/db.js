@@ -2,23 +2,19 @@
  * New node file
  */
 
-var mongoURL = "mongodb://username:password@localhost:port/dbname";
-//var collections = [ "users" ];
-var mysql = require('mysql');
-var mongodb = require("mongojs")
+var mongoURL = "mongodb://test:test@ds061611.mongolab.com:61611/cmpe281";
+// //var collections = [ "users" ];
+// //var mysql = require('mysql');
+// var mongo = require('mongodb');
+// var MongoClient = mongo.MongoClient
+//
+// exports.mongoClient = MongoClient;
 
-exports.mongo = function(collection) {
-	return mongodb.connect(mongoURL, collection);
-//	return mongodb;
-}
+var MongoClient = require('mongodb').MongoClient, format = require('util').format;
 
-exports.sql = function() {
-	var dbCon = mysql.createConnection({
-		host : 'localhost',
-		user : 'root',
-		password : '',
-		database : 'test'
-	});
-	dbCon.connect();
-	return dbCon;
-}
+MongoClient.connect(mongoURL, function(err, mongo) {
+	if (err) {
+		throw err;
+	}
+	exports.mongo = mongo;
+});

@@ -11,24 +11,19 @@ exports.singIn = function(req, res) {
 		"userId" : email,
 		"password" : password
 	};
-	var mongo = db.mongo([ "users" ]);
-	mongo.users.find(input, function(err, result) {
+	var mongo = db.mongo;
+	mongo.collection("users").findOne(input, function(err, result) {
 		console.log(result);
 		if (err || !result)
 			res.send({
-				"error" : "Something went wrong"
+				"error" : "Login Failed"
 			});
 		else {
 			console.log(result);
-			if (result.length > 0) {
-				userData.getData({
-					"modelType" : result[0].modelType
-				}, req, res);
-			} else
-				res.send({
-					"Login" : "Fail",
-				});
+			userData.getData({
+				"modelType" : result.modelType
+			}, req, res);
 		}
-		mongo.close();
+		// mongo.close();
 	});
 }
