@@ -1,5 +1,5 @@
 /**
- * Made some changes
+ * @author Praveen K
  */
 
 var db = require("./db");
@@ -127,38 +127,198 @@ exports.updateKanbanCard = function(req, res) {
 	});
 };
 
+/**
+ * Updates task details in waterfall model
+ */
 exports.updateWaterfallTask = function(req, res) {
 	var userId = req.param("userId");
 	var projectName = req.param("projectName");
-	var cardId = req.param("taskId");
+	var taskId = req.param("taskId");
 	var completed = req.param("completed");
 
-	if (!userId || !projectName || !cardId || !completed
+	if (!userId || !projectName || !taskId || !completed
 			|| userId === undefined || projectName === undefined
-			|| cardId === undefined || completed === undefined) {
+			|| taskId === undefined || completed === undefined) {
 		res.send({
-			"error" : "Unsufficient details"
+			"error" : "Insufficient details"
+		});
+	} else {
+		var mongo = db.mongo;
+		mongo.collection("waterfall").update({
+			"userId" : userId,
+			'projectName' : projectName,
+			tasks : {
+				$elemMatch : {
+					"taskId" : taskId
+				}
+			}
+		}, {
+			$set : {
+				'tasks.$.completed' : completed
+			}
+		}, function(err, result) {
+
+			res.send({
+				"result" : result
+			});
 		});
 	}
-	var mongo = db.mongo;
-	mongo.collection("waterfall").update({
-		"userId" : userId,
-		'projectName' : projectName,
-		tasks : {
-			$elemMatch : {
-				"taskId" : cardId
-			}
-		}
-	}, {
-		$set : {
-			'tasks.$.completed' : completed
-		}
-	}, function(err, result) {
-
-		res.send({
-			"result" : result
-		});
-	});
 };
 
+/**
+ * Add task in waterfall model.
+ */
+exports.addTask = function(req, res) {
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var taskId = req.param("taskId");
+	var taskName = req.param("taskName");
+	var duration = req.param("duration");
+	var startDate = req.param("startDate");
+	var endDate = req.param("endDate");
+	var predecessors = req.param("predecessors");
+	var resources = req.param("resources");
+	var risks = req.param("risks");
+	var completed = req.param("completed");
 
+	if (!userId || !projectName || !taskId || !duration || !startDate
+			|| !endDate || !completed || userId === undefined
+			|| projectName === undefined || taskId === undefined
+			|| duration === undefined || duration === undefined
+			|| startDate === undefined || endDate === undefined
+			|| completed === undefined) {
+		res.send({
+			"error" : "Insufficient details"
+		});
+	} else {
+		var mongo = db.mongo;
+		mongo.collection("waterfall").update({
+			"userId" : userId,
+			'projectName' : projectName,
+		}, {
+			$push : {
+				'tasks' : {
+					'taskId' : taskId,
+					'taskName' : taskName,
+					'duration' : duration,
+					'startDate' : startDate,
+					'endDate' : endDate,
+					'predecessors' : predecessors,
+					'resources' : resources,
+					'risks' : risks,
+					'completed' : completed
+				}
+			}
+		}, function(err, result) {
+
+			res.send({
+				"result" : result
+			});
+		});
+	}
+
+};
+
+/**
+ * Add task in waterfall model.
+ */
+exports.addCard = function(req, res) {
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var cardId = req.param("cardId");
+	var name = req.param("name");
+	var duration = req.param("duration");
+	var startDate = req.param("startDate");
+	var endDate = req.param("endDate");
+	var predecessors = req.param("predecessors");
+	var resources = req.param("resources");
+	var risks = req.param("risks");
+	var status = req.param("status");
+
+	if (!userId || !projectName || !cardId || !duration || !startDate
+			|| !endDate || !status || userId === undefined
+			|| projectName === undefined || cardId === undefined
+			|| duration === undefined || startDate === undefined
+			|| endDate === undefined || status === undefined) {
+		res.send({
+			"error" : "Insufficient details"
+		});
+	} else {
+		var mongo = db.mongo;
+		mongo.collection("kanban").update({
+			"userId" : userId,
+			'projectName' : projectName,
+		}, {
+			$push : {
+				'cards' : {
+					'cardId' : cardId,
+					'name' : name,
+					'duration' : duration,
+					'startDate' : startDate,
+					'endDate' : endDate,
+					'predecessors' : predecessors,
+					'resources' : resources,
+					'risks' : risks,
+					'status' : status
+				}
+			}
+		}, function(err, result) {
+
+			res.send({
+				"result" : result
+			});
+		});
+	}
+};
+/**
+ * Removes project from any type of tenant.
+ */
+exports.removeProject = function(req, res) {
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var modelType = req.param("modelType");
+
+	var mongo = db.mongo;
+	mongo.collection(modelType).remove({
+		'userId' : userId,
+		'projectName' : projectName
+	}, function(err, results) {
+		res.send({
+			'results' : results
+		});
+	});
+}
+
+/**
+ * Updates user details.
+ */
+exports.updateUser = function(req, res) {
+	var userId = req.param("userId");
+	var modelType = req.param("modelType");
+	var firstName = req.param("firstName");
+	var lastName = req.param("lastName");
+
+	if (!userId || !modelType || !firstName || !lastName
+			|| userId === undefined || modelType === undefined
+			|| firstName === undefined || lastName === undefined) {
+		res.send({
+			"error" : "In sufficient data"
+		});
+	} else {
+		var mongo = db.mongo;
+		mongo.collection("users").update({
+			'userId' : userId
+		}, {
+			$set : {
+				'firstName' : firstName,
+				'lastName' : lastName,
+				'modelType' : modelType
+			}
+		}, function(err, result) {
+			res.send({
+				'result' : result
+			});
+		});
+	}
+
+}

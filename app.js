@@ -26,13 +26,16 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-
 app.post('/signIn', login.singIn);
 app.post('/updateKanbanCard', users.updateKanbanCard);
-app.post('/updateWaterfallTask', users.updateWaterfallTask);
+app.put('/updateWaterfallTask', users.updateWaterfallTask);
+app.put('/addTask', users.addTask);
+app.put('/addCard', users.addCard);
+app.post('/removeProject', users.removeProject);
+app.put('/updateUser', users.updateUser);
+
 //app.post('/getData', login.singIn);
 
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get('port'), function() {
+	console.log('Express server listening on port ' + app.get('port'));
 });
