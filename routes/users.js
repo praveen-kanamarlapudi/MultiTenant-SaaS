@@ -93,17 +93,24 @@ exports.getData = function(model, req, res) {
  * @param req
  * @param res
  */
-exports.updateCardStatus = function(req, res) {
+exports.updateCard = function(req, res) {
 	var userId = req.param("userId");
 	var projectName = req.param("projectName");
 	var cardId = req.param("cardId");
 	var status = req.param("status");
 
-	if (!userId || !projectName || !cardId || !status || userId === undefined
-			|| projectName === undefined || cardId === undefined
-			|| status === undefined) {
+	var name = req.param("name");
+	var duration = req.param("duration");
+	var startDate = req.param("startDate");
+	var endDate = req.param("endDate");
+	var predecessors = req.param("predecessors");
+	var resources = req.param("resources");
+	var risks = req.param("risks");
+
+	if (!userId || !projectName || !cardId || userId === undefined
+			|| projectName === undefined || cardId === undefined) {
 		res.send({
-			"error" : "Unsufficient details"
+			"error" : "In Sufficient details"
 		});
 	}
 	var mongo = db.mongo;
@@ -117,7 +124,14 @@ exports.updateCardStatus = function(req, res) {
 		}
 	}, {
 		$set : {
-			'cards.$.status' : status
+			'cards.$.name' : name,
+			'cards.$.duration' : duration,
+			'cards.$.startDate' : startDate,
+			'cards.$.endDate' : endDate,
+			'cards.$.risks' : risks,
+			'cards.$.status' : status,
+			'cards.$.predecessors' : predecessors,
+			'cards.$.resources' : resources
 		}
 	}, function(err, result) {
 
@@ -130,15 +144,21 @@ exports.updateCardStatus = function(req, res) {
 /**
  * Updates task details in waterfall model
  */
-exports.updateTaskStatus = function(req, res) {
+exports.updateTask = function(req, res) {
 	var userId = req.param("userId");
 	var projectName = req.param("projectName");
 	var taskId = req.param("taskId");
+	var taskName = req.param("taskName");
+	var duration = req.param("duration");
+	var startDate = req.param("startDate");
+	var endDate = req.param("endDate");
+	var predecessors = req.param("predecessors");
+	var resources = req.param("resources");
+	var risks = req.param("risks");
 	var completed = req.param("completed");
 
-	if (!userId || !projectName || !taskId || !completed
-			|| userId === undefined || projectName === undefined
-			|| taskId === undefined || completed === undefined) {
+	if (!userId || !projectName || !taskId || userId === undefined
+			|| projectName === undefined || taskId === undefined) {
 		res.send({
 			"error" : "Insufficient details"
 		});
@@ -154,6 +174,13 @@ exports.updateTaskStatus = function(req, res) {
 			}
 		}, {
 			$set : {
+				'tasks.$.taskName' : taskName,
+				'tasks.$.duration' : duration,
+				'tasks.$.startDate' : startDate,
+				'tasks.$.endDate' : endDate,
+				'tasks.$.risks' : risks,
+				'tasks.$.predecessors' : predecessors,
+				'tasks.$.resources' : resources,
 				'tasks.$.completed' : completed
 			}
 		}, function(err, result) {

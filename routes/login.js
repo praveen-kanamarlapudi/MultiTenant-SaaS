@@ -3,6 +3,7 @@
  */
 var db = require("./db");
 var userData = require("./users");
+
 exports.singIn = function(req, res) {
 	var email = req.param("userId");
 	var password = req.param("password");
@@ -20,10 +21,18 @@ exports.singIn = function(req, res) {
 			});
 		else {
 			console.log(result);
+			req.session.userId = email;
+			req.session.modelType = modelType;
 			userData.getData({
 				"modelType" : result.modelType
 			}, req, res);
 		}
 		// mongo.close();
 	});
+}
+
+exports.signOut = function(req,res){
+	if(req.session){
+		req.session.destroy();
+	}
 }
