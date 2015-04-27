@@ -98,14 +98,14 @@ exports.updateCard = function(req, res) {
 	var projectName = req.param("projectName");
 	var cardId = req.param("cardId");
 	var status = req.param("status");
-
 	var name = req.param("name");
 	var duration = req.param("duration");
 	var startDate = req.param("startDate");
-	var endDate = req.param("endDate");
-	var predecessors = req.param("predecessors");
+	var endDate = req.param("finishDate");
+	var comments = req.param("comments");
 	var resources = req.param("resources");
-	var risks = req.param("risks");
+	// var risks = req.param("risks");
+	var teamSize = req.param("teamSize");
 
 	if (!userId || !projectName || !cardId || userId === undefined
 			|| projectName === undefined || cardId === undefined) {
@@ -128,9 +128,9 @@ exports.updateCard = function(req, res) {
 			'cards.$.duration' : duration,
 			'cards.$.startDate' : startDate,
 			'cards.$.endDate' : endDate,
-			'cards.$.risks' : risks,
+			'cards.$.teamSize' : teamSize,
 			'cards.$.status' : status,
-			'cards.$.predecessors' : predecessors,
+			'cards.$.comments' : comments,
 			'cards.$.resources' : resources
 		}
 	}, function(err, result) {
@@ -272,18 +272,17 @@ exports.addCard = function(req, res) {
 	var cardId = req.param("cardId");
 	var name = req.param("name");
 	var duration = req.param("duration");
-	var startDate = req.param("startDate");
+	var description = req.param("description");
 	var endDate = req.param("endDate");
 	var predecessors = req.param("predecessors");
 	var resources = req.param("resources");
 	var risks = req.param("risks");
 	var status = req.param("status");
 
-	if (!userId || !projectName || !cardId || !duration || !startDate
-			|| !endDate || !status || userId === undefined
-			|| projectName === undefined || cardId === undefined
-			|| duration === undefined || startDate === undefined
-			|| endDate === undefined || status === undefined) {
+	if (!userId || !projectName || !cardId || !description || !status || !name
+			|| userId === undefined || projectName === undefined
+			|| cardId === undefined || description === undefined
+			|| status === undefined || name === undefined) {
 		res.send({
 			"error" : "Insufficient details"
 		});
@@ -312,7 +311,7 @@ exports.addCard = function(req, res) {
 							'cardId' : cardId,
 							'name' : name,
 							'duration' : duration,
-							'startDate' : startDate,
+							'startDate' : description,
 							'endDate' : endDate,
 							'predecessors' : predecessors,
 							'resources' : resources,
@@ -410,3 +409,12 @@ exports.createProject = function(req, res) {
 		res.send("results", results);
 	});
 }
+
+/**
+ * @TODO 1. Add Card validations  
+ * 2.Update status seperate API
+ * 3. Project status --> each status type and curresponding no of cards.
+ * 4. getCard details based on card status type. (each card type and array of card deatils.)
+ * 
+ * 
+ */
