@@ -40,6 +40,10 @@ app.put('/updateUser', users.updateUser);
 app.put('/createProject', users.createProject);
 app.put('/updateTask', users.updateTask);
 app.put('/updateCard', users.updateCard);
+app.put('/updateCardStatus', users.updateCardStatus);
+app.put('/updateTaskStatus', users.updateTaskStatus);
+app.post('/getCardsOnStatus', users.getCardsOnStatus);
+
 
 //app.post('/getData', login.singIn);
 
