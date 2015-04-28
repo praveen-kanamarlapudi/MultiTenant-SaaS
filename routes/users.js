@@ -87,6 +87,70 @@ exports.getData = function(model, req, res) {
 
 };
 
+//exports.getCardsOnStatus = function(req,res){
+//	var mongo = db.mongo;
+//	var userId = req.param("userId");
+//	var projectName = req.param("projectName");
+//	var status = req.param("status");
+//	
+//	mongo.collection("kanban").find({
+//		"userId" : userId,
+//		'projectName' : projectName,
+//		cards : {
+//			$elemMatch : {
+//				"status" : status
+//			}
+//		}
+//	}).toArray(function(err, result) {
+//		if (err || !result)
+//			res.send({
+//				"error" : "Something went wrong"
+//			});
+//		else {
+//			console.log(result);
+//			if (result.length > 0) {
+//				var proj = "projectNaame";
+//				console.log(result);
+//				res.send(result[0].cards);
+//			} else
+//				res.send({
+//					"Login" : "Fail",
+//				});
+//		}
+//	});
+//	
+//}
+
+//exports.getCardsOnStatus = function(req,res){
+//	var mongo = db.mongo;
+//	var userId = req.param("userId");
+//	var projectName = req.param("projectName");
+//	var status = req.param("status");
+//	
+//	mongo.collection("kanban").find({
+//		"userId" : userId,
+//		'projectName' : projectName,
+//		"cards.status" : status
+//	}).toArray(function(err, result) {
+//		if (err || !result)
+//			res.send({
+//				"error" : "Something went wrong"
+//			});
+//		else {
+//			console.log(result);
+//			if (result.length > 0) {
+//				var proj = "projectNaame";
+//				console.log(result);
+//				res.send(result[0].cards);
+//			} else
+//				res.send({
+//					"Login" : "Fail",
+//				});
+//		}
+//	});
+//	
+//}
+
 /**
  * Update card details for kanban
  * 
@@ -141,6 +205,47 @@ exports.updateCard = function(req, res) {
 	});
 };
 
+
+/**
+ * Update card details for kanban
+ * 
+ * @param req
+ * @param res
+ */
+exports.updateCardStatus = function(req, res) {
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var cardId = req.param("cardId");
+	var status = req.param("status");
+
+	if (!userId || !projectName || !cardId || !status || userId === undefined
+			|| projectName === undefined || cardId === undefined || status === undefined) {
+		res.send({
+			"error" : "In Sufficient details"
+		});
+	}
+	var mongo = db.mongo;
+	mongo.collection("kanban").update({
+		"userId" : userId,
+		'projectName' : projectName,
+		cards : {
+			$elemMatch : {
+				"cardId" : cardId
+			}
+		}
+	}, {
+		$set : {
+			'cards.$.status' : status,
+		}
+	}, function(err, result) {
+
+		res.send({
+			"result" : result
+		});
+	});
+};
+
+
 /**
  * Updates task details in waterfall model
  */
@@ -185,6 +290,43 @@ exports.updateTask = function(req, res) {
 			}
 		}, function(err, result) {
 
+			res.send({
+				"result" : result
+			});
+		});
+	}
+};
+
+
+/**
+ * Updates task details in waterfall model
+ */
+exports.updateTaskStatus = function(req, res) {
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var taskId = req.param("taskId");
+	var completed = req.param("completed");
+
+	if (!userId || !projectName || !taskId || !completed || userId === undefined
+			|| projectName === undefined || taskId === undefined || completed === undefined) {
+		res.send({
+			"error" : "Insufficient details"
+		});
+	} else {
+		var mongo = db.mongo;
+		mongo.collection("waterfall").update({
+			"userId" : userId,
+			'projectName' : projectName,
+			tasks : {
+				$elemMatch : {
+					"taskId" : taskId
+				}
+			}
+		}, {
+			$set : {
+				'tasks.$.completed' : completed
+			}
+		}, function(err, result) {
 			res.send({
 				"result" : result
 			});
@@ -409,6 +551,8 @@ exports.createProject = function(req, res) {
 		res.send("results", results);
 	});
 }
+
+
 
 /**
  * @TODO 1. Add Card validations  
