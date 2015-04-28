@@ -121,35 +121,77 @@ exports.getData = function(model, req, res) {
 //	
 //}
 
-//exports.getCardsOnStatus = function(req,res){
-//	var mongo = db.mongo;
-//	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
-//	var status = req.param("status");
-//	
-//	mongo.collection("kanban").find({
-//		"userId" : userId,
-//		'projectName' : projectName,
-//		"cards.status" : status
-//	}).toArray(function(err, result) {
-//		if (err || !result)
-//			res.send({
-//				"error" : "Something went wrong"
-//			});
-//		else {
-//			console.log(result);
-//			if (result.length > 0) {
-//				var proj = "projectNaame";
-//				console.log(result);
-//				res.send(result[0].cards);
-//			} else
-//				res.send({
-//					"Login" : "Fail",
-//				});
-//		}
-//	});
-//	
-//}
+exports.getCardsOnStatus = function(req,res){
+	var mongo = db.mongo;
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var status = req.param("status");
+	
+	mongo.collection("kanban").find({
+		"userId" : userId,
+		'projectName' : projectName},
+		{
+			cards:{
+				 $elemMatch : {
+			            'status' : status
+			        }
+			}
+		
+	}).toArray(function(err, result) {
+		if (err || !result)
+			res.send({
+				"error" : "Something went wrong"
+			});
+		else {
+			console.log(result);
+			if (result.length > 0) {
+				var proj = "projectNaame";
+				console.log(result);
+				res.send(result[0].cards);
+			} else
+				res.send({
+					"Error" : "No records in requested status",
+				});
+		}
+	});
+	
+}
+
+exports.getTasksOnStatus = function(req,res){
+	var mongo = db.mongo;
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var completed = req.param("completed");
+	
+	mongo.collection("waterfall").find({
+		"userId" : userId,
+		'projectName' : projectName},
+		{
+			tasks:{
+				 $elemMatch : {
+			            'completed' : completed
+			        }
+			}
+		
+	}).toArray(function(err, result) {
+		if (err || !result)
+			res.send({
+				"error" : "Something went wrong"
+			});
+		else {
+			console.log(result);
+			if (result.length > 0) {
+				var proj = "projectNaame";
+				console.log(result);
+				res.send(result[0].cards);
+			} else
+				res.send({
+					"Error" : "No records in requested status",
+				});
+		}
+	});
+	
+}
 
 /**
  * Update card details for kanban
