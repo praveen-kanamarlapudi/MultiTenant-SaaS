@@ -46,6 +46,10 @@ app.put('/updateTaskStatus', users.updateTaskStatus);
 app.post('/getTasksOnStatus', users.getTasksOnStatus);
 app.get('/getTaskStatus', users.getTasksOnStatus);
 
+app.get('/create',users.create);
+app.get('/edit',users.edit);
+app.get('/view',users.view);
+
 app.get('/', login.singIn);
 //app.post('/getData', login.singIn);
 

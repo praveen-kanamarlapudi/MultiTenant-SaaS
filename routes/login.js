@@ -7,8 +7,8 @@ var userData = require("./users");
 exports.singIn = function(req, res) {
 //	var email = req.param("userId");
 //	var password = req.param("password");
-	var email = "g.apoorvareddy@gmail.com";
-	var password = "apoorva";
+	var email = "k.praveen@outlook.com";
+	var password = "kpraveen";
 	console.log("Got a connection");
 	var input = {
 		"userId" : email,
@@ -30,7 +30,7 @@ exports.singIn = function(req, res) {
 			//get projects - define new API to get projects for that user
 			//if there are projects load the project display page with project details along with create project option
 			//if no projects - the same project details page will be loaded but empty with only create project option
-			
+			console.log(result.modelType);
 			//TBD move getData to the project details page
 			userData.getData({
 				"modelType" : result.modelType

@@ -66,8 +66,11 @@ function getCards(project,req,res)
 
 exports.getData = function(model, req, res) 
 {
+	
+	console.log('Getting user data from db');
 	//var userId = req.param("userId");
-	var userId = "g.apoorvareddy@gmail.com";
+//	var userId = "g.apoorvareddy@gmail.com";
+	var userId = "k.praveen@outlook.com";
 	//console.log(model);
 	if (!model || model === undefined)
 	{
@@ -86,8 +89,10 @@ exports.getData = function(model, req, res)
 				console.log(result);
 				if (result.length > 0) 
 				{
+					console.log('Got data from db..');
 					console.log(result);
 					res.send(result);
+//					res.render('view',{'data':result});s
 				} 
 				else
 				{
@@ -329,7 +334,8 @@ exports.updateTask = function(req, res) {
 	var resources = req.param("resources");
 	var risks = req.param("risks");
 	var completed = req.param("completed");
-
+	
+	
 	if (!userId || !projectName || !taskId || userId === undefined
 			|| projectName === undefined || taskId === undefined) {
 		res.send({
@@ -623,7 +629,15 @@ exports.createProject = function(req, res) {
 	});
 }
 
-
+exports.create = function(req,res){
+	res.render('create');
+}
+exports.edit = function(req,res){
+	res.render('edit');
+}
+exports.view = function(req,res){
+	res.render('view');
+}
 
 /**
  * @TODO 1. Add Card validations  
