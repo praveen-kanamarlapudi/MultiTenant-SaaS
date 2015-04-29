@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workforce Management System</title>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/css/local.css" />
+
+    <script type="text/javascript" src="/stylesheets/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/stylesheets/bootstrap/js/bootstrap.min.js"></script>   
+    
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>     
+</head>
+<body ng-app="" ng-controller="viewTasksController">
+
+    <div id="wrapper">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Back to Admin</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li><a href="./"><i class="fa fa-bullseye"></i> Dashboard</a></li>
+                    
+                    <li  class="active"><a href="./searchGuards"><i class="fa fa-tasks"></i> Tasks</a></li>
+                    
+                    <li><a href="./searchClients"><i class="fa fa-globe"></i> Status</a></li>
+                    <li><a href="./displaySchedule? Not sure"><i class="fa fa-list-ol"></i> Schedule</a></li>
+                    <li><a href="./searchBuildings"><i class="fa fa-globe"></i> Buildings</a></li>                    
+                </ul>
+                <ul class="nav navbar-nav navbar-right navbar-user">                    
+                    <li><a href="./logout"><i class="fa fa-power-off"></i> Log Out</a></li>                       
+                </ul>
+            </div>
+        </nav>
+
+          
+
+
+
+    <div class="row">
+
+
+        <div class="modal-body" ng-show="showMode">           
+            <div class="row text-center">
+                <h2> Task Details </h2>
+            </div>
+        </div>
+        <br>  
+
+    <div class="col-md-6" ng-repeat="task in tasks"> 
+        <div class="scrollit" ng-show = 'visible[task.taskId]'>
+            <table border="1">
+                
+                <div class="content">                   
+                    <form class="form-horizontal">                      
+                        <fieldset>    
+                            <div class="form-group">      
+                                <label class="col-md-5">
+                                    Task ID:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.taskId}}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">      
+                                <label class="col-md-5">
+                                    Task Name:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.taskName}}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">      
+                                <label class="col-md-5">
+                                    Duration:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.duration}}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-5">
+                                    Start Date:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.startDate}}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-5">
+                                    End Date:
+                                </label>
+                                <div class="col-md-6">                
+                                    <p class="form-control-static">{{task.endDate}}</p>                        
+                                </div>
+                            </div>
+
+                            <div class="form-group">      
+                                <label class="col-md-5">
+                                    Predecessors:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.predecessors}}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">      
+                                <label class="col-md-5">
+                                    Resources allocated:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.resources}}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">      
+                                <label class="col-md-5">
+                                    Risks:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.risks}}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">      
+                                <label class="col-md-5">
+                                    % Completed:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.completed}}</p>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div class="row"> 
+                    <label class='col-md-1'></label>
+                    <div class="col-md-3"> 
+                        <button type="button" class="btn btn-primary" ng-click="editTask(task.taskId)">
+                            Edit Client
+                        </button>
+                    </div>
+                    <div class="col-md-2"> 
+                        <button type="button" class="btn btn-danger" ng-click ="deleteTask(task.taskId)">
+                            Delete Client
+                        </button>
+                    </div> 
+                </div>
+
+            </table>
+        </div>
+
+         <div id="create" ng-hide="visible[task.taskId]">            
+            <div class="row text-center">
+                    <h2>Edit Task</h2>
+            </div>
+            <div class="col-md-10 container">                           
+                <div class="content">                   
+                    <form class="form-horizontal">                      
+                        <fieldset>    
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Task ID:
+                                </label>
+                                <div class="col-md-6">
+                                    <p class="form-control-static">{{task.taskId}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Task Name:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="task.taskName">
+                                </div>
+                            </div>
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Duration:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control"  ng-model="task.duration"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3">
+                                    Start Date:
+                                </label>
+                                <div class="col-md-6">                
+                                    <div id='startDate'>
+                                        <input type='date' class="form-control" ng-model="task.startDate"/>
+                                    </div>                        
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-md-3">
+                                    End Date:
+                                </label>
+                                <div class="col-md-6">                
+                                    <div id='endDate'>
+                                        <input type='date' class="form-control" ng-model="task.endDate"/>
+                                    </div>                        
+                                </div>
+                            </div>  
+                            
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Predecessors for this task:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="task.predecessors"/>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Resources allocated to this task:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="task.resources"/>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Risks
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="task.risks"/>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    % Completed
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="task.completed"/>
+                                </div>
+                            </div>
+
+                            
+                            <div class="row text-center">
+                        
+                            <button type="submit" class="btn btn-info" ng-click="saveTask(task)">
+                                Save changes
+                            </button>
+                            <button class="btn btn-warning" ng-click = "visible[task.taskId] = !visible[task.taskId]">
+                                Cancel
+                            </button>
+                            
+                        </fieldset>
+                    </form> 
+                </div>
+            </div>                  
+        </div>
+    </div>
+
+
+</div>
+
+
+</div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+    function viewTasksController($scope,$http){
+        $scope.tasks=[];
+        $scope.visible = [];
+        $scope.getCall = function(){
+            $http({
+                method : 'get',
+                url : '/'
+            }).success(function(res){
+                console.log(res[0]);
+                if(res === undefined || res.length <1){
+                    alert('Unable to get the data');
+                } else {
+                    $scope.tasks = res[0].tasks;
+                    console.log($scope.tasks);
+                    for(var i=0; i<$scope.tasks.length;i++){
+                        $scope.visible[$scope.tasks[i].taskId] = true;
+                    }
+                }
+            })
+        }
+        
+        $scope.editTask = function(taskId){
+            $scope.visible[taskId]=!$scope.visible[taskId];
+        }
+
+        $scope.saveTask = function(task){
+            task.userId = 'k.praveen@outlook.com';
+            task.projectName = 'Test1'
+            console.log(task);
+
+            $http({
+                method : 'PUT',
+                url : '/updateTask',
+                data : task
+            }).success(function(res){
+                console.log(res);
+                if(res.status === 'Failed'){
+                    alert(res.error);
+                } else {
+                    alert('Saved successfully.');
+                    $scope.visible[task.taskId]=!$scope.visible[task.taskId];
+                }
+            })
+        }
+
+        $scope.getCall();
+
+
+        
+    }
+
+
+
+</script>
+</html>
