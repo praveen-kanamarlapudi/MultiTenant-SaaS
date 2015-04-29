@@ -1,0 +1,44 @@
+html {
+ height:100%;
+ margin:0; padding:0;
+}
+body {
+ margin:0; padding:0;
+ height:100%;
+ font-family:'Open Sans';
+ font-size:13px;
+ color:#393939;
+}
+
+.tbl { display:table; content:''; clear:both; width:100%; }
+
+h1, h2, h3, h4, h5, h6 { font-family:'Open Sans';}
+
+/* LAYOUT */
+.container {  width:100%; height:100%; background:#FFFFFF; display:table; content: ''; clear:both; margin:0; padding:0; }
+
+.top-container { display:table-row; width:100%; height:100px; vertical-align:top;}
+.bot-container { display:table-row; width:100%; height:100%; vertical-align:top;}
+
+.container .top { width:100%;display:table; content:''; clear:both;height:100px;background: url('../img/bg.png'); }
+.container .top .logo { display:table-cell; width:200px; height:100px; vertical-align:middle; text-align:center; }
+.container .top .nav { display:table-cell;  }
+.bot { display:table;content:'';clear:both; width:100%; height:auto; }
+.bot .sidebar { display:table-cell; width:200px;  background:#F3F3F3 !important; box-shadow: inset -10px 0px 20px -10px #C6C6C6 !important; vertical-align:top; }
+.bot-cell { width:100%; height:100%; display:table-cell; }
+
+
+
+
+
+/* -----  OVERRIDES ----- */
+
+.table thead { background: #f2f2f2; border-top: 1px solid #CCC;border-left: 1px solid #CCC;border-right: 1px solid #CCC; }
+.table tbody { border-bottom: 1px solid #CCC;border-left: 1px solid #CCC;border-right: 1px solid #CCC; }
+.table tbody tr td { border-right: 1px solid #DDDDDD; }
+.table tbody tr td:last-child { border-right: 0px; }
+td.center { text-align:center; }
+.pagination > li.active > a { background: #7DB4D8 !important; border-color: #73A8C6 !important; }
+
+/* ----- FORM OVERRIDES ----- */
+
