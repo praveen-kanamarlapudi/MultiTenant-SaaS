@@ -334,7 +334,8 @@ exports.updateTask = function(req, res) {
 	var resources = req.param("resources");
 	var risks = req.param("risks");
 	var completed = req.param("completed");
-	
+	predecessors = predecessors.split(',');
+	console.log(predecessors);
 	
 	if (!userId || !projectName || !taskId || userId === undefined
 			|| projectName === undefined || taskId === undefined) {
