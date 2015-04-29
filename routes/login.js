@@ -5,10 +5,12 @@ var db = require("./db");
 var userData = require("./users");
 
 exports.singIn = function(req, res) {
-//	var email = req.param("userId");
-//	var password = req.param("password");
-	var email = "k.praveen@outlook.com";
-	var password = "kpraveen";
+	//var email = req.param("userId");
+    //var password = req.param("password");
+    
+	var email = "g.apoorvareddy@gmail.com";
+	var password = "apoorva";
+    
 	console.log("Got a connection");
 	var input = {
 		"userId" : email,
