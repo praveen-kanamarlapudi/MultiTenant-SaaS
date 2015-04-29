@@ -44,6 +44,7 @@ app.put('/updateCardStatus', users.updateCardStatus);
 app.put('/updateTaskStatus', users.updateTaskStatus);
 app.post('/getCardsOnStatus', users.getCardsOnStatus);
 app.post('/getTasksOnStatus', users.getTasksOnStatus);
+app.get('/getTaskStatus', users.getTasksOnStatus);
 
 //app.post('/getData', login.singIn);
 
