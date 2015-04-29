@@ -34,17 +34,18 @@ app.post('/signOut', login.signOut);
 //app.post('/updateCardStatus', users.updateCardStatus);
 //app.put('/updateTaskStatus', users.updateTaskStatus);
 app.put('/addTask', users.addTask);
-app.put('/addCard', users.addCard);
+app.post('/addCard', users.addCard);
 app.post('/removeProject', users.removeProject);
 app.put('/updateUser', users.updateUser);
 app.put('/createProject', users.createProject);
 app.put('/updateTask', users.updateTask);
-app.put('/updateCard', users.updateCard);
-app.put('/updateCardStatus', users.updateCardStatus);
+app.post('/updateCard', users.updateCard);
+app.post('/updateCardStatus', users.updateCardStatus);
 app.put('/updateTaskStatus', users.updateTaskStatus);
-app.post('/getCardsOnStatus', users.getCardsOnStatus);
+//app.post('/getCardsOnStatus', users.getCardsOnStatus);
 app.post('/getTasksOnStatus', users.getTasksOnStatus);
 
+app.get('/', login.singIn);
 //app.post('/getData', login.singIn);
 
 http.createServer(app).listen(app.get('port'), function() {

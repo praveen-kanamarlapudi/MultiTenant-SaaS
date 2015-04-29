@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<script src="/scripts/angular.min.js"></script>
+  	<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  	<title>Storyboard </title>
+
+  	<!-- Default Styles (DO NOT TOUCH) -->
+ 	<link href="/stylesheets/bootstrap.css" rel="stylesheet">
+ 	<link href="/stylesheets/drag.css" rel="stylesheet">
+ 	<link href="/stylesheets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  	<!-- Adjustable Styles -->
+  	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<script src="lib/js/html5shiv.js"></script>
+	<script src="lib/js/respond.min.js"></script>
+</head>
+ 
+<body ng-app="kanban" ng-controller="kanbanController">
+ 
+	<!-- BEGIN PAGE CONTENT -->
+    <div class="content">
+    	<div class="page-h1">
+      		<h1>Leankit </h1>
+     	</div>
+	 	<div>
+	 		<button type="button" onclick="$('#taskModal').modal('show')"class="btn btn-default" >Add</button>
+	 	</div>
+     	<div class="col-md-12" >
+      		<table class="table storyboard" style="margin-top:10px;">
+       			<thead>
+        			<tr>
+			         <th>Not Set</th>
+			         <th>Ready for Dev</th>
+			         <th>In Progress</th>
+			         <th>Testing</th>
+			         <th>Finished</th>
+        			</tr>
+       			</thead>
+       			<tbody id="story-contain">
+        			<tr>
+				         <td class="droppable ui-draggable" id="firstcol">
+				         	<%
+				         	if(firstdata != null)
+				         	{
+			         	    for(var i=0; i< firstdata.length; i++)
+				         	{
+				         	%>
+				         	<div class='story ui-draggable'>
+				         		<div class='story-title'><%=firstdata[i].name%> <span>#<%=firstdata[i].cardId%></span></div>
+				         		<div class='story-content'><%=firstdata[i].description%></div>
+				         	</div>
+				         	<%
+				         	}
+				         	}
+				         	%>
+				         </td>
+				         <td class="droppable pane-info ui-draggable" id ="secondcol">
+				         	<%
+				         	if(seconddata != null)
+				         	{
+			         	    for(var i=0; i< seconddata.length; i++)
+				         	{
+				         	%>
+				         	<div class='story ui-draggable'>
+				         		<div class='story-title'><%=seconddata[i].name%> <span>#<%=seconddata[i].cardId%></span></div>
+				         		<div class='story-content'><%=seconddata[i].description%></div>
+				         	</div>
+				         	<%
+				         	}
+				         	}
+				         	%>
+				         </td>
+				         <td class="droppable pane-primary ui-draggable" id ="thirdcol">
+				         	<%
+				         	if(thirddata != null)
+				         	{
+			         	    for(var i=0; i< thirddata.length; i++)
+				         	{
+				         	%>
+				         	<div class='story ui-draggable'>
+				         		<div class='story-title'><%=thirddata[i].name%> <span>#<%=thirddata[i].cardId%></span></div>
+				         		<div class='story-content'><%=thirddata[i].description%></div>
+				         	</div>
+				         	<%
+				         	}
+				         	}
+				         	%>
+				         </td>
+				         <td class="droppable pane-warning ui-draggable" id ="forthcol">
+				         	<%
+				         	if(forthdata != null)
+				         	{
+			         	    for(var i=0; i< forthdata.length; i++)
+				         	{
+				         	%>
+				         	<div class='story ui-draggable'>
+				         		<div class='story-title'><%=forthdata[i].name%> <span>#<%=forthdata[i].cardId%></span></div>
+				         		<div class='story-content'><%=forthdata[i].description%></div>
+				         	</div>
+				         	<%
+				         	}
+				         	}
+				         	%>
+				         </td>
+				         <td class="droppable pane-success ui-draggable" id ="fifthcol">
+				         	<%
+				         	if(fifthdata != null)
+				         	{
+			         	    for(var i=0; i< fifthdata.length; i++)
+				         	{
+				         	%>
+				         	<div class='story ui-draggable'>
+				         		<div class='story-title'><%=fifthdata[i].name%> <span>#<%=fifthdata[i].cardId%></span></div>
+				         		<div class='story-content'><%=fifthdata[i].description%></div>
+				         	</div>
+				         	<%
+				         	}
+				         	}
+				         	%>
+				         </td>
+        			</tr>
+       			</tbody>
+      		</table>
+     	</div>
+		<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">New Card</h4>
+				  </div>
+				  <form id="tasksform"   role="form"  class="form-horizontal" >
+					<div class="modal-body">	
+					  <div class='col-xs-12'>
+						<label class='control-label'>Card ID</label>                 
+						<input type="text"  class='form-control card-number' id="cardid" required />             
+					  </div>
+					  <div class='col-xs-12'>
+						<label class='control-label'>Card Name</label>                 
+						<input type="text"  class='form-control card-number' id="cardName" required />             
+					  </div>
+					   <div class='col-xs-12'>
+						<label class='control-label'>Card Description</label>                 
+						<input type="text"  class='form-control card-number' id="cardDescription" required />             
+					  </div>
+					</div> 
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<input type="submit" class="btn btn-primary confirm" data-ng-click=saveStories(e) id="addstory" ></input>
+					</div>
+				  </form>
+				</div>
+			</div>
+		</div>
+		<style>
+		  .storyboard th, .storyboard td { width:20% !important;  }
+		  .storyboard th { text-align:center; }
+		  .storyboard .story {
+		   min-height:100px;
+		   background: #FFF;
+		   margin-bottom:10px; border:1px solid #999; border-left:6px solid #999;
+		  }.storyboard .story:hover { cursor:move; } .storyboard .story-title > span { float:right; }
+		  
+		  .storyboard .story-title { height:30px; padding:5px;color:#666; border-bottom:1px solid #E6E6E6; }
+		  .storyboard .story-content { color:#999; padding:5px; font-size:12px; margin-bottom:24px;}
+		  
+		  .storyboard .pane-default .story { border-color:#f4f4f4; border-left:6px solid #f4f4f4; }
+		  .storyboard .pane-primary .story { border-color:#7BAEDA; border-left:6px solid #7BAEDA; }
+		  .storyboard .pane-warning .story { border-color:#F4C583; border-left:6px solid #F4C583; }
+		  .storyboard .pane-danger .story { border-color:#E48784; border-left:6px solid #E48784; }
+		  .storyboard .pane-info .story { border-color:#8CD3E8; border-left:6px solid #8CD3E8; }
+		  .storyboard .pane-success .story { border-color:#8DCD8D; border-left:6px solid #8DCD8D; }
+		  .storyboard .pane-soft .story { border-color:#ACACCF; border-left:6px solid #ACACCF; }
+		  .storyboard .pane-dark .story { border-color:#A0A0A0; border-left:6px solid #A0A0A0; }
+		  .storyboard .pane-bright .story { border-color:#FFC9ED; border-left:6px solid #FFC9ED; }
+
+		  .storyboard .story-active { background: #E3E3E3; }
+		  .storyboard .story .story-footer { text-align:right; padding-right:7px; height:24px; }
+		  .storyboard .story .story-footer span { color:#999; padding:5px 5px; font-size:14px; display:none; }
+		  .storyboard .story .story-footer span:hover { color:#666; cursor:pointer; }
+		  .storyboard .story:hover .story-footer span { display:inline-block; }
+		  #storyModal .modal-body textarea { width:100%; height:175px; text-align:left; }
+		</style>
+    </div>
+
+    <!-- END PAGE CONTENT -->
+	<div class="modal fade" id="storyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header modal-primary">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title"> <span></span></h4>
+				</div>
+				<form name="modalform" id="modalform" >
+				   <div class="modal-body"><textarea ng-model="editedDescription"></textarea></div>
+				   	<div class='col-xs-12'>
+						<label class='control-label'>Planned Start</label>                 
+						<input type="date"  class='form-control card-number' id="plannedStart" required />             
+					 </div>
+					 <div class='col-xs-12'>
+						<label class='control-label'>Planned Finish</label>                 
+						<input type="date"  class='form-control card-number' id="plannedFinish" required />             
+					 </div>
+					 <div class='col-xs-12'>
+						<label class='control-label'>Resource Assigned</label>                 
+						<input type="text"  class='form-control card-number' id="resourceAssigned" required />             
+					 </div>
+					  <div class='col-xs-12'>
+						<label class='control-label'>Priority</label>                 
+						<select id = "priority">
+						  <option value="Normal">Normal</option>
+						  <option value="High">High</option>
+						  <option value="Critical">Critical</option>
+						  <option value="Low">Low</option>
+						</select>           
+					 </div>
+					  <div class='col-xs-12'>
+						<label class='control-label'>Team Size</label>                 
+						<input type="number"  class='form-control card-number' id="teamSize" required />             
+					 </div>
+					  <div class='col-xs-12'>
+						<label class='control-label'>Comments</label>  
+					    <input type="text"  class='form-control card-number' id="comments" required />
+					  </div>  
+				   <div class="modal-footer">
+					   <button type="button" class="btn btn-dark" data-dismiss="modal">Cancel</button>
+					   <input type="submit" class="btn btn-primary confirm" data-ng-click=editCard(e) id="editcard" ></input>
+				   </div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- Default JS (DO NOT TOUCH) -->
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- Adjustable JS -->
+	<script src="../js/jquery-ui.js"></script>
+  
+	<script>
+	   var app = angular.module('kanban', []);
+	   app.controller("kanbanController", function($scope,$http) {
+
+			var cardDetails;
+			$scope.saveStories = function(e)
+			{	
+				var carddescription=$("#cardDescription").val();
+				var cardid=$("#cardid").val();
+				var cardName=$("#cardName").val();
+				$('#taskModal').modal('hide');
+				$("#cardid").val('');
+				$("#cardName").val('');
+				$("#cardDescription").val('');
+			
+				console.log("Card ID:"+cardid);
+				console.log("Card Name:"+cardName);
+				console.log("Card Description:"+carddescription);
+				 // your db call goes here
+				 $http({		
+						  method: 'POST',
+						  url: '/addCard',
+						  data: { "cardId":cardid ,"cardName":cardName, "carddescription":carddescription}
+						})
+						.success(function(response){
+						    if(response.error != null)
+						    {
+						    	alert(response.error);
+						    }
+						    else
+						    {
+								$("#firstcol").append($("<div class='story ui-draggable'><div class='story-title'>"+cardName+" <span>#"+cardid+"</span></div><div class='story-content'>"+carddescription+"</div><div class='story-footer'><span class='fa fa-pencil-square-o'></span><span class='fa fa-times-circle'></span></div></div>").draggable({stack: '.story',  revert: 'invalid'}));
+							    resetBtns();
+							}
+						})
+						.error(function(error){
+							alert("Failed to add new card!");
+						});
+		
+			}
+			$scope.editCard = function(e)
+			{
+			    var cardNameId = cardDetails.split("#");
+			    var cardId = cardNameId[1].split("<");
+				var cardDescription=$('#editDescription').val();
+				var plannedStart=$("#plannedStart").val();	
+				var plannedFinish=$("#plannedFinish").val();	
+				var teamSize=$("#teamSize").val();	
+				var comments=$("#comments").val();
+				var resources = $("#resourceAssigned").val();
+				var priority = $("#priority").val();
+				console.log(priority);
+
+				$('#storyModal').modal('hide');
+				$("#taskDescription").val('');
+				
+				resetBtns();
+				  $http({		
+						  method: 'POST',
+						  url: '/updateCard',
+						  data: { "cardId": cardId[0], 
+						          "editedDescription":cardDescription,
+						          "plannedStart":plannedStart,
+						          "plannedFinish":plannedFinish,
+						          "priority":priority,
+						          "teamSize":teamSize,
+						          "resources":resources,
+						          "comments":comments}
+						})
+						.success(function(response){})
+						.error(function(error){});
+				 
+			}
+			$(".story").draggable({stack: ".story",  revert: "invalid" });    
+			$(".droppable").droppable({
+				accept: ".story", hoverClass: "story-active",      
+				drop: function( event, ui ) 
+				{
+					var cardTitle = ui.draggable.parent().parent().find('.story-title').html();
+					var cardNameId = cardTitle.split("#");
+			    	var cardId = cardNameId[1].split("<");
+			    	var currentClumn = $(this);
+					$http({		
+						  method: 'POST',
+						  url: '/updateCardStatus',
+						  data: { "cardId":cardId[0] ,"status":$(this).attr('id')}
+						})
+						.success(function(response)
+						{
+						    if(response.error != null)
+						    {
+						    	alert(response.error);
+						    }
+						    else
+						    {
+						        currentClumn.append($('<div class="story">'+ui.draggable.html()+'</div>').draggable({stack: ".story",  revert: "invalid"}));
+						        resetBtns();
+						    }
+						})
+						.error(function(error){
+							alert("unable to move the card!");
+						});
+					
+					ui.draggable.remove();
+				}
+			});
+
+			$(".story").each(function(){
+				$(this).append('<div class="story-footer"><span class="fa fa-pencil-square-o"></span><span class="fa fa-times-circle"></span></div>');
+				$('.storyboard .story-content').css('margin-bottom','0px');
+			});
+		
+			function resetBtns()
+			{
+				$(".story-footer  .fa-pencil-square-o").off('click');
+				$(".story-footer  .fa-times-circle").off('click');
+				$(".story-footer  .fa-pencil-square-o").on('click', function() {
+				    
+				    console.log("calling edit popup");
+					$('#storyModal .modal-title').html($(this).parent().parent().find('.story-title').html());
+					cardDetails = $(this).parent().parent().find('.story-title').html();
+					$('#storyModal .modal-body').html("<textarea id='editDescription'>" + $(this).parent().parent().find('.story-content').html() + "</textarea>");
+					$('#storyModal').modal('show');
+				});
+		 
+				$(".story-footer .fa-times-circle").on('click', function() {
+					
+					var cardTitle = $(this).parent().parent().find('.story-title').html();
+					var cardNameId = cardTitle.split("#");
+			    	var cardId = cardNameId[1].split("<");
+			    	console.log("removed card Id is " + cardId[0]);
+			    	$(this).parent().parent().fadeOut(1200, function() { $(this).remove(); });
+					$http({		
+						  method: 'POST',
+						  url: '/removeCard',
+						  data: { "cardId":cardId[0]}
+						})
+						.success(function(response){
+							//$(this).parent().parent().fadeOut(1200, function() { $(this).remove(); });
+						})
+						.error(function(error){});
+				});
+			}
+			resetBtns();
+		 });
+	</script>
+</body>
+</html>
