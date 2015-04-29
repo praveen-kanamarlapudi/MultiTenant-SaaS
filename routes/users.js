@@ -253,7 +253,7 @@ exports.updateCard = function(req, res) {
 
 
 /**
- * Update card details for kanban
+ * Update card status for kanban
  * 
  * @param req
  * @param res
@@ -267,10 +267,12 @@ exports.updateCardStatus = function(req, res) {
 	var cardId = req.param("cardId");
 	var column = req.param("status");
 
+	console.log(column);
 	var status = null;
 	if(column === "secondcol")
 	{
 		status = "Ready for Dev";
+		console.log(status);
 	}
 	else if(column === "thirdcol")
 	{
@@ -290,6 +292,7 @@ exports.updateCardStatus = function(req, res) {
 	}
 	
 	var mongo = db.mongo;
+	console.log(cardId);
 	mongo.collection("kanban").update({
 		"userId" : userId,
 		'projectName' : projectName,
@@ -302,6 +305,49 @@ exports.updateCardStatus = function(req, res) {
 		$set : {
 			'cards.$.status' : status,
 		}
+	}, function(err, result) {
+
+		if(err)
+		{
+			console.log("failed");
+			res.send({"error" : "failed to move card!"});
+		}
+		else
+		{
+			console.log("success");
+			res.send({"success" : "success"});
+		}
+		
+	});
+};
+
+/**
+ * delete card for kanban
+ * 
+ * @param req
+ * @param res
+ */
+exports.deleteCard = function(req, res) {
+//	var userId = req.param("userId");
+//	var projectName = req.param("projectName");
+	var userId = "g.apoorvareddy@gmail.com";
+	var projectName = "Testing Project";
+	
+	var cardId = req.param("cardId");
+	
+	if (!userId || !projectName || !cardId || userId === undefined || 
+		projectName === undefined || cardId === undefined ) {
+		res.send({"error" : "In Sufficient details"});
+	}
+	
+	var mongo = db.mongo;
+	console.log(cardId);
+	mongo.collection("kanban").update(
+		{
+		"userId" : userId,
+		'projectName' : projectName},
+	 {
+		$pull : {'cards': { cardId: cardId}}
 	}, function(err, result) {
 
 		if(err)
@@ -481,7 +527,7 @@ exports.addTask = function(req, res) {
 };
 
 /**
- * Add task in waterfall model.
+ * Add card to kanban model.
  */
 exports.addCard = function(req, res) {
 //	var userId = req.param("userId");
@@ -628,23 +674,22 @@ exports.createProject = function(req, res) {
 	}, function(err, results) {
 		res.send("results", results);
 	});
-}
+};
 
-exports.create = function(req,res){
+exports.create = function(req,res)
+{
 	res.render('create');
-}
-exports.edit = function(req,res){
+};
+exports.edit = function(req,res)
+{
 	res.render('edit');
-}
-exports.view = function(req,res){
+};
+exports.view = function(req,res)
+{
 	res.render('view');
-}
+};
 
 /**
- * @TODO 1. Add Card validations  
- * 2.Update status seperate API
+ * @TODO
  * 3. Project status --> each status type and curresponding no of cards.
- * 4. getCard details based on card status type. (each card type and array of card deatils.)
- * 
- * 
- */
+ */ 

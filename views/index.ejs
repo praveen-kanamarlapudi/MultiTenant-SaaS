@@ -11,10 +11,7 @@
  	<link href="/stylesheets/drag.css" rel="stylesheet">
  	<link href="/stylesheets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-  	<!-- Adjustable Styles -->
-  	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<script src="lib/js/html5shiv.js"></script>
-	<script src="lib/js/respond.min.js"></script>
+
 </head>
  
 <body ng-app="kanban" ng-controller="kanbanController">
@@ -316,9 +313,11 @@
 				accept: ".story", hoverClass: "story-active",      
 				drop: function( event, ui ) 
 				{
-					var cardTitle = ui.draggable.parent().parent().find('.story-title').html();
+					var cardTitle = ui.draggable.find('.story-title').html();
 					var cardNameId = cardTitle.split("#");
 			    	var cardId = cardNameId[1].split("<");
+			    	console.log("cardTitle"+cardTitle);
+			    	console.log("cardId"+cardId);
 			    	var currentClumn = $(this);
 					$http({		
 						  method: 'POST',
@@ -359,7 +358,7 @@
 				    console.log("calling edit popup");
 					$('#storyModal .modal-title').html($(this).parent().parent().find('.story-title').html());
 					cardDetails = $(this).parent().parent().find('.story-title').html();
-					$('#storyModal .modal-body').html("<textarea id='editDescription'>" + $(this).parent().parent().find('.story-content').html() + "</textarea>");
+					$('#storyModal .modal-body').html("<textarea id='editDescription'>" + $(this).parent().parent().find('.story-content').html() + "</textarea>");	
 					$('#storyModal').modal('show');
 				});
 		 
@@ -369,14 +368,22 @@
 					var cardNameId = cardTitle.split("#");
 			    	var cardId = cardNameId[1].split("<");
 			    	console.log("removed card Id is " + cardId[0]);
-			    	$(this).parent().parent().fadeOut(1200, function() { $(this).remove(); });
+			    	var currentCard = $(this);
+			    	//$(this).parent().parent().fadeOut(1200, function() { $(this).remove(); });
 					$http({		
 						  method: 'POST',
-						  url: '/removeCard',
+						  url: '/deleteCard',
 						  data: { "cardId":cardId[0]}
 						})
 						.success(function(response){
-							//$(this).parent().parent().fadeOut(1200, function() { $(this).remove(); });
+						if(response.error != null)
+						    {
+						    	alert(response.error);
+						    }
+						else
+						   {    
+							currentCard.parent().parent().fadeOut(1200, function() { $(this).remove(); });
+						   }
 						})
 						.error(function(error){});
 				});
