@@ -7,8 +7,8 @@ var userData = require("./users");
 exports.singIn = function(req, res) {
 	//var email = req.param("userId");
     //var password = req.param("password");
-    
-	var email = "k.praveen@outlook.com";
+	
+	var email = "100";
 	var password = "kpraveen";
     
 	console.log("Got a connection");
@@ -23,7 +23,7 @@ exports.singIn = function(req, res) {
 		{
 			console.log(err);
 			res.send({"error" : "Login Failed"});
-		}	
+		}
 		else 
 		{
 			//console.log(result);

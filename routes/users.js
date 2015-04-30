@@ -70,7 +70,7 @@ exports.getData = function(model, req, res)
 	console.log('Getting user data from db');
 	//var userId = req.param("userId");
 //	var userId = "g.apoorvareddy@gmail.com";
-	var userId = "k.praveen@outlook.com";
+	var userId = "100";
 	//console.log(model);
 	if (!model || model === undefined)
 	{
@@ -385,6 +385,95 @@ exports.deleteCard = function(req, res) {
 		
 	});
 };
+
+
+/**
+ * delete card for kanban
+ * 
+ * @param req
+ * @param res
+ */
+exports.deleteTask = function(req, res) {
+//	var userId = req.param("userId");
+//	var projectName = req.param("projectName");
+	var userId = "g.apoorvareddy@gmail.com";
+	var projectName = "Testing Project";
+	
+	var taskId = req.param("taskId");
+	
+	if (!userId || !projectName || !taskId || userId === undefined || 
+		projectName === undefined || taskId === undefined ) {
+		res.send({"error" : "In Sufficient details"});
+	}
+	
+	var mongo = db.mongo;
+	console.log(taskId);
+	mongo.collection("waterfall").update(
+		{
+		"userId" : userId,
+		'projectName' : projectName},
+	 {
+		$pull : {'tasks': { taskId: taskId}}
+	}, function(err, result) {
+
+		if(err)
+		{
+			console.log("failed");
+			res.send({"error" : "failed to move task!", 'status' : 'Failed'});
+		}
+		else
+		{
+			console.log("success");
+			res.send({"status" : "Success"});
+		}
+		
+	});
+};
+
+
+/**
+ * delete card for kanban
+ * 
+ * @param req
+ * @param res
+ */
+exports.deleteUserstory = function(req, res) {
+//	var userId = req.param("userId");
+//	var projectName = req.param("projectName");
+	var userId = "g.apoorvareddy@gmail.com";
+	var projectName = "Testing Project";
+	
+	var id = req.param("id");
+	
+	if (!userId || !projectName || !id || userId === undefined || 
+		projectName === undefined || id === undefined ) {
+		res.send({"error" : "In Sufficient details"});
+	}
+	
+	var mongo = db.mongo;
+	console.log(id);
+	mongo.collection("scrum").update(
+		{
+		"userId" : userId,
+		'projectName' : projectName},
+	 {
+		$pull : {'userStories': { id: id}}
+	}, function(err, result) {
+
+		if(err)
+		{
+			console.log("failed");
+			res.send({"error" : "failed to move user story!", 'status' : 'Failed'});
+		}
+		else
+		{
+			console.log("success");
+			res.send({"status" : "Success"});
+		}
+		
+	});
+};
+
 
 
 /**

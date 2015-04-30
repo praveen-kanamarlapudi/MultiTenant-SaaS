@@ -51,6 +51,8 @@ app.post('/updateUserStorySprint', users.updateUserStorySprint);
 app.get('/getTaskStatus', users.getTasksOnStatus);
 app.get('/getSprints', users.getSprints);
 app.post('/deleteCard',users.deleteCard);
+app.post('/deleteUserstory',users.deleteUserstory);
+app.post('/deleteTask',users.deleteTask);
 
 app.get('/create',users.create);
 app.get('/edit',users.edit);

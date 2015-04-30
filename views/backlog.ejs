@@ -37,7 +37,6 @@
             </div>
         </nav>
 
-
         <div class="modal-body" id="clientDetails" >           
          
          <div class="row">
@@ -54,16 +53,12 @@
 
 
 
-        <div class="row">  
-
+        <div class="row">
             <div class="col-md-3"> 
                <div class="scrollit">
                 <table border="1">
-
                        <div class="content"><h3><input type="text" class="form-control" placeholder="Backlog name" id="text" ng-model="text"/></h3>     
                        </div>
-
-
                    </table>
                </div>
            </div>
@@ -86,19 +81,19 @@
         <th style='width: 9%;'>Cost</th>
     </tr>
 <br>
-    <tr style='height: 45px;' >
-        <th style='width: 10%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
-        <th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
-        <th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
+    <tr style='height: 45px;' ng-repeat="userStory in userStories">
+        <th style='width: 10%;'><input type="text" class="form-control" id="text" ng-model="userStory.id"/></th>
+        <th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="userStory.name"/></th>
+        <th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="userStory.acceptanceCriteria"/></th>
 
         <th style='width: 15%;'> <select name="model type" default='b' class = "form-control">
                                     <option value="01" ng-repeat = "sprint in sprints" value='sprint'>{{sprint}}</option>
         </select>
        </th>
-        <th style='width: 130%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
-        <th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
-        <th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
-        <th style='width: 9%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
+        <th style='width: 130%;'><input type="text" class="form-control" id="text" ng-model="userStory.comments"/></th>
+        <th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="userStory.days"/></th>
+        <th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="userStory.points"/></th>
+        <th style='width: 9%;'><input type="text" class="form-control" id="text" ng-model="userStory.cost"/></th>
         </tr>
     <br>
     
@@ -109,8 +104,8 @@
 </body>
 <script type="text/javascript">
 function backlogController($scope, $http){
-
-    $http.sprints = [];
+    $scope.userStories = [];
+    $scope.sprints = [];
     $scope.getSprints = function(){
         $http({
             method : 'GET',
@@ -125,8 +120,22 @@ function backlogController($scope, $http){
         })
     }
 
+    $scope.getData = function(){
+        $http({
+            method : 'GET',
+            url : '/'
+        }).success(function(res){
+            console.log('Got response: '+JSON.stringify(res));
+            if(res === undefined || res.length ==0) {
+                alert('Unable to laod data.');
+            } else{
+                $scope.userStories = res[0].userStories;
+                console.log($scope.userStories);
+            }
+        })
+    }
     $scope.getSprints();
-
+    $scope.getData();
 
 }
 
