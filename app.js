@@ -57,6 +57,7 @@ app.post('/deleteCard',users.deleteCard);
 app.post('/deleteUserstory',users.deleteUserstory);
 app.post('/deleteTask',users.deleteTask);
 
+
 app.get('/create',users.create);
 app.get('/edit',users.edit);
 app.get('/view',users.view);
@@ -65,7 +66,8 @@ app.post('/signIn', login.singIn);
 app.get('/', login.start);
 app.get('/backlog', login.backlog);
 
-app.post('/selectProject', users.getData);
+//app.post('/selectProject', users.getData);
+app.post('/selectProject', users.temp);
 
 //app.post('/getData', login.singIn);
 

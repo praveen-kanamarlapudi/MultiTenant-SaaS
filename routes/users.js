@@ -169,9 +169,11 @@ exports.getProjects = function(req, res) {
 }
 
 
+exports.temp = function(req,res){
+	res.render('view');
+}
 
-
-exports.getData = function(model, req, res) 
+exports.getData = function(req, res) 
 {
 
 	if (req.session === undefined || req.session.userId === undefined) {
@@ -183,16 +185,18 @@ exports.getData = function(model, req, res)
 		// var userId = req.param("userId");
 		// var userId = "g.apoorvareddy@gmail.com";
 		var userId = req.session.userId;
-		// console.log(model);
-		if (!model || model === undefined) {
+		var modelType = req.session.modelType;
+		var projectName = req.param('projectName');
+		if (modelType === undefined) {
 			res
 					.send({
 						"error" : "Something went wrong. User data doesn't contain any tenant type."
 					});
-		} else if (model.modelType === "waterfall") {
+		} else if (modelType === "waterfall") {
 			var mongo = db.mongo;
 			mongo.collection("waterfall").find({
-				"userId" : userId
+				"userId" : userId,
+				'projectName' : projectName
 			}).toArray(function(err, result) {
 				if (err || !result) {
 					res.send({
@@ -203,8 +207,10 @@ exports.getData = function(model, req, res)
 					if (result.length > 0) {
 						console.log('Got data from db..');
 						console.log(result);
-						res.send(result);
-						// res.render('view',{'data':result});s
+//						res.render('view', {
+//							'data' : result[0]
+//						});
+						res.render('view');
 					} else {
 						res.send({
 							"Login" : "Fail",
@@ -212,10 +218,11 @@ exports.getData = function(model, req, res)
 					}
 				}
 			});
-		} else if (model.modelType === "kanban") {
+		} else if (modelType === "kanban") {
 			var mongo = db.mongo;
 			mongo.collection("kanban").find({
-				"userId" : userId
+				"userId" : userId,
+				'projectName' : projectName
 			}).toArray(function(err, result) {
 				if (err || !result) {
 					res.send({
@@ -229,10 +236,11 @@ exports.getData = function(model, req, res)
 					}, req, res);
 				}
 			});
-		} else if (model.modelType === "scrum") {
+		} else if (modelType === "scrum") {
 			var mongo = db.mongo;
 			mongo.collection("scrum").find({
-				"userId" : userId
+				"userId" : userId,
+				'projectName' : projectName
 			}).toArray(function(err, result) {
 				if (err || !result)
 					res.send({
@@ -251,7 +259,7 @@ exports.getData = function(model, req, res)
 					}
 				}
 			});
-		} else if (model.modelType === "scrum") {
+		} else if (modelType === "scrum") {
 			var mongo = db.mongo;
 			mongo.collection("scrum").find({
 				"userId" : userId

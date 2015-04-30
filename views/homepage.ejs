@@ -208,7 +208,7 @@
 			};
 
 			$scope.selectProject = function(projectName){
-				%http({
+				$http({
 					method : "POST",
 					url : '/selectProject',
 					data : {'projectName':projectName}
