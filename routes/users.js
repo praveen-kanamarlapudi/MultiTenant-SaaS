@@ -216,13 +216,13 @@ exports.getData = function(req, res)
 				} else {
 					console.log(result);
 					if (result.length > 0) {
-						console.log('Got data from db..');
+						console.log('Got data from db.. In waterfalllll');
 						console.log(result);
 						req.session.data = result[0];
 //						res.render('view', {
 //							session:session.data
 //						});
-						res.send({'modelType':modelType});
+						res.send({'data':result, 'modelType':modelType});
 //						res.render('view');
 					} else {
 						res.send({

@@ -29,7 +29,6 @@ if ('development' == app.get('env')) {
 }
 
 
-app.post('/signIn', login.singIn);
 app.post('/signOut', login.signOut);
 //app.post('/updateCardStatus', users.updateCardStatus);
 //app.put('/updateTaskStatus', users.updateTaskStatus);
@@ -60,14 +59,14 @@ app.get('/create',users.create);
 app.get('/edit',users.edit);
 app.get('/view',users.view);
 app.get('/getProjects',users.getProjects);
-app.post('/signIn', login.singIn);
+app.post('/signIn', login.signIn);
 app.get('/', login.start);
 app.get('/backlog', login.backlog);
 
 app.post('/selectProject', users.getData);
 //app.post('/selectProject', users.temp);
 
-//app.post('/getData', login.singIn);
+//app.post('/getData', login.signIn);
 
 http.createServer(app).listen(app.get('port'), function() {
 	console.log('Express server listening on port ' + app.get('port'));

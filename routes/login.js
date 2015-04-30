@@ -9,7 +9,7 @@ exports.start = function(req, res){
 }
 
 
-exports.singIn = function(req, res) {
+exports.signIn = function(req, res) {
 	var email = req.param("email");
     var password = req.param("password");
 	
@@ -40,7 +40,6 @@ exports.singIn = function(req, res) {
 			//if there are projects load the project display page with project details along with create project option
 			//if no projects - the same project details page will be loaded but empty with only create project option
 			console.log(result.modelType);
-			
 			res.send({'status':'Success'});
 			//TBD move getData to the project details page
 //			userData.getData({

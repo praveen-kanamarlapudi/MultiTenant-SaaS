@@ -1,6 +1,6 @@
 /* Deep Blue Admin Bootstrap Theme by PrepBootstrap - http://www.prepbootstrap.com */
 body {
-  margin-top: 70px;
+  margin-top: 20px;
 }
 #wrapper {
   padding-left: 0;
@@ -43,7 +43,7 @@ body {
 }
 
 .main-title {
-	color: rgb(243, 93, 35);	
+	color: rgb(94, 7, 7);	
 }
 
 .main-grid {
@@ -177,7 +177,7 @@ a.bg-primary:hover {
   display: block;
   margin-top: 5px;
   margin-bottom: 10px;
-  color: #959595;
+  color: #1A1C1C;
 }
 .btn {
   display: inline-block;
