@@ -4,12 +4,17 @@
 var db = require("./db");
 var userData = require("./users");
 
+exports.start = function(req, res){
+	res.render('homepage');
+}
+
+
 exports.singIn = function(req, res) {
-	//var email = req.param("userId");
-    //var password = req.param("password");
+	var email = req.param("email");
+    var password = req.param("password");
 	
-	var email = "100";
-	var password = "kpraveen";
+//	var email = "100";
+//	var password = "kpraveen";
     
 	console.log("Got a connection");
 	var input = {
@@ -26,17 +31,20 @@ exports.singIn = function(req, res) {
 		}
 		else 
 		{
-			//console.log(result);
+			console.log('Login success..');
+			console.log(result);
 			req.session.userId = email;
 			req.session.modelType = result.modelType; //modified by Apoorva
 			//get projects - define new API to get projects for that user
 			//if there are projects load the project display page with project details along with create project option
 			//if no projects - the same project details page will be loaded but empty with only create project option
 			console.log(result.modelType);
+			
+			res.send({'status':'Success'});
 			//TBD move getData to the project details page
-			userData.getData({
-				"modelType" : result.modelType
-			}, req, res);
+//			userData.getData({
+//				"modelType" : result.modelType
+//			}, req, res);
 		}
 		// mongo.close();
 	});

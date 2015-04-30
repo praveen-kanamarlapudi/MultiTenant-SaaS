@@ -137,109 +137,148 @@ exports.getCardsOnStatus = function (req,res)
 };
 
 
-exports.getData = function(model, req, res) 
-{
-	
-	console.log('Getting user data from db');
-	//var userId = req.param("userId");
-//	var userId = "g.apoorvareddy@gmail.com";
-	var userId = "100";
-	//console.log(model);
-	if (!model || model === undefined)
-	{
-		res.send({"error" : "Something went wrong. User data doesn't contain any tenant type."});
-	}
-	else if (model.modelType === "waterfall") 
-	{
-		var mongo = db.mongo;
-		mongo.collection("waterfall").find({"userId" : userId}).toArray(function(err, result) {
-			if (err || !result)
-			{
-				res.send({"error" : "Something went wrong"});
-			}
-			else 
-			{
-				console.log(result);
-				if (result.length > 0) 
-				{
-					console.log('Got data from db..');
-					console.log(result);
-					res.send(result);
-//					res.render('view',{'data':result});s
-				} 
-				else
-				{
-					res.send({"Login" : "Fail",});
-				}
-			}
-		});
-	} 
-	else if (model.modelType === "kanban") 
-	{
-		var mongo = db.mongo;
-		mongo.collection("kanban").find({"userId" : userId}).toArray(function(err, result) 
-		{
-			if (err || !result)
-			{
-				res.send({"error" : "Something went wrong"});
-			}	
-			else 
-			{
-				console.log(result);
-				//load kanban project view in getCards function
-				getCards({"projectName" : result.projectName}, req, res);
-			}
-		});
-	} else if (model.modelType === "scrum") {
-		var mongo = db.mongo;
-		mongo.collection("scrum").find({
-			"userId" : userId
-		}).toArray(function(err, result) {
-			if (err || !result)
-				res.send({
-					"error" : "Something went wrong"
-				});
-			else {
-				console.log(result);
-				if (result.length > 0) {
-					var proj = "projectNaame";
-					console.log(result.$proj);
-					res.send(result);
-				} else {
-					res.send({
-						"Login" : "Fail",
-					});
-				}
-			}
-		});
-	}  else if (model.modelType === "scrum") {
-		var mongo = db.mongo;
-		mongo.collection("scrum").find({
-			"userId" : userId
-		}).toArray(function(err, result) {
-			if (err || !result)
-				res.send({
-					"error" : "Something went wrong"
-				});
-			else {
-				console.log(result);
-				if (result.length > 0) {
-					var proj = "projectNaame";
-					console.log(result.$proj);
-					res.send(result);
-				} else {
-					res.send({
-						"Login" : "Fail",
-					});
-				}
-			}
-		});
+exports.getProjects = function(req, res) {
+	if (req.session === undefined || req.session.userId === undefined) {
+		res.render('homepage');
+
 	} else {
-		res.send({
-			"error" : "This new tenant not yet supported."
-		});
+		var userId = req.session.userId;
+		var modelType = req.session.modelType;
+
+		var mongo = db.mongo;
+		mongo.collection(modelType).find({
+			'userId' : userId
+		}, {
+			projectName : true,
+			_id : false
+		}).toArray(function(err, result) {
+			if (err) {
+				res.send({
+					'status' : 'Failed',
+					'error' : 'User has not created any project yet.'
+				});
+			}
+			console.log(JSON.stringify(result));
+			res.send({
+				'status' : 'Success',
+				'projects' : result
+			});
+		})
 	}
 
+}
+
+
+
+
+exports.getData = function(model, req, res) 
+{
+
+	if (req.session === undefined || req.session.userId === undefined) {
+		res.render('homepage');
+
+	} else {
+
+		console.log('Getting user data from db');
+		// var userId = req.param("userId");
+		// var userId = "g.apoorvareddy@gmail.com";
+		var userId = req.session.userId;
+		// console.log(model);
+		if (!model || model === undefined) {
+			res
+					.send({
+						"error" : "Something went wrong. User data doesn't contain any tenant type."
+					});
+		} else if (model.modelType === "waterfall") {
+			var mongo = db.mongo;
+			mongo.collection("waterfall").find({
+				"userId" : userId
+			}).toArray(function(err, result) {
+				if (err || !result) {
+					res.send({
+						"error" : "Something went wrong"
+					});
+				} else {
+					console.log(result);
+					if (result.length > 0) {
+						console.log('Got data from db..');
+						console.log(result);
+						res.send(result);
+						// res.render('view',{'data':result});s
+					} else {
+						res.send({
+							"Login" : "Fail",
+						});
+					}
+				}
+			});
+		} else if (model.modelType === "kanban") {
+			var mongo = db.mongo;
+			mongo.collection("kanban").find({
+				"userId" : userId
+			}).toArray(function(err, result) {
+				if (err || !result) {
+					res.send({
+						"error" : "Something went wrong"
+					});
+				} else {
+					console.log(result);
+					// load kanban project view in getCards function
+					getCards({
+						"projectName" : result.projectName
+					}, req, res);
+				}
+			});
+		} else if (model.modelType === "scrum") {
+			var mongo = db.mongo;
+			mongo.collection("scrum").find({
+				"userId" : userId
+			}).toArray(function(err, result) {
+				if (err || !result)
+					res.send({
+						"error" : "Something went wrong"
+					});
+				else {
+					console.log(result);
+					if (result.length > 0) {
+						var proj = "projectNaame";
+						console.log(result.$proj);
+						res.send(result);
+					} else {
+						res.send({
+							"Login" : "Fail",
+						});
+					}
+				}
+			});
+		} else if (model.modelType === "scrum") {
+			var mongo = db.mongo;
+			mongo.collection("scrum").find({
+				"userId" : userId
+			}).toArray(function(err, result) {
+				if (err || !result)
+					res.send({
+						"error" : "Something went wrong"
+					});
+				else {
+					console.log(result);
+					if (result.length > 0) {
+						var proj = "projectNaame";
+						console.log(result.$proj);
+						res.send(result);
+					} else {
+						res.send({
+							"Login" : "Fail",
+						});
+					}
+				}
+			});
+		} else {
+			res.send({
+				"error" : "This new tenant not yet supported."
+			});
+		}
+	}
 };
 
 

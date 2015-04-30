@@ -60,10 +60,13 @@ app.post('/deleteTask',users.deleteTask);
 app.get('/create',users.create);
 app.get('/edit',users.edit);
 app.get('/view',users.view);
-
+app.get('/getProjects',users.getProjects);
 app.post('/signIn', login.singIn);
 app.get('/', login.start);
 app.get('/backlog', login.backlog);
+
+app.get('/selectProject', users.getData);
+
 //app.post('/getData', login.singIn);
 
 http.createServer(app).listen(app.get('port'), function() {
