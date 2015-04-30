@@ -49,6 +49,7 @@ app.post('/updateUserStoryStatus', users.updateUserStoryStatus);
 app.post('/getTasksOnStatus', users.getTasksOnStatus);
 app.post('/updateUserStorySprint', users.updateUserStorySprint);
 app.get('/getTaskStatus', users.getTasksOnStatus);
+app.get('/getSprints', users.getSprints);
 app.post('/deleteCard',users.deleteCard);
 
 app.get('/create',users.create);
@@ -56,6 +57,7 @@ app.get('/edit',users.edit);
 app.get('/view',users.view);
 
 app.get('/', login.singIn);
+app.get('/backlog', login.backlog);
 //app.post('/getData', login.singIn);
 
 http.createServer(app).listen(app.get('port'), function() {

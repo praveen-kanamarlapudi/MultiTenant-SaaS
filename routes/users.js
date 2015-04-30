@@ -554,6 +554,37 @@ exports.addTask = function(req, res) {
 	}
 };
 
+exports.getSprints = function(req, res) {
+	var mongo = db.mongo;
+	mongo.collection("scrum").find({
+
+	}, {
+		'sprints' : 1
+	}).toArray(function(err, result) {
+		if (err || !result) {
+			res.send({
+				"error" : "Something went wrong"
+			});
+		} else {
+			console.log(result);
+			if (result.length > 0) {
+				console.log('Got data from db..');
+				console.log(result);
+				res.send({
+					'sprints' : result[0].sprints,
+					'status' : 'Success'
+				});
+				// res.render('view',{'data':result});s
+			} else {
+				res.send({
+					"error" : "Unable to fetch data",
+					'status' : 'Failed'
+				});
+			}
+		}
+	});
+}	
+
 /**
  * Updates task details in waterfall model
  */

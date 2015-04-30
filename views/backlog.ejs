@@ -25,15 +25,11 @@
 
 
 </head>
-<body ng-app="" ng-controller="searchClientsController" style="background: #EDEEFA;">
+<body ng-app="" ng-controller="backlogController" style="background: #EDEEFA;">
 
     
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            
-                <a class="navbar-brand">Back to Admin</a>
-            
-            
-
+            <a class="navbar-brand">Back to Admin</a>
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav navbar-right navbar-user">                    
                     <li><a href="./logout"><i class="fa fa-power-off"></i> Log Out</a></li>                       
@@ -42,7 +38,7 @@
         </nav>
 
 
-        <div class="modal-body" id="clientDetails" ng-show="showMode">           
+        <div class="modal-body" id="clientDetails" >           
          
          <div class="row">
         <div class="col-md-3 row text-center"> <button type="button" class="btn-sm btn-primary" ng-click="switchToEdit()">
@@ -76,7 +72,7 @@
 
 
     <div class="col-md-9"> 
-             <div class="scrollit">
+        <div class="scrollit">
 
 <table style='table-layout:fixed;width:100%;height:100px' border='1'>
     <tr style='height: 45px;'>
@@ -90,33 +86,50 @@
         <th style='width: 9%;'>Cost</th>
     </tr>
 <br>
-    <tr style='height: 45px;'>
+    <tr style='height: 45px;' >
         <th style='width: 10%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
         <th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
         <th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
 
-        <th style='width: 15%;'> <select name="model type" class = "form-control">
-                                    <option value="01">Kanban</option>
-                                    <option value="02">Waterfall</option>
-                                    <option value="03">Scrum</option>
+        <th style='width: 15%;'> <select name="model type" default='b' class = "form-control">
+                                    <option value="01" ng-repeat = "sprint in sprints" value='sprint'>{{sprint}}</option>
         </select>
        </th>
-        
         <th style='width: 130%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
         <th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
         <th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
         <th style='width: 9%;'><input type="text" class="form-control" id="text" ng-model="text"/></th>
         </tr>
-<br>
+    <br>
     
-
 </div>
-
-
-
-
 
 </div>
 
 </body>
+<script type="text/javascript">
+function backlogController($scope, $http){
+
+    $http.sprints = [];
+    $scope.getSprints = function(){
+        $http({
+            method : 'GET',
+            url : '/getSprints'
+        }).success(function(res){
+            console.log('Got response: '+JSON.stringify(res));
+            if(res === undefined || res.status === undefined || res.status === 'Failed') {
+                alert('Unable to laod data.');
+            } else if(res.status === 'Success'){
+                $scope.sprints = res.sprints;
+            }
+        })
+    }
+
+    $scope.getSprints();
+
+
+}
+
+
+</script>
 </html>

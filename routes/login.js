@@ -42,6 +42,10 @@ exports.singIn = function(req, res) {
 	});
 };
 
+exports.backlog = function(req, res){
+	res.render('backlog');
+}
+
 exports.signOut = function(req,res){
 	if(req.session){
 		req.session.destroy();
