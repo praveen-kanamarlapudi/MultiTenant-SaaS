@@ -213,7 +213,15 @@
 					url : '/selectProject',
 					data : {'projectName':projectName}
 				}).success(function(res){
-
+					console.log(res);
+					if(res.modelType === 'Waterfall'){
+						window.location = "/view";
+					} else if (res.modelType === 'scrum'){
+						window.location = "/backlog";
+					} else {
+						console.log('Its by mistake.. :)');
+						window.location = "/index";
+					}
 				})
 			}
 

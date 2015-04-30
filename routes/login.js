@@ -22,8 +22,9 @@ exports.singIn = function(req, res) {
 		"password" : password
 	};
 	var mongo = db.mongo;
+	console.log(input);
 	mongo.collection("users").findOne(input, function(err, result) {
-		//console.log(result);
+		console.log(result);
 		if (err || !result)
 		{
 			console.log(err);

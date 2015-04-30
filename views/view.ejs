@@ -57,6 +57,7 @@
             <div class="row text-center">
                 <h2> Task Details </h2>
             </div>
+            
         </div>
         <br>  
 
@@ -293,6 +294,8 @@
     function viewTasksController($scope,$http){
         $scope.tasks=[];
         $scope.visible = [];
+console.log($scope.data);
+        $scope.tasks = $scope.data.tasks;
         $scope.getCall = function(){
             $http({
                 method : 'get',
