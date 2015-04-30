@@ -45,6 +45,7 @@ app.put('/updateTaskStatus', users.updateTaskStatus);
 //app.post('/getCardsOnStatus', users.getCardsOnStatus);
 app.post('/getTasksOnStatus', users.getTasksOnStatus);
 app.get('/getTaskStatus', users.getTasksOnStatus);
+app.post('/deleteCard',users.deleteCard);
 
 app.get('/create',users.create);
 app.get('/edit',users.edit);
