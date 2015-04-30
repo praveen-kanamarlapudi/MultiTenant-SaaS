@@ -37,6 +37,9 @@ app.put('/addTask', users.addTask);
 app.post('/addCard', users.addCard);
 app.post('/addUserStory', users.addUserStory);
 app.post('/removeProject', users.removeProject);
+app.get('/projectStatusKanban', users.getProjectStatus);
+
+
 app.put('/updateUser', users.updateUser);
 app.put('/createProject', users.createProject);
 app.put('/updateTask', users.updateTask);
@@ -45,7 +48,7 @@ app.post('/updateCardStatus', users.updateCardStatus);
 app.post('/updateUserStory', users.updateUserStory);
 app.put('/updateTaskStatus', users.updateTaskStatus);
 app.post('/updateUserStoryStatus', users.updateUserStoryStatus);
-//app.post('/getCardsOnStatus', users.getCardsOnStatus);
+app.post('/getCardsOnStatus', users.getCardsOnStatus);
 app.post('/getTasksOnStatus', users.getTasksOnStatus);
 app.post('/updateUserStorySprint', users.updateUserStorySprint);
 app.get('/getTaskStatus', users.getTasksOnStatus);
@@ -58,7 +61,8 @@ app.get('/create',users.create);
 app.get('/edit',users.edit);
 app.get('/view',users.view);
 
-app.get('/', login.singIn);
+app.post('/signIn', login.singIn);
+app.get('/', login.start);
 app.get('/backlog', login.backlog);
 //app.post('/getData', login.singIn);
 

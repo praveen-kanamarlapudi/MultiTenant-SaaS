@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+  </script>
+  </head>
+  <body>
+    <div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+     <script>
+	
+    $(function () {
+    console.log(Highcharts);	
+    var chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'container',
+            type: 'bar'
+        },
+        title: {
+            text: 'Card Status'
+        },
+        xAxis: {
+            categories: ['Finished','Testing','In progress','Ready for Dev','Not Set']
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'No. of cards'
+            }
+        },
+        legend: {
+            reversed: true
+        },
+        plotOptions: {
+            series: {
+                stacking: 'normal'
+            }
+        },
+        series: [{
+            name: 'card',
+            data: [10, 20, 30, 40, 50]
+        }]
+    });
+}); </script>
+  </body>
+</html>

@@ -3,6 +3,7 @@
  */
 
 var db = require("./db");
+var projectStatus;
 
 /**
  * Gets user project data depending on user tenant type
@@ -63,6 +64,78 @@ function getCards(project,req,res)
 		}
 	});
 }
+
+
+exports.getProjectStatus = function(req,res)
+{
+	console.log("got project status" + projectStatus.testingcount);
+	res.render('kanbangraph', { title: 'Kanban Status Graph', status: projectStatus});
+};
+
+exports.getCardsOnStatus = function (req,res)
+{
+	var mongo       = db.mongo;
+	//var userId      = req.param("userId");
+	//var projectName = project.projectName;
+	var userId = "g.apoorvareddy@gmail.com";
+	var projectName = "Testing Project";
+	
+	console.log("get card for " + userId);
+	mongo.collection("kanban").find({
+		"userId" : userId,
+		'projectName' : projectName}).toArray(function(err, result) 
+	{
+		if (err || !result)
+		{
+			res.send({"error" : "Something went wrong"});
+		}	
+		else 
+		{
+			console.log(result);
+			var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
+			if (result.length > 0) {
+				var cards = result[0].cards;
+				for(var i = 0; i < cards.length ; i++)
+				{
+					if(cards[i].status === null || cards[i].status === undefined)
+					{
+						firstData.push(cards[i]);
+					}
+					else if(cards[i].status === "Ready for Dev")
+					{
+						secondData.push(cards[i]);
+					}
+					else if(cards[i].status === "In progress")
+					{
+						thirdData.push(cards[i]);
+					}
+					else if(cards[i].status === "Testing")
+					{
+						fourthData.push(cards[i]);
+					}
+					else if(cards[i].status === "Finished")
+					{
+						fifthData.push(cards[i]);
+					}
+				}
+			}
+			projectStatus = { notsetcount:firstData.length
+			       , readyfordevcount:secondData.length
+			       , inprogresscount:thirdData.length
+			       , testingcount:fourthData.length
+			       , finishedcount:fifthData.length };
+				
+//			res.render('kanbangraph', { title: 'Kanban Status Graph'
+//                   ,  notsetcount:firstData.length
+//			       , readyfordevcount:secondData.length
+//			       , inprogresscount:thirdData.length
+//			       , testingcount:fourthData.length
+//			       , finishedcount:fifthData.length });
+			res.send({"success" : "load"});
+		}
+	});
+};
+
 
 exports.getData = function(model, req, res) 
 {
@@ -386,6 +459,10 @@ exports.deleteCard = function(req, res) {
 	});
 };
 
+
+exports.getAllProjects = function(req,res){
+	
+}
 
 /**
  * delete card for kanban

@@ -11,6 +11,10 @@
  	<link href="/stylesheets/drag.css" rel="stylesheet">
  	<link href="/stylesheets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+  </script>
 
 </head>
  
@@ -23,6 +27,7 @@
      	</div>
 	 	<div>
 	 		<button type="button" onclick="$('#taskModal').modal('show')"class="btn btn-default" >Add</button>
+	 		<button type="button" data-ng-click=getCardsonCount(e) class="btn btn-default" >Project Status</button>
 	 	</div>
      	<div class="col-md-12" >
       		<table class="table storyboard" style="margin-top:10px;">
@@ -237,9 +242,33 @@
   
 	<script>
 	   var app = angular.module('kanban', []);
-	   app.controller("kanbanController", function($scope,$http) {
+	   app.controller("kanbanController", function($scope,$http) 
+	   {
 
 			var cardDetails;
+
+			$scope.getCardsonCount = function(e)
+			{
+			console.log("project status clicked");
+			  $http({		
+						  method: 'POST',
+						  url: '/getCardsOnStatus'
+						})
+						.success(function(response){
+						    if(response.error != null)
+						    {
+						    	alert(response.error);
+						    }
+						    else
+						    {
+						     	window.location = '/projectStatusKanban';  
+							}
+						})
+						.error(function(error){
+							alert("Failed to add new card!");
+						});
+			}
+
 			$scope.saveStories = function(e)
 			{	
 				var carddescription=$("#cardDescription").val();
