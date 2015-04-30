@@ -3,7 +3,9 @@
  */
 
 var db = require("./db");
+
 var projectStatus;
+var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
 
 /**
  * Gets user project data depending on user tenant type
@@ -11,67 +13,44 @@ var projectStatus;
 function getCards(result,req,res)
 {
 	var mongo       = db.mongo;
-	//var userId      = req.param("userId");
-	//var projectName = project.projectName;
-//	var userId = "k.praveen@outlook.com";
-//	var projectName = "Test1";
 	var userId = req.session.userId;
 	var projectName = req.param("projectName");
 	
-	console.log("get card for " + userId);
-//	mongo.collection("kanban").find({
-//		"userId" : userId,
-//		'projectName' : projectName}).toArray(function(err, finalResult) 
-//	{
-//		if (err || !result)
-//		{
-//			res.send({"error" : "Something went wrong"});
-//		}	
-//		else 
-//		{
-			console.log(result);
-			var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
-			if (result.length > 0) {
-				var cards = result[0].cards;
-				for(var i = 0; i < cards.length ; i++)
-				{
-					if(cards[i].status === null || cards[i].status === undefined)
-					{
-						firstData.push(cards[i]);
-					}
-					else if(cards[i].status === "Ready for Dev")
-					{
-						secondData.push(cards[i]);
-					}
-					else if(cards[i].status === "In progress")
-					{
-						thirdData.push(cards[i]);
-					}
-					else if(cards[i].status === "Testing")
-					{
-						fourthData.push(cards[i]);
-					}
-					else if(cards[i].status === "Finished")
-					{
-						fifthData.push(cards[i]);
-					}
-				}
+	if (result.length > 0) 
+	{
+		var cards = result[0].cards;
+		for(var i = 0; i < cards.length ; i++)
+		{
+			if(cards[i].status === null || cards[i].status === undefined)
+			{
+				firstData.push(cards[i]);
 			}
-			
-			console.log('AL  data.. '+JSON.stringify({ title: 'Express'
-                , firstdata:firstData
-                , seconddata:secondData 
-                , thirddata:thirdData 
-                , forthdata:fourthData 
-                , fifthdata:fifthData }));
-			res.render('index', { title: 'Express'
-				                , firstdata:firstData
-				                , seconddata:secondData 
-				                , thirddata:thirdData 
-				                , forthdata:fourthData 
-				                , fifthdata:fifthData });
-//			res.render('homepage');
-//		}
+			else if(cards[i].status === "Ready for Dev")
+			{
+				secondData.push(cards[i]);
+			}
+			else if(cards[i].status === "In progress")
+			{
+				thirdData.push(cards[i]);
+			}
+			else if(cards[i].status === "Testing")
+			{
+				fourthData.push(cards[i]);
+			}
+			else if(cards[i].status === "Finished")
+			{
+				fifthData.push(cards[i]);
+			}
+		}
+	}
+	
+	console.log('AL  data.. '+JSON.stringify({ title: 'Express'
+        , firstdata:firstData
+        , seconddata:secondData 
+        , thirddata:thirdData 
+        , forthdata:fourthData 
+        , fifthdata:fifthData }));
+	res.send({"modelType" : "kanban"});
 }
 
 
@@ -84,14 +63,9 @@ exports.getProjectStatus = function(req,res)
 exports.getCardsOnStatus = function (req,res)
 {
 	var mongo       = db.mongo;
-	//var userId      = req.param("userId");
 	var userId = req.session.userId;
-	var projectName = req.param('projectName');
-	//var projectName = project.projectName;
-//	var userId = "g.apoorvareddy@gmail.com";
-	var projectName = "Testing Project";
-	
-	console.log("get card for " + userId);
+	var projectName = req.session.projectName;
+	console.log("project name is " + projectName);
 	mongo.collection("kanban").find({
 		"userId" : userId,
 		'projectName' : projectName}).toArray(function(err, result) 
@@ -135,13 +109,6 @@ exports.getCardsOnStatus = function (req,res)
 			       , inprogresscount:thirdData.length
 			       , testingcount:fourthData.length
 			       , finishedcount:fifthData.length };
-				
-//			res.render('kanbangraph', { title: 'Kanban Status Graph'
-//                   ,  notsetcount:firstData.length
-//			       , readyfordevcount:secondData.length
-//			       , inprogresscount:thirdData.length
-//			       , testingcount:fourthData.length
-//			       , finishedcount:fifthData.length });
 			res.send({"success" : "load"});
 		}
 	});
@@ -184,6 +151,18 @@ exports.temp = function(req,res){
 	res.render('view');
 }
 
+exports.loadCards = function(req,res)
+{
+	res.render('index', {
+				title : 'Kanban View',
+				firstdata : firstData,
+				seconddata : secondData,
+				thirddata : thirdData,
+				forthdata : fourthData,
+				fifthdata : fifthData
+			});
+};
+
 exports.getData = function(req, res) 
 {
 
@@ -193,11 +172,16 @@ exports.getData = function(req, res)
 	} else {
 
 		console.log('Getting user data from db');
-		// var userId = req.param("userId");
-		// var userId = "g.apoorvareddy@gmail.com";
 		var userId = req.session.userId;
 		var modelType = req.session.modelType;
 		var projectName = req.param('projectName');
+		
+		if(projectName !== null ||
+		   projectName !== undefined)
+		{
+			req.session.projectName = projectName;
+		}
+		
 		if (modelType === undefined) {
 			res
 					.send({
@@ -237,51 +221,19 @@ exports.getData = function(req, res)
 				"userId" : userId,
 				'projectName' : projectName
 			}).toArray(function(err, result) {
-				if (err || !result) {
+				if (err || !result) 
+				{
 					res.send({
 						"error" : "Something went wrong"
 					});
-								} else {
-									console.log(result);
-									// load kanban project view in getCards
-									// function
-									// getCards( result, req, res);
-									var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
-									if (result.length > 0) {
-										var cards = result[0].cards;
-										for (var i = 0; i < cards.length; i++) {
-											if (cards[i].status === null
-													|| cards[i].status === undefined) {
-												firstData.push(cards[i]);
-											} else if (cards[i].status === "Ready for Dev") {
-												secondData.push(cards[i]);
-											} else if (cards[i].status === "In progress") {
-												thirdData.push(cards[i]);
-											} else if (cards[i].status === "Testing") {
-												fourthData.push(cards[i]);
-											} else if (cards[i].status === "Finished") {
-												fifthData.push(cards[i]);
-											}
-										}
-									}
-
-									console.log('AL  data.. '
-											+ JSON.stringify({
-												title : 'Express',
-												firstdata : firstData,
-												seconddata : secondData,
-												thirddata : thirdData,
-												forthdata : fourthData,
-												fifthdata : fifthData
-											}));
-									// res.render('index', { title: 'Express'
-									// , firstdata:firstData
-									// , seconddata:secondData
-									// , thirddata:thirdData
-									// , forthdata:fourthData
-									//						                , fifthdata:fifthData });
-									res.render('homepage');
-								}
+				} 
+				else 
+				{
+					console.log(result);
+					// load kanban project view in getCards
+					// function
+					getCards( result, req, res);
+				}
 			});
 		} else if (modelType === "scrum") {
 			var mongo = db.mongo;

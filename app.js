@@ -63,6 +63,8 @@ app.post('/signIn', login.signIn);
 app.get('/', login.start);
 app.get('/backlog', login.backlog);
 
+app.get('/loadCards', users.loadCards);
+
 app.post('/selectProject', users.getData);
 //app.post('/selectProject', users.temp);
 
