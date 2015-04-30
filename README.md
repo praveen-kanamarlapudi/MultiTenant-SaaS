@@ -1,18 +1,13 @@
 
 
 # MultiTenant
+It's a multitenant application which supports tenants like Waterfall, Kanban and Agile(Scrum)
 
-
-
-## Usage
-
-
-
-## Developing
 
 
 
 ### Tools
+For Back End we used NodeJS, Front end AngularJS and Database is MongoDB.
 
 Created with [Nodeclipse](https://github.com/Nodeclipse/nodeclipse-1)
  ([Eclipse Marketplace](http://marketplace.eclipse.org/content/nodeclipse), [site](http://www.nodeclipse.org))   
