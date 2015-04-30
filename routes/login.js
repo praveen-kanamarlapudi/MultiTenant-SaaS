@@ -8,8 +8,8 @@ exports.singIn = function(req, res) {
 	//var email = req.param("userId");
     //var password = req.param("password");
     
-	var email = "g.apoorvareddy@gmail.com";
-	var password = "apoorva";
+	var email = "k.praveen@outlook.com";
+	var password = "kpraveen";
     
 	console.log("Got a connection");
 	var input = {

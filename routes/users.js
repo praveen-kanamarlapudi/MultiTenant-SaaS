@@ -12,8 +12,8 @@ function getCards(project,req,res)
 	var mongo       = db.mongo;
 	//var userId      = req.param("userId");
 	//var projectName = project.projectName;
-	var userId = "g.apoorvareddy@gmail.com";
-	var projectName = "Testing Project";
+	var userId = "k.praveen@outlook.com";
+	var projectName = "Test1";
 	
 	console.log("get card for " + userId);
 	mongo.collection("kanban").find({
@@ -118,6 +118,28 @@ exports.getData = function(model, req, res)
 			}
 		});
 	} else if (model.modelType === "scrum") {
+		var mongo = db.mongo;
+		mongo.collection("scrum").find({
+			"userId" : userId
+		}).toArray(function(err, result) {
+			if (err || !result)
+				res.send({
+					"error" : "Something went wrong"
+				});
+			else {
+				console.log(result);
+				if (result.length > 0) {
+					var proj = "projectNaame";
+					console.log(result.$proj);
+					res.send(result);
+				} else {
+					res.send({
+						"Login" : "Fail",
+					});
+				}
+			}
+		});
+	}  else if (model.modelType === "scrum") {
 		var mongo = db.mongo;
 		mongo.collection("scrum").find({
 			"userId" : userId
@@ -380,8 +402,14 @@ exports.updateTask = function(req, res) {
 	var resources = req.param("resources");
 	var risks = req.param("risks");
 	var completed = req.param("completed");
-	predecessors = predecessors.split(',');
-	console.log(predecessors);
+//	console.log('predecessors '+predecessors);
+//	if(predecessors !== undefined){
+//		predecessors = predecessors.split(',');
+//	}
+//	if(resources !== undefined){
+//		resources = resources.split(',');
+//	}
+//	console.log(predecessors);
 	
 	if (!userId || !projectName || !taskId || userId === undefined
 			|| projectName === undefined || taskId === undefined) {
@@ -525,6 +553,238 @@ exports.addTask = function(req, res) {
 
 	}
 };
+
+/**
+ * Updates task details in waterfall model
+ */
+exports.updateUserStoryStatus = function(req, res) {
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var id = req.param("id");
+	var status = req.param("status");
+
+	if (!userId || !projectName || !id || !status || userId === undefined
+			|| projectName === undefined || id === undefined || status === undefined) {
+		res.send({
+			"error" : "Insufficient details"
+		});
+	} else {
+		var mongo = db.mongo;
+		mongo.collection("scrum").update({
+			"userId" : userId,
+			'projectName' : projectName,
+			userStories : {
+				$elemMatch : {
+					"id" : id
+				}
+			}
+		}, {
+			$set : {
+				'userStories.$.status' : status
+			}
+		}, function(err, result) {
+			res.send({
+				"result" : result
+			});
+		});
+	}
+};
+
+
+/**
+ * Updates task details in waterfall model
+ */
+exports.updateUserStorySprint = function(req, res) {
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var id = req.param("id");
+	var sprint = req.param("sprint");
+
+	if (!userId || !projectName || !id || !sprint || userId === undefined
+			|| projectName === undefined || id === undefined || sprint === undefined) {
+		res.send({
+			"error" : "Insufficient details"
+		});
+	} else {
+		var mongo = db.mongo;
+		mongo.collection("scrum").update({
+			"userId" : userId,
+			'projectName' : projectName,
+			userStories : {
+				$elemMatch : {
+					"id" : id
+				}
+			}
+		}, {
+			$set : {
+				'userStories.$.sprint' : sprint
+			}
+		}, function(err, result) {
+			res.send({
+				"result" : result
+			});
+		});
+	}
+};
+
+
+
+
+/**
+ * Add task in waterfall model.
+ */
+exports.addUserStory = function(req, res) {
+	var userId = req.param("userId");
+	var projectName = req.param("projectName");
+	var backlogId = req.param("backlogId");
+	var userStoryName = req.param("name");
+	var userStoryId = req.param("userStoryId");
+	var acceptanceCriteria = req.param('acceptanceCriteria');
+	var days = req.param("days");
+	var points = req.param("points");
+	var resources = req.param("resources");
+	var risks = req.param("risks");
+	var status = req.param("status");
+	var sprintId = req.param("sprint");
+	
+	if (!userId || !projectName || !backlogId || !userStoryId || !days
+			|| !points || userId === undefined
+			|| projectName === undefined || backlogId === undefined
+			|| userStoryId === undefined 
+			|| days === undefined || points === undefined
+			) {
+		res.send({
+			"error" : "Insufficient details"
+		});
+	} else {
+		
+		if(status === undefined){
+			status = 'TO DO';
+		}
+		var mongo = db.mongo;
+		mongo.collection('scrum').find({
+			'userId' : userId,
+			'projectName' : projectName,
+			userStories : {
+				$elemMatch : {
+					'id' : userStoryId,
+					
+				}
+			}
+		}).toArray(function(err, results) {
+			console.log('checked whether user story with given id exists are not.'+JSON.stringify(results));
+			if (results.length > 0) {
+				res.send({
+					'error' : 'Task with given id already exists.'
+				});
+			} else {
+				mongo.collection("scrum").update({
+					"userId" : userId,
+					'projectName' : projectName,
+				}, {
+					$push : {
+						'userStories' : {
+							'id' : userStoryId,
+							'name' : userStoryName,
+							'duration' : userStoryId,
+							'days' : days,
+							'points' : points,
+							'acceptanceCriteria' : acceptanceCriteria,
+							'resources' : resources,
+							'risks' : risks,
+							'status' : status,
+							'sprint' : sprintId,
+							'backlog' : backlogId
+						}
+					}
+				}, function(err, result) {
+//					console.log(result);
+//					console.log(res);
+					res.send({
+						"result" : result
+					});
+				});
+			}
+		});
+
+	}
+};
+
+/**
+ * Update card details for kanban
+ * 
+ * @param req
+ * @param res
+ */
+exports.updateUserStory = function(req, res) {
+//	var userId = req.param("userId");
+//	var projectName = req.param("projectName");
+	var userId = "100";
+	var projectName = "Testing Project";
+	
+	var id = req.param("id");
+	var projectName = req.param("projectName");
+	var backlogId = req.param("backlogId");
+	var name = req.param("name");
+	var duration = req.param("duration");
+	var days = req.param("days");
+	var points = req.param("points");
+	var resources = req.param("resources");
+	var acceptanceCriteria = req.param("acceptanceCriteria");
+	var priority = req.param("priority");
+	var risks = req.param('risks');
+	var status = req.param('status');
+	var sprint = req.param('sprint');
+
+//	console.log(cardId);
+//	console.log(name);
+//	console.log(duration);
+//	console.log(days);
+//	console.log(points);
+//	console.log(resources);
+//	console.log(acceptanceCriteria);
+//	console.log(priority);
+	
+	if (!id || !projectName  || userId === undefined
+			|| projectName === undefined ) {
+		res.send({
+			"error" : "In Sufficient details"
+		});
+	}
+	var mongo = db.mongo;
+	mongo.collection("scrum").update({
+		"userId" : userId,
+		'projectName' : projectName,
+		userStories : {
+			$elemMatch : {
+				"id" : id
+			}
+		}
+	}, {
+		$set : {
+			
+			'userStories.$.name': name,
+			'userStories.$.duration' : duration,
+			'userStories.$.days' : days,
+			'userStories.$.risks' : risks,
+			'userStories.$.acceptanceCriteria' : acceptanceCriteria,
+			'userStories.$.points' : points,
+			'userStories.$.resources' : resources,
+			'userStories.$.sprint' : sprint,
+			'userStories.$.status':status,
+			'userStories.$.backlog':backlogId
+		}
+	}, function(err, result) {
+
+		//console.log(err);
+		//console.log(result);
+		res.send({
+			"result" : result
+		});
+	});
+};
+
+
 
 /**
  * Add card to kanban model.
