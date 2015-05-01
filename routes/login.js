@@ -8,6 +8,39 @@ exports.start = function(req, res){
 	res.render('homepage');
 }
 
+exports.signUp = function(req,res) {
+	var email = req.param("email");
+    var password = req.param("password");
+	var firstname = req.param("firstname");
+    var lastname = req.param("lastname");
+	var modeltype = req.param("modeltype");
+	
+	console.log("signup data is " + firstname + lastname + email + password + modeltype);
+	if(email !== null && password !== null && firstname !== null &&
+	  lastname !== null && modeltype !== null && email !== undefined &&
+	  password !== undefined && firstname !== undefined && lastname !== undefined && modeltype !== undefined)
+	{
+		var input = {firstName:firstname,
+				     lastName:lastname,
+				     userId:email,
+				     password:password,
+				     modelType:modeltype};
+			var mongo = db.mongo;
+			mongo.collection("users").insert(input, function(err, result) {
+				console.log(result);
+				if (err || !result)
+				{
+					console.log(err);
+					res.send({"status" : "SignUp Failed"});
+				}
+				else 
+				{
+					console.log("user signup success");
+					res.send({"status" : "Success"});
+				}
+			});
+	}
+};
 
 exports.signIn = function(req, res) {
 	var email = req.param("email");

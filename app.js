@@ -28,7 +28,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-
+app.post('/signUp', login.signUp);
 app.post('/signOut', login.signOut);
 //app.post('/updateCardStatus', users.updateCardStatus);
 //app.put('/updateTaskStatus', users.updateTaskStatus);
