@@ -462,7 +462,6 @@
 	    								</div>
 	    							</div>
 
-
 	    							<div class="row text-center">
 
 	    								<button type="submit" class="btn btn-info" ng-click="createTask()">
@@ -709,6 +708,22 @@
             	$scope.visible[taskId]=!$scope.visible[taskId];
         	}
 
+        	$scope.deleteTask = function(taskId){
+        		$http({
+                	method : 'POST',
+                	url : '/deleteTask',
+                	data : {'taskId' : taskId}
+            	}).success(function(res){
+                	console.log(res);
+                	if(res.status === 'Failed'){
+                    	alert(res.error);
+                	} else {
+                    	alert('Saved successfully.');
+                    	$scope.visible[task.taskId]=!$scope.visible[task.taskId];
+                	}
+            	})
+        	}
+
         	$scope.saveTask = function(task){
             	// task.userId = 'k.praveen@outlook.com';
             	// task.projectName = 'Test1'
@@ -764,12 +779,10 @@
             	$scope.visible2[id]=!$scope.visible2[id];
         	}
 
-
         	$scope.saveStory = function(story){
             	// story.userId = 'k.praveen@outlook.com';
             	// story.projectName = 'Test1'
             	console.log(story);
-
             	$http({
                 	method : 'PUT',
                 	url : '/updateUser',
@@ -784,8 +797,6 @@
                 	}
             	})
         	}
-
     	}
-
 	</script>
 </html>
