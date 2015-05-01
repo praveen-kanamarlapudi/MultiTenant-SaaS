@@ -1,0 +1,222 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>281 - Team 22</title>
+
+	<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/stylesheets/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="/stylesheets/css/local.css" />
+
+	<script type="text/javascript" src="/stylesheets/js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="/stylesheets/bootstrap/js/bootstrap.min.js"></script>   
+
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>     
+</head>
+
+<body ng-app="" ng-controller="loginController" background="/images/db.jpg">
+	<div class="row" ng-show="!projectShow">
+		<div class="container im-centered">
+			
+			<div class="col-md-12">
+				<!-- <div class="main-well" style="border: solid 3px #000000; background: #C4B5BA"> -->
+					<div class="row text-center main-title" style="text-shadow: 2px 2px 5px #96180F; height: 100px" >
+						<h1> Multi-Tenant System</h1>
+					</div>
+				</div>
+
+			<div class="col-md-6 main">
+
+				<div class="container" id="wrap">
+					<div class="row">
+						<div class="col-md-4" style="border: solid 3px #000000; background: #D9D4B4" >
+							<form method="post" accept-charset="utf-8" class="form" role="form"> 
+							  <legend>Sign Up</legend>
+								<div class="row">
+									<div class="col-xs-6 col-md-6">
+										<input type="text" name="firstname" value="" class="form-control input-lg" placeholder="First Name"  />                       
+									</div>
+									<div class="col-xs-6 col-md-6">
+										<input type="text" name="lastname" value="" class="form-control input-lg" placeholder="Last Name"  />                  
+									</div>
+								</div>
+								<br>
+								<input type="text" name="email" value="" class="form-control input-lg" placeholder="Your Email"  /><br><input type="password" name="password" value="" class="form-control input-lg" placeholder="Password"  /><br>
+
+								<div class="row">
+									<div class="col-xs-4 col-md-3">
+										<label>Model Type</label>
+									</div>                           
+									<div class="col-xs-4 col-md-4">
+										<select name="model type" class = "form-control input-lg">
+											<option value="01">Kanban</option>
+											<option value="02">Waterfall</option>
+											<option value="03">Scrum</option>
+										</select>                        </div>
+									</div>
+									<br>
+									<hr style="border: solid 2px #000000";>
+									<span class="help-block"><h5>By clicking Create my account, you agree to our Terms and that you have read our Data Use Policy.</h5></span>
+									<button type="submit" ng-click="login()" class="btn btn-success btn-block">Create</button>	
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>  
+			
+
+				<div class="col-md-6 main-grid"> 
+
+					<div class="main-well" style="border: solid 3px #000000; background: #D9D4B4">	
+						<form class="form-horizontal">  					
+							<fieldset>    			
+								<h4> Login here </h4><br>										
+								<div class="form-group">      
+									<div class="col-lg-12">
+										<input type="email" ng-model="inputEmail" class="form-control" id="inputEmail" placeholder="Email address" required>  
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-lg-12">      							
+										<input type="password" ng-model="inputPassword" class="form-control" id="inputPassword" placeholder="Password (6 or more characters)" required>
+									</div>
+								</div>
+								<br>
+
+								<div class="form-group">
+									<div class="col-lg-12">								
+										<p>									
+											<button type="submit" ng-click="login()" class="btn btn-success btn-block">Login</button>	
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+					</div> 
+
+        </div>
+    </div>
+
+    <div ng-show="projectShow">
+     			<div class="row">
+
+					<div class="col-md-9 row text-center">
+						<h2> Project List </h2>
+					</div>
+					<div class="col-md-3 row text-center"> 
+					<button type="button" class="btn-lg btn-warning" ng-click="switchToEdit()">
+						Create Project
+					</button>
+
+					<div class="col-lg-12" ng-show="true">
+						<input type="text" ng-model="projectName" ng-click="createproject()" placeholder="Project name" required>  
+					</div>
+				    
+				    </div>
+				</div>                
+			<br>            
+
+
+
+			<div class="row">  
+
+				<div class="col-md-2"></div>
+
+				<div class="col-md-10">
+
+					
+
+					<select name="model type" class="place_holder dropdown" ng-model="project" ng-change="selectProject(project)" style='width: 30%; height: 30%'>
+
+						<option ng:repeat="project in projects" value="{{project.projectName}}">{{project.projectName}}</option>
+                        </select>
+					</select>
+				</div>
+
+				<br><br><br><br><br><br>
+			</div>
+
+
+		</div>
+	</div>
+
+
+		<script>
+		function loginController($scope, $http, $location) {
+			$scope.projectShow = false;
+            $scope.createProjMode  = false;
+             
+             $scope.createproject = function(){
+             	$scope.createProjMode  = true;
+
+             }
+
+
+			$scope.login = function() {		
+					
+				$http({
+					method: 'POST',
+					url: '/signIn',
+					data: { "email": $scope.inputEmail, "password": $scope.inputPassword }	            
+				}).success(function(res){	           
+					// alert(JSON.stringify(res));	
+					console.log(res);            
+					if(res.status == "Success")
+					{	     
+						$scope.projectShow = true;
+						console.log('Sending backend call for projects');
+						$scope.getProjects(); 
+						$scope.projectShow  = !$scope.projectShow;
+
+					}	            	       
+					else
+					{
+						alert(res.status);
+						
+					}	            	
+				}).error(function(error){
+					alert(res.Status);
+				});
+			};
+
+
+			$scope.getProjects = function() {
+				$http({
+					method: 'GET',
+					url: '/getProjects'
+				}).success(function(res){	           
+					console.log(res);	            
+					if(res.status == "Success")
+					{	           			
+						 
+						$scope.projectShow  = !$scope.projectShow;
+						$scope.projects = res.projects;
+					}	            	       
+					else
+					{
+						alert(res.error);
+					}	            	
+				}).error(function(error){
+					alert(res.Status);
+				});
+			};
+
+			$scope.selectProject = function(projectName){
+				$http({
+					method : "POST",
+					url : '/selectProject',
+					data : {'projectName':projectName}
+				}).success(function(res){
+
+				})
+			}
+
+		}
+		</script>
+	</body>
+
+	</html>

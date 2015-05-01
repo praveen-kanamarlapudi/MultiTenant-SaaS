@@ -780,10 +780,12 @@ exports.addTask = function(req, res) {
 			}
 		}).toArray(function(err, results) {
 			if (results.length > 0) {
+				console.log('Task with id '+task.taskId+' already exists.');
 				res.send({
 					'error' : 'Task with given id already exists.'
 				});
 			} else {
+				console.log('Creating task with id'+task.taskId);
 				mongo.collection("waterfall").update({
 					"userId" : userId,
 					'projectName' : projectName,
@@ -798,6 +800,7 @@ exports.addTask = function(req, res) {
 							error : 'err'
 						})
 					} else {
+						console.log('task with id '+task.taskId+' created successfully.');
 						res.send({
 							"result" : result,
 							'status' : 'Success'

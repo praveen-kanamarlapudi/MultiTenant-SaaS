@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workforce Management System</title>
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/css/local.css" />
+
+    <script type="text/javascript" src="/stylesheets/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/stylesheets/bootstrap/js/bootstrap.min.js"></script>   
+    
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>     
+</head>
+<body ng-app="" ng-controller="searchClientsController">
+
+<div id="wrapper">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Back to Admin</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li><a href="./"><i class="fa fa-bullseye"></i> Dashboard</a></li>
+                    <li><a href="./searchClients"><i class="fa fa-tasks"></i> Tasks</a></li>
+                    <li  class="active"><a href="./searchGuards"><i class="fa fa-tasks"></i> Guards</a></li>
+                    <li><a href="./searchReports"><i class="fa fa-table"></i> Reports</a></li>
+                    <li><a href="./searchAlerts"><i class="fa fa-bell"></i> Alerts</a></li>
+                    <li><a href="./displaySchedule? Not sure"><i class="fa fa-list-ol"></i> Schedule</a></li>
+                    <li><a href="./searchBuildings"><i class="fa fa-globe"></i> Buildings</a></li>                    
+                </ul>
+                <ul class="nav navbar-nav navbar-right navbar-user">                    
+                    <li><a href="./logout"><i class="fa fa-power-off"></i> Log Out</a></li>                       
+                </ul>
+            </div>
+        </nav>
+        
+    
+        <div id="create" ng-show="true">            
+            <div class="row text-center">
+                    <h2>Create Task</h2>
+            </div>
+            <div class="col-md-10 container">                           
+                <div class="content">                   
+                    <form class="form-horizontal">                      
+                        <fieldset>    
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Task ID:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control" ng-model="task.taskId">
+                                </div>
+                            </div>
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Task Name:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="task.taskName">
+                                </div>
+                            </div>
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Duration:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control" ng-model="task.duration"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3">
+                                    Start Date:
+                                </label>
+                                <div class="col-md-6">                
+                                    <div id='startDate'>
+                                        <input type='date' class="form-control" id="startDate" ng-model="task.startDate"/>
+                                    </div>                        
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-md-3">
+                                    End Date:
+                                </label>
+                                <div class="col-md-6">                
+                                    <div id='endDate'>
+                                        <input type='date' class="form-control" id="endDate" ng-model="task.endDate"/>
+                                    </div>                        
+                                </div>
+                            </div>  
+                            
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Predecessors for this task:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="cost" ng-model="task.predecessors"/>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Resources allocated to this task:
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" id="street" ng-model="task.resources"/>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    Risks
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" ng-model="task.risks"/>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">      
+                                <label class="col-md-3">
+                                    % Completed
+                                </label>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control" ng-model="task.completed"/>
+                                </div>
+                            </div>
+
+                            
+                            <div class="row text-center">
+                        
+                            <button type="submit" class="btn btn-info" ng-click="saveTask()">
+                                Save changes
+                            </button>
+                            <button class="btn btn-warning">
+                                Cancel
+                            </button>
+                            
+                        </fieldset>
+                    </form> 
+                    
+                        
+                    
+                </div>
+                
+            </div>                  
+        </div>
+
+
+</div>
+</body>
+
+<script type="text/javascript">
+    function searchClientsController($scope, $http){
+
+        $scope.task = {};
+        $scope.saveTask = function(){
+            console.log('prnting task data to be saved');
+            console.log($scope.task);
+
+            $http({
+                method : 'POST',
+                url : 'addTask',
+                data : {'task' : $scope.task}
+            }).success(function(res){
+                if(res.status === 'Success'){
+                    alert('Task creted successfully.');
+                } else {
+                    alert('Sorry client not created');
+                }
+
+            })
+        }
+    }
+
+</script>
+</html>
+        

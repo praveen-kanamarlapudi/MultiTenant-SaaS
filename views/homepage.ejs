@@ -755,13 +755,15 @@
             		console.log(res);
             		if(res.status === 'Success'){
             			console.log('Task cretaed successfully');
-            			console.log(res);
+            			console.log($scope.tasks);
             			$scope.tasks.push($scope.newTtask);
             			alert('Task creted successfully.');
             			$scope.createTaskMode=false;
                 		$scope.showMode = true;
+            			$scope.visible[$scope.newTtask.taskId] = true;
+            			
             		} else {
-            			alert('Sorry client not created');
+            			alert('Sorry Task not created');
             		}
             	})
             }
