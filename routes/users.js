@@ -6,6 +6,7 @@ var db = require("./db");
 
 var projectStatus;
 var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
+var taskStatusData = [];
 
 /**
  * Gets user project data depending on user tenant type
@@ -53,6 +54,42 @@ function getCards(result,req,res)
 	res.send({"modelType" : "kanban"});
 }
 
+exports.getProjectStatusWaterfall = function(req,res)
+{
+	console.log("got project status" + taskStatusData);
+	res.render('waterfallgraph', { title: 'Waterfall Status Graph', status: taskStatusData});
+};
+
+exports.getWaterfallStatus = function(req,res)
+{
+	var mongo       = db.mongo;
+	var userId = req.session.userId;
+	var projectName = req.session.projectName;
+	mongo.collection("waterfall").find({
+		"userId" : userId,
+		'projectName' : projectName}).toArray(function(err, result) 
+	{
+		if (err || !result)
+		{
+			res.send({"error" : "Something went wrong",
+				      "status": "Failed"});
+		}	
+		else 
+		{
+			console.log(result);
+			if (result.length > 0) 
+			{
+				var tasks = result[0].tasks;
+				for(var i =0 ; i < tasks.length; i++)
+				{
+					taskStatusData.push(tasks[i].completed);
+					console.log(tasks[i].completed);
+				}
+			}
+			res.send({"status": "success"});
+		}
+	});
+};
 
 exports.getProjectStatus = function(req,res)
 {

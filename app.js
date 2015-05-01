@@ -37,6 +37,7 @@ app.post('/addCard', users.addCard);
 app.post('/addUserStory', users.addUserStory);
 app.post('/removeProject', users.removeProject);
 app.get('/projectStatusKanban', users.getProjectStatus);
+app.get('/projectStatusWaterfall', users.getProjectStatusWaterfall);
 
 app.put('/updateUser', users.updateUser);
 app.put('/createProject', users.createProject);
@@ -54,6 +55,7 @@ app.get('/getSprints', users.getSprints);
 app.post('/deleteCard',users.deleteCard);
 app.post('/deleteUserstory',users.deleteUserstory);
 app.post('/deleteTask',users.deleteTask);
+app.post('/getWaterfallStatus', users.getWaterfallStatus);
 
 app.get('/create',users.create);
 app.get('/edit',users.edit);
