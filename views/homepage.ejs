@@ -257,7 +257,7 @@
 		                        		</button>
 			                    	</div>
 		    	                	<div class="col-md-2"> 
-		        	                	<button type="button" class="btn btn-danger" ng-click ="deleteTask(task.taskId)">
+		        	                	<button type="button" class="btn btn-danger" ng-click ="deleteTask(task)">
 		            	                	Delete Tasks
 		                	        	</button>
 		                    		</div> 
@@ -708,17 +708,18 @@
             	$scope.visible[taskId]=!$scope.visible[taskId];
         	}
 
-        	$scope.deleteTask = function(taskId){
+        	$scope.deleteTask = function(task){
         		$http({
                 	method : 'POST',
                 	url : '/deleteTask',
-                	data : {'taskId' : taskId}
+                	data : {'taskId' : task.taskId}
             	}).success(function(res){
                 	console.log(res);
                 	if(res.status === 'Failed'){
                     	alert(res.error);
                 	} else {
-                    	alert('Saved successfully.');
+                    	alert('Deleted successfully.');
+                    	$scope.tasks.splice($scope.tasks.indexOf(task),1)
                     	$scope.visible[task.taskId]=!$scope.visible[task.taskId];
                 	}
             	})
