@@ -837,6 +837,23 @@
             	$scope.visible2[id]=!$scope.visible2[id];
         	}
 
+        	$scope.deleteUserStory = function(story){
+            	$http({
+                	method : 'POST',
+                	url : '/deleteUserstory',
+                	data : {'id' : story.id}
+            	}).success(function(res){
+                	console.log(res);
+                	if(res.status === 'Failed'){
+                    	alert(res.error);
+                	} else {
+                    	alert('Deleted successfully.');
+                    	$scope.userStories.splice($scope.userStories.indexOf(story),1)
+                    	$scope.visible2[story.id]=!$scope.visible2[story.id];
+                	}
+            	})
+        	}
+
         	$scope.saveStory = function(story){
             	// story.userId = 'k.praveen@outlook.com';
             	// story.projectName = 'Test1'

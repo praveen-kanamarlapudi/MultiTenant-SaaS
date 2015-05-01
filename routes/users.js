@@ -600,9 +600,11 @@ exports.deleteTask = function(req, res) {
  */
 exports.deleteUserstory = function(req, res) {
 //	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
-	var userId = "g.apoorvareddy@gmail.com";
-	var projectName = "Testing Project";
+////	var projectName = req.param("projectName");
+//	var userId = "g.apoorvareddy@gmail.com";
+//	var projectName = "Testing Project";
+	var userId = req.session.userId;
+	var projectName = req.session.projectName;
 	
 	var id = req.param("id");
 	
