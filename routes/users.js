@@ -736,7 +736,7 @@ exports.addTask = function(req, res) {
 			'projectName' : projectName,
 			tasks : {
 				$elemMatch : {
-					'taskId' : task
+					'taskId' : task.taskId
 				}
 			}
 		}).toArray(function(err, results) {

@@ -476,8 +476,7 @@
 	    					</div>
 	    				</div>                  
 	    			</div>
-				</div>
-	    		
+				</div>	    		
 			</div>
 
 		<div class="modal-body" ng-show = "scrumPageShow">           
@@ -523,6 +522,7 @@
 								<th style='width: 8%;'></th>
 							</tr>
 							<br>
+							
 							<tr style='height: 45px;' ng-repeat="userStory in userStories" ng-show="visible2[userStory.id]">
 								<th style='width: 10%;'><p>{{userStory.id}}</p></th>
 								<th style='width: 15%;'><p>{{userStory.name}}</p></th>
@@ -590,6 +590,9 @@
     		$scope.sprints = [];
     		$scope.editbacklog  = false;
     		$scope.visible2 = [];
+
+    		$scope.newStory = {};
+    		$scope.showStoryMode = false;
              
              $scope.createproject = function(){
              	$scope.createProjMode  = true;
@@ -691,10 +694,11 @@
             		url : 'addTask',
             		data : {'task' : $scope.newTtask}
             	}).success(function(res){
+            		console.log(res);
             		if(res.status === 'Success'){
             			console.log('Task cretaed successfully');
             			console.log(res);
-            			tasks.push(newTask);
+            			$scope.tasks.push($scope.newTtask);
             			alert('Task creted successfully.');
             			$scope.createTaskMode=false;
                 		$scope.showMode = true;
