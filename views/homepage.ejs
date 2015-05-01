@@ -149,7 +149,7 @@
 	                    
 	                    <li  class="active"><a href="./searchGuards"><i class="fa fa-tasks"></i> Tasks</a></li>
 	                    
-	                    <li><a href="./searchClients"><i class="fa fa-globe"></i> Status</a></li>
+	                    <li><a data-ng-click=getWaterfallStatus()><i class="fa fa-globe"></i> Status</a></li>
 	                    <li><a href="./displaySchedule? Not sure"><i class="fa fa-list-ol"></i> Schedule</a></li>
 	                    <li><a href="./searchBuildings"><i class="fa fa-globe"></i> Buildings</a></li>                    
 	                </ul>
@@ -787,6 +787,22 @@
             	})
         	}
 
+			
+			$scope.getWaterfallStatus = function()
+			{
+				$http({
+                	method : 'POST',
+                	url : '/getWaterfallStatus'
+            	}).success(function(res){
+                	console.log(res);
+                	if(res.status === 'Failed'){
+                    	alert(res.error);
+                	} else {
+                    	window.location = '/projectStatusWaterfall';
+                	}
+            	})
+			}
+			
         	//functions for Scrum..
         	$scope.getSprints = function(){
         		$http({
