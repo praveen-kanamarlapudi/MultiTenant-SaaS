@@ -1008,19 +1008,20 @@ exports.updateUserStory = function(req, res) {
 //	var projectName = req.param("projectName");
 	var userId = req.session.userId;
 	var projectName = req.session.projectName;
-	
-	var id = req.param("id");
-	var backlogId = req.param("backlogId");
-	var name = req.param("name");
-	var duration = req.param("duration");
-	var days = req.param("days");
-	var points = req.param("points");
-	var resources = req.param("resources");
-	var acceptanceCriteria = req.param("acceptanceCriteria");
-	var priority = req.param("priority");
-	var risks = req.param('risks');
-	var status = req.param('status');
-	var sprint = req.param('sprint');
+	var story = req.param('data');
+	console.log(story);
+//	var id = req.param("id");
+//	var backlogId = req.param("backlogId");
+//	var name = req.param("name");
+//	var duration = req.param("duration");
+//	var days = req.param("days");
+//	var points = req.param("points");
+//	var resources = req.param("resources");
+//	var acceptanceCriteria = req.param("acceptanceCriteria");
+//	var priority = req.param("priority");
+//	var risks = req.param('risks');
+//	var status = req.param('status');
+//	var sprint = req.param('sprint');
 
 //	console.log(cardId);
 //	console.log(name);
@@ -1031,7 +1032,7 @@ exports.updateUserStory = function(req, res) {
 //	console.log(acceptanceCriteria);
 //	console.log(priority);
 	
-	if (!id || !projectName  || userId === undefined
+	if (!story.id || !projectName  || userId === undefined
 			|| projectName === undefined ) {
 		res.send({
 			"error" : "In Sufficient details"
@@ -1043,22 +1044,22 @@ exports.updateUserStory = function(req, res) {
 		'projectName' : projectName,
 		userStories : {
 			$elemMatch : {
-				"id" : id
+				"id" : story.id
 			}
 		}
 	}, {
 		$set : {
 			
-			'userStories.$.name': name,
-			'userStories.$.duration' : duration,
-			'userStories.$.days' : days,
-			'userStories.$.risks' : risks,
-			'userStories.$.acceptanceCriteria' : acceptanceCriteria,
-			'userStories.$.points' : points,
-			'userStories.$.resources' : resources,
-			'userStories.$.sprint' : sprint,
-			'userStories.$.status':status,
-			'userStories.$.backlog':backlogId
+			'userStories.$.name': story.name,
+			'userStories.$.comments' : story.comments,
+			'userStories.$.days' : story.days,
+//			'userStories.$.risks' : risks,
+			'userStories.$.acceptanceCriteria' : story.acceptanceCriteria,
+			'userStories.$.points' : story.points,
+			'userStories.$.resources' : story.resources,
+			'userStories.$.sprint' : story.sprint,
+			'userStories.$.status':story.status
+//			'userStories.$.backlog':backlogId
 		}
 	}, function(err, result) {
 

@@ -575,7 +575,7 @@
 
 								<th style='width: 15%;'> 
 									<select name="model type" default='b' ng-model = "userStory.sprint" class = "form-control">
-										<option ng-repeat = "sprint in sprints" value='sprint'>{{sprint}}</option>
+										<option ng-repeat = "sprint in sprints" value='{{sprint}}'>{{sprint}}</option>
 									</select>
 								</th>
 								<th style='width: 130%;'><input type="text" class="form-control" id="text" ng-model="userStory.comments"/></th>
@@ -590,10 +590,10 @@
 								</select>
 								</th>
 
-								<th style='width: 9%;'><input type="text" class="form-control" id="text" ng-model="userStory.cost"/></th>
+								<th style='width: 9%;'><input type="text" class="form-control" id="text" ng-model="userStory.resources"/></th>
 								<!-- <th type="button" ng-click="editUserStory(userStory.id)" class="btn btn-primary btn-block">Cancel </th> -->
-								<td type="button" ng-click="editbacklog()" class="btn-xs btn-success btn-block"><center>Save</center> </td>
-								<td type="button" ng-click="editbacklog()" class="btn-xs btn-danger btn-block"><center>Cancel</center></td>
+								<td type="button" ng-click="saveStory(userStory)" class="btn-xs btn-success btn-block"><center>Save</center> </td>
+								<td type="button" ng-click="editUserStory(userStory.id)" class="btn-xs btn-danger btn-block"><center>Cancel</center></td>
 							</tr>
 
 							<br>
@@ -859,9 +859,9 @@
             	// story.projectName = 'Test1'
             	console.log(story);
             	$http({
-                	method : 'PUT',
-                	url : '/updateUser',
-                	data : story
+                	method : 'POST',
+                	url : '/updateUserStory',
+                	data : {'data':story}
             	}).success(function(res){
                 	console.log(res);
                 	if(res.status === 'Failed'){
