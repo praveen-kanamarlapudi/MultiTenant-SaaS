@@ -368,8 +368,7 @@
 			        	</div>
 		    		</div>
 		    	</div>
-
-	    		<div id="create" ng-show="createClientMode">            
+		    	<div id="create" ng-show="createTaskMode">            
 	    			<div class="row text-center">
 	    				<h2>Create Task</h2>
 	    			</div>
@@ -382,7 +381,7 @@
 	    									Task ID:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="number" class="form-control" ng-model="task.taskId">
+	    									<input type="number" class="form-control" ng-model="newTtask.taskId">
 	    								</div>
 	    							</div>
 	    							<div class="form-group">      
@@ -390,7 +389,7 @@
 	    									Task Name:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="text" class="form-control" ng-model="task.taskName">
+	    									<input type="text" class="form-control" ng-model="newTtask.taskName">
 	    								</div>
 	    							</div>
 	    							<div class="form-group">      
@@ -398,7 +397,7 @@
 	    									Duration:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="number" class="form-control" ng-model="task.duration"/>
+	    									<input type="number" class="form-control" ng-model="newTtask.duration"/>
 	    								</div>
 	    							</div>
 
@@ -408,7 +407,7 @@
 	    								</label>
 	    								<div class="col-md-6">                
 	    									<div id='startDate'>
-	    										<input type='date' class="form-control" id="startDate" ng-model="task.startDate"/>
+	    										<input type='date' class="form-control" id="startDate" ng-model="newTtask.startDate"/>
 	    									</div>                        
 	    								</div>
 	    							</div>
@@ -419,7 +418,7 @@
 	    								</label>
 	    								<div class="col-md-6">                
 	    									<div id='endDate'>
-	    										<input type='date' class="form-control" id="endDate" ng-model="task.endDate"/>
+	    										<input type='date' class="form-control" id="endDate" ng-model="newTtask.endDate"/>
 	    									</div>                        
 	    								</div>
 	    							</div>  
@@ -429,7 +428,7 @@
 	    									Predecessors for this task:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="text" class="form-control" id="cost" ng-model="task.predecessors"/>
+	    									<input type="text" class="form-control" id="cost" ng-model="newTtask.predecessors"/>
 	    								</div>
 	    							</div>
 
@@ -439,7 +438,7 @@
 	    									Resources allocated to this task:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="text" class="form-control" id="street" ng-model="task.resources"/>
+	    									<input type="text" class="form-control" id="street" ng-model="newTtask.resources"/>
 	    								</div>
 	    							</div>
 
@@ -449,7 +448,7 @@
 	    									Risks
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="text" class="form-control" ng-model="task.risks"/>
+	    									<input type="text" class="form-control" ng-model="newTtask.risks"/>
 	    								</div>
 	    							</div>
 
@@ -459,7 +458,7 @@
 	    									% Completed
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="number" class="form-control" ng-model="task.completed"/>
+	    									<input type="number" class="form-control" ng-model="newTtask.completed"/>
 	    								</div>
 	    							</div>
 
@@ -479,6 +478,7 @@
 	    				</div>                  
 	    			</div>
 				</div>
+	    		
 			</div>
 
 		<div class="modal-body" ng-show = "scrumPageShow">           
@@ -580,7 +580,10 @@
             //For Waterfall..
             $scope.tasks=[];
         	$scope.visible = [];
-			$scope.taskAdd=true;
+        	$scope.waterfallPageShow = false;
+			// $scope.taskAdd=true;
+			$scope.newTtask = {};
+			$scope.showMode = false;
 
 
         	//For Scrum
@@ -661,12 +664,14 @@
 			}
 
 			$scope.Waterfall = function(res){
+				console.log('in scope.Waterfall = function(res){');
 				$scope.tasks = res.data[0].tasks;
 				$scope.projectPageShow = false;
             	$scope.createProjMode  = false;
             	$scope.signInPageShow = false;
             	$scope.scrumPageShow = false;
             	$scope.waterfallPageShow = true;
+            	$scope.showMode = true;
                 
                 console.log($scope.tasks);
                 for(var i=0; i<$scope.tasks.length;i++){
@@ -674,8 +679,30 @@
                 }
 			}
 
-			$scope.addTask = function(taskId){
-                $scope.taskAdd=true;
+			$scope.addTask = function(){
+                $scope.createTaskMode=true;
+                $scope.showMode = false;
+            }
+
+            $scope.createTask = function(){
+            	console.log('prnting task data to be saved');
+            	console.log($scope.newTtask);
+            	$http({
+            		method : 'POST',
+            		url : 'addTask',
+            		data : {'task' : $scope.newTtask}
+            	}).success(function(res){
+            		if(res.status === 'Success'){
+            			console.log('Task cretaed successfully');
+            			console.log(res);
+            			tasks.push(newTask);
+            			alert('Task creted successfully.');
+            			$scope.createTaskMode=false;
+                		$scope.showMode = true;
+            		} else {
+            			alert('Sorry client not created');
+            		}
+            	})
             }
 
 			$scope.editTask = function(taskId){
@@ -698,6 +725,7 @@
                 	} else {
                     	alert('Saved successfully.');
                     	$scope.visible[task.taskId]=!$scope.visible[task.taskId];
+
                 	}
             	})
         	}
@@ -756,9 +784,6 @@
                 	}
             	})
         	}
-
-
-
 
     	}
 
