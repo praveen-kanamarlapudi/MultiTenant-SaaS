@@ -1,6 +1,6 @@
 /* Deep Blue Admin Bootstrap Theme by PrepBootstrap - http://www.prepbootstrap.com */
 body {
-  margin-top: 20px;
+  margin-top: 70px;
 }
 #wrapper {
   padding-left: 0;
@@ -1432,7 +1432,7 @@ table.tablesorter thead tr th:hover {
 @media (min-width:768px) {
   /* Wrappers */
   #wrapper {
-	padding-left: 225px;
+	padding-left: 150px;
   }
   #page-wrapper {
 	padding: 15px 25px;
@@ -1440,9 +1440,9 @@ table.tablesorter thead tr th:hover {
 
   /* Side Nav */
   .side-nav {
-	margin-left: -225px;
-	left: 225px;
-	width: 225px;
+	margin-left: -50px;
+	left: 50px;
+	width: 150px;
 	position: fixed;
 	top: 50px;
 	height: 100%;
