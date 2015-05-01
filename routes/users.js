@@ -12,7 +12,7 @@ var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData 
  */
 function getCards(result,req,res)
 {
-	var mongo       = db.mongo;
+	var mongo = db.mongo;
 	var userId = req.session.userId;
 	var projectName = req.param("projectName");
 	
@@ -700,24 +700,31 @@ exports.updateTaskStatus = function(req, res) {
  * Add task in waterfall model.
  */
 exports.addTask = function(req, res) {
-	var userId = req.param("userId");
-	var projectName = req.param("projectName");
-	var taskId = req.param("taskId");
-	var taskName = req.param("taskName");
-	var duration = req.param("duration");
-	var startDate = req.param("startDate");
-	var endDate = req.param("endDate");
-	var predecessors = req.param("predecessors");
-	var resources = req.param("resources");
-	var risks = req.param("risks");
-	var completed = req.param("completed");
+//	var userId = req.param("userId");
+//	var projectName = req.param("projectName");
+	
+	var userId = req.session.userId;
+	var projectName = req.session.projectName;
+	var task = req.param("task");
+	console.log('In add task: '+JSON.stringify(task));
+	console.log('userId: '+userId);
+	console.log('projectName: '+projectName);
+//	var taskId = req.param("taskId");
+//	var taskName = req.param("taskName");
+//	var duration = req.param("duration");
+//	var startDate = req.param("startDate");
+//	var endDate = req.param("endDate");
+//	var predecessors = req.param("predecessors");
+//	var resources = req.param("resources");
+//	var risks = req.param("risks");
+//	var completed = req.param("completed");
 
-	if (!userId || !projectName || !taskId || !duration || !startDate
-			|| !endDate || !completed || userId === undefined
-			|| projectName === undefined || taskId === undefined
-			|| duration === undefined || duration === undefined
-			|| startDate === undefined || endDate === undefined
-			|| completed === undefined) {
+	if (!userId || !projectName || !task.taskId || !task.duration || !task.startDate
+			|| !task.endDate || !task.completed || userId === undefined
+			|| projectName === undefined || task.taskId === undefined
+			|| task.duration === undefined
+			|| task.startDate === undefined || task.endDate === undefined
+			|| task.completed === undefined) {
 		res.send({
 			"error" : "Insufficient details"
 		});
@@ -729,7 +736,7 @@ exports.addTask = function(req, res) {
 			'projectName' : projectName,
 			tasks : {
 				$elemMatch : {
-					'taskId' : taskId
+					'taskId' : task
 				}
 			}
 		}).toArray(function(err, results) {
@@ -743,23 +750,20 @@ exports.addTask = function(req, res) {
 					'projectName' : projectName,
 				}, {
 					$push : {
-						'tasks' : {
-							'taskId' : taskId,
-							'taskName' : taskName,
-							'duration' : duration,
-							'startDate' : startDate,
-							'endDate' : endDate,
-							'predecessors' : predecessors,
-							'resources' : resources,
-							'risks' : risks,
-							'completed' : completed
-						}
+						'tasks' : task
 					}
 				}, function(err, result) {
-
-					res.send({
-						"result" : result
-					});
+					if (err) {
+						res.send({
+							'status' : 'Failed',
+							error : 'err'
+						})
+					} else {
+						res.send({
+							"result" : result,
+							'status' : 'Success'
+						});
+					}
 				});
 			}
 		});

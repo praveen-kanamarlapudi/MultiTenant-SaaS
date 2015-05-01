@@ -32,7 +32,7 @@ if ('development' == app.get('env')) {
 app.post('/signOut', login.signOut);
 //app.post('/updateCardStatus', users.updateCardStatus);
 //app.put('/updateTaskStatus', users.updateTaskStatus);
-app.put('/addTask', users.addTask);
+app.post('/addTask', users.addTask);
 app.post('/addCard', users.addCard);
 app.post('/addUserStory', users.addUserStory);
 app.post('/removeProject', users.removeProject);
