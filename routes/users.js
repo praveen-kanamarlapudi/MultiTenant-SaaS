@@ -518,10 +518,10 @@ exports.getAllProjects = function(req,res){
  * @param res
  */
 exports.deleteTask = function(req, res) {
-//	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
-	var userId = "g.apoorvareddy@gmail.com";
-	var projectName = "Testing Project";
+	var userId = req.session.userId;
+	var projectName = req.session.projectName;
+//	var userId = "g.apoorvareddy@gmail.com";
+//	var projectName = "Testing Project";
 	
 	var taskId = req.param("taskId");
 	
