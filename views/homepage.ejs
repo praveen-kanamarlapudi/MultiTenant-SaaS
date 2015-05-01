@@ -62,7 +62,7 @@
 
 									<span class="help-block">By clicking Create my account, you agree to our Terms and that you have read our Data Use Policy, including our Cookie Use.</span>
 									<!-- <input type = "button" onClick="/signup/kanban/create" class="btn btn-lg btn-block signup-btn" type="submit"> -->
-									<button type="submit" ng-click="login()" class="btn btn-primary btn-block">Create</button>	
+									<button type="submit" ng-click="login()" class="btn btn-primary btn-block">Sign Up</button>	
 								</div>
 							</form>
 						</div>
@@ -352,7 +352,7 @@
 		                            		<button type="submit" class="btn btn-info" ng-click="saveTask(task)">
 	    	                        			Save changes
 	        	                    		</button>
-	            	                		<button class="btn btn-warning" ng-click = "visible[task.taskId] = !visible[task.	taskId]">
+	            	                		<button class="btn btn-warning" ng-click = "visible[task.taskId] = !visible[task.taskId]">
 		                            			Cancel
 	    	                        		</button>
 	        	                    	</div>
@@ -365,6 +365,91 @@
 			</div>
 		</div>
 
+		<div class="modal-body" id="clientDetails" ng-show = "scrumPageShow">           
+
+			<div class="row">
+				<div class="col-md-3 row text-center">
+					<button type="button" class="btn-sm btn-primary" ng-click="switchToEdit()">
+						Add Sprint
+					</button>
+				</div>
+
+				<div class="col-md-7 row text-center">
+					<h2> Backlog Details </h2>
+				</div>
+			</div>                
+			<br>   
+			<div class="row">
+				<div class="col-md-2"> 
+				</div>
+				<div class="col-md-8"> 
+					<table border="1">
+						<div class="content"><h3><input type="text" class="form-control" placeholder="Backlog name" id="text" ng-model="text"/></h3>     
+						</div>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-1">
+				</div> 
+				<div class="col-md-10"> 
+					<div class="scrollit">
+
+						<table style='table-layout:fixed;width:100%;height:100px' border='1'>
+							<tr style='height: 45px;'>
+								<th style='width: 10%;'>ID</th>
+								<th style='width: 12%;'>User Story</th>
+								<th style='width: 12%;'>Acceptable Criteria</th>
+								<th style='width: 12%;'>Sprint</th>
+								<th style='width: 30%;'>Comments</th>
+								<th style='width: 8%;'>Days</th>
+								<th style='width: 8%;'>Points</th>
+								<th style='width: 9%;'>Cost</th>
+								<th style='width: 8%;'></th>
+							</tr>
+							<br>
+							<tr style='height: 45px;' ng-repeat="userStory in userStories" ng-show="visible2[userStory.id]">
+								<th style='width: 10%;'><p>{{userStory.id}}</p></th>
+								<th style='width: 15%;'><p>{{userStory.name}}</p></th>
+								<th style='width: 15%;'><p>{{userStory.acceptanceCriteria}}</p></th>
+
+								<!--th style='width: 15%;'> 
+									<select name="model type" default='b' class = "form-control">
+										<option value="01" ng-repeat = "sprint in sprints" value='sprint'>{{userStory.sprint}}</option>
+									</select>
+								</th-->
+								<th style='width: 130%;'><p>{{userStory.sprint}}</p></th>
+								<th style='width: 130%;'><p>{{userStory.comments}}</p></th>
+								<th style='width: 8%;'><p>{{userStory.days}}</p></th>
+								<th style='width: 8%;'><p>{{userStory.points}}</p></th>
+								<th style='width: 9%;'><p>{{userStory.cost}}</p></th>
+								<th type="button" ng-click="editUserStory(userStory.id)" class="btn btn-primary btn-block">Edit </th>
+							</tr>
+
+
+							<tr style='height: 45px;' ng-repeat="userStory in userStories" ng-show="!visible2[userStory.id]">
+								<th style='width: 10%;'><input type="text" class="form-control" id="text" ng-model="userStory.id"/></th>
+								<th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="userStory.name"/></th>
+								<th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="userStory.acceptanceCriteria"/></th>
+
+								<th style='width: 15%;'> 
+									<select name="model type" default='b' class = "form-control">
+										<option value="01" ng-repeat = "sprint in sprints" value='sprint'>{{sprint}}</option>
+									</select>
+								</th>
+								<th style='width: 130%;'><input type="text" class="form-control" id="text" ng-model="userStory.comments"/></th>
+								<th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="userStory.days"/></th>
+								<th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="userStory.points"/></th>
+								<th style='width: 9%;'><input type="text" class="form-control" id="text" ng-model="userStory.cost"/></th>
+								<th type="button" ng-click="editUserStory(userStory.id)" class="btn btn-primary btn-block">Cancel </th>
+							</tr>
+
+							<br>
+						</table>   
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 
@@ -374,9 +459,17 @@
             $scope.createProjMode  = false;
             $scope.signInPageShow = true;
             $scope.waterfallPageShow = false;
+            $scope.scrumPageShow = false;
 
+            //For Waterfall..
             $scope.tasks=[];
         	$scope.visible = [];
+
+        	//For Scrum
+        	$scope.userStories = [];
+    		$scope.sprints = [];
+    		$scope.editbacklog  = false;
+    		$scope.visible2 = [];
              
              $scope.createproject = function(){
              	$scope.createProjMode  = true;
@@ -441,7 +534,7 @@
 					if(res.modelType === 'waterfall'){
 						$scope.Waterfall(res);
 					} else if (res.modelType === 'scrum'){
-						window.location = "/backlog";
+						$scope.scrumInit(res);
 					} else {
 						console.log('Its by mistake.. :)');
 						window.location = "/loadCards";
@@ -454,6 +547,7 @@
 				$scope.projectPageShow = false;
             	$scope.createProjMode  = false;
             	$scope.signInPageShow = false;
+            	$scope.scrumPageShow = false;
             	$scope.waterfallPageShow = true;
                 
                 console.log($scope.tasks);
@@ -467,8 +561,8 @@
         	}
 
         	$scope.saveTask = function(task){
-            	task.userId = 'k.praveen@outlook.com';
-            	task.projectName = 'Test1'
+            	// task.userId = 'k.praveen@outlook.com';
+            	// task.projectName = 'Test1'
             	console.log(task);
 
             	$http({
@@ -485,6 +579,66 @@
                 	}
             	})
         	}
-		}
+
+        	//functions for Scrum..
+        	$scope.getSprints = function(){
+        		$http({
+            		method : 'GET',
+            		url : '/getSprints'
+        		}).success(function(res){
+            		console.log('Got response: '+JSON.stringify(res));
+            		if(res === undefined || res.status === undefined || res.status === 'Failed') {
+                		alert('Unable to laod data.');
+            		} else if(res.status === 'Success'){
+                		$scope.sprints = res.sprints;
+            		}
+        		})
+        	}
+
+        	$scope.scrumInit = function(res){
+				$scope.userStories = res.data[0].userStories;
+				$scope.projectPageShow = false;
+            	$scope.createProjMode  = false;
+            	$scope.signInPageShow = false;
+            	$scope.scrumPageShow = true;
+            	$scope.waterfallPageShow = false;
+        		
+                console.log($scope.userStories);
+                for(var i=0; i<$scope.userStories.length;i++){
+                    $scope.visible2[$scope.userStories[i].id] = true;
+                }
+                $scope.getSprints();
+			}
+
+			$scope.editUserStory = function(id){
+            	$scope.visible2[id]=!$scope.visible2[id];
+        	}
+
+
+        	$scope.saveStory = function(story){
+            	// story.userId = 'k.praveen@outlook.com';
+            	// story.projectName = 'Test1'
+            	console.log(story);
+
+            	$http({
+                	method : 'PUT',
+                	url : '/updateUser',
+                	data : story
+            	}).success(function(res){
+                	console.log(res);
+                	if(res.status === 'Failed'){
+                    	alert(res.error);
+                	} else {
+                    	alert('Saved successfully.');
+                    	$scope.visible2[story.id]=!$scope.visible2[story.id];
+                	}
+            	})
+        	}
+
+
+
+
+    	}
+
 	</script>
 </html>

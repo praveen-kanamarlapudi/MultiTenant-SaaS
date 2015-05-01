@@ -40,7 +40,8 @@
         <div class="modal-body" id="clientDetails" >           
          
          <div class="row">
-        <div class="col-md-3 row text-center"> <button type="button" class="btn-sm btn-primary" ng-click="switchToEdit()">
+        <div class="col-md-3 row text-center">
+         <button type="button" class="btn-sm btn-primary" ng-click="switchToEdit()">
            Add Sprint
         </button>
         </div>
@@ -54,39 +55,59 @@
 
 
         <div class="row">
-            <div class="col-md-3"> 
-               <div class="scrollit">
+            <div class="col-md-2"> 
+            </div>
+            <div class="col-md-8"> 
                 <table border="1">
                        <div class="content"><h3><input type="text" class="form-control" placeholder="Backlog name" id="text" ng-model="text"/></h3>     
                        </div>
                    </table>
-               </div>
            </div>
+        </div>
 
 
-
-
-    <div class="col-md-9"> 
+<div class="row">
+ <div class="col-md-1"></div> 
+    <div class="col-md-10"> 
         <div class="scrollit">
 
 <table style='table-layout:fixed;width:100%;height:100px' border='1'>
     <tr style='height: 45px;'>
         <th style='width: 10%;'>ID</th>
-        <th style='width: 15%;'>User Story</th>
-        <th style='width: 15%;'>Acceptable Criteria</th>
-        <th style='width: 15%;'>Sprint</th>
+        <th style='width: 12%;'>User Story</th>
+        <th style='width: 12%;'>Acceptable Criteria</th>
+        <th style='width: 12%;'>Sprint</th>
         <th style='width: 30%;'>Comments</th>
         <th style='width: 8%;'>Days</th>
         <th style='width: 8%;'>Points</th>
         <th style='width: 9%;'>Cost</th>
+        <th style='width: 8%;'></th>
     </tr>
 <br>
-    <tr style='height: 45px;' ng-repeat="userStory in userStories">
+    <tr style='height: 45px;' ng-repeat="userStory in userStories" ng-show="!editbacklog">
+        <th style='width: 10%;'><p></p></th>
+        <th style='width: 15%;'><p></p></th>
+        <th style='width: 15%;'><p></p></th>
+
+        <th style='width: 15%;'> 
+        <select name="model type" default='b' class = "form-control">
+                                    <option value="01" ng-repeat = "sprint in sprints" value='sprint'>{{sprint}}</option>
+        </select>
+       </th>
+        <th style='width: 130%;'><p></p></th>
+        <th style='width: 8%;'><p></p></th>
+        <th style='width: 8%;'><p></p></th>
+        <th style='width: 9%;'><p></p></th>
+    </tr>
+
+
+    <tr style='height: 45px;' ng-repeat="userStory in userStories" ng-show="editbacklog">
         <th style='width: 10%;'><input type="text" class="form-control" id="text" ng-model="userStory.id"/></th>
         <th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="userStory.name"/></th>
         <th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="userStory.acceptanceCriteria"/></th>
 
-        <th style='width: 15%;'> <select name="model type" default='b' class = "form-control">
+        <th style='width: 15%;'> 
+        <select name="model type" default='b' class = "form-control">
                                     <option value="01" ng-repeat = "sprint in sprints" value='sprint'>{{sprint}}</option>
         </select>
        </th>
@@ -94,18 +115,30 @@
         <th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="userStory.days"/></th>
         <th style='width: 8%;'><input type="text" class="form-control" id="text" ng-model="userStory.points"/></th>
         <th style='width: 9%;'><input type="text" class="form-control" id="text" ng-model="userStory.cost"/></th>
-        </tr>
-    <br>
-    
+        <th type="button" ng-click="editbacklog()" class="btn btn-primary btn-block">Edit </th>
+    </tr>
+
+<br>
+</table>   
+</div>
+</div>
 </div>
 
-</div>
+
+<br>
+<br>
+
 
 </body>
 <script type="text/javascript">
 function backlogController($scope, $http){
     $scope.userStories = [];
     $scope.sprints = [];
+    $scope.editbacklog  = false;
+
+    $scope.editbacklog = function(){
+        $scope.editbacklog  = !$scope.editbacklog; 
+    }
     $scope.getSprints = function(){
         $http({
             method : 'GET',

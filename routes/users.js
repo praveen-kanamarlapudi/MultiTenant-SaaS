@@ -250,7 +250,8 @@ exports.getData = function(req, res)
 					if (result.length > 0) {
 						var proj = "projectNaame";
 						console.log(result.$proj);
-						res.send(result);
+//						res.send(result);
+						res.send({'data':result, 'modelType':modelType});
 					} else {
 						res.send({
 							"Login" : "Fail",
@@ -801,8 +802,8 @@ exports.getSprints = function(req, res) {
  * Updates task details in waterfall model
  */
 exports.updateUserStoryStatus = function(req, res) {
-	var userId = req.param("userId");
-	var projectName = req.param("projectName");
+	var userId = req.session.userId;
+	var projectName = req.session.projectName;
 	var id = req.param("id");
 	var status = req.param("status");
 
@@ -962,11 +963,10 @@ exports.addUserStory = function(req, res) {
 exports.updateUserStory = function(req, res) {
 //	var userId = req.param("userId");
 //	var projectName = req.param("projectName");
-	var userId = "100";
-	var projectName = "Testing Project";
+	var userId = req.session.userId;
+	var projectName = req.session.projectName;
 	
 	var id = req.param("id");
-	var projectName = req.param("projectName");
 	var backlogId = req.param("backlogId");
 	var name = req.param("name");
 	var duration = req.param("duration");
