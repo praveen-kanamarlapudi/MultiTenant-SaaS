@@ -10,6 +10,9 @@ exports.start = function(req, res){
 
 
 exports.signIn = function(req, res) {
+	if(req.session){
+		req.session.destroy();
+	}
 	var email = req.param("email");
     var password = req.param("password");
 	
