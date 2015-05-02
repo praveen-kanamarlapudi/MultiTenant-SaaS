@@ -151,6 +151,39 @@ exports.getCardsOnStatus = function (req,res)
 	});
 };
 
+/**
+ * @author PraveenK
+ */
+exports.scrumStatus = function(req, res){
+	
+	if(req.session === undefined || req.sesssion.userId === undefined){
+		
+	}
+	var userId = req.sesssion.userId;
+	
+	var mongo = db.mongo;
+	mongo.collection('scrum').find({
+		'userId' : userId
+	}, {
+		projectName : true,
+		_id : false
+	}).toArray(function(err, result) {
+		if (err) {
+			res.send({
+				'status' : 'Failed',
+				'error' : 'User has not created any project yet.'
+			});
+		}
+		console.log(JSON.stringify(result));
+		res.send({
+			'status' : 'Success',
+			'projects' : result
+		});
+	})
+	
+	
+	
+}
 
 exports.getProjects = function(req, res) {
 	if (req.session === undefined || req.session.userId === undefined) {
@@ -1226,6 +1259,103 @@ exports.createProject = function(req, res) {
 	});
 };
 
+/*
+ * Gets all custom fields and fieldTypes
+ */
+exports.getCustomFields = function(req,res){
+	// var userId = req.session.userId;
+	// var userId = req.param('userId');
+	var userId = 'abcd@gm.com';
+	var mongo = db.mongo;
+	
+	mongo.collection('metadata').find({
+		userId : userId
+	}).toArray(function(error, result){
+		if(error){
+			res.send({'status':'Failed'});
+		} else {
+			if(result.length>0){
+				console.log(JSON.stringify(result));
+				res.send({'status':'Success',fields:result[0].fields});
+			} else {
+				res.send({'status' : 'Success', fields : null});
+			}
+		}
+	});
+}
+
+/**
+ * Creates custom field and feildType.
+ */
+exports.createCustomField = function(req, res) {
+	// var userId = req.session.userId;
+	// var userId = req.param('userId');
+	var userId = 'abcd@gm.com';
+	var mongo = db.mongo;
+
+	// var fieldNa = req.param('fieldName');
+	// var fieldVa = req.param('fieldType');
+	var fieldNa = 'new';
+	var fieldVa = 'string';
+	console.log('in createCustomField');
+	mongo.collection('metadata').find({
+		userId : userId
+	}, {
+		fieldName : true,
+		fieldType : true,
+		userId : true
+	}).toArray(function(error, result) {
+		console.log(result);
+		if (error) {
+			res.send({
+				'status' : 'Failed'
+			});
+		} else if (result.length > 0) {
+			console.log('result > 0');
+			mongo.collection('metadata').update({
+				userId : userId
+			}, {
+				$push : {
+					fields:{
+					fieldName : fieldNa,
+					fieldType : fieldVa}
+				}
+			}, function(err, resu) {
+				if (err) {
+					res.send({
+						'status' : 'Failed'
+					});
+				} else {
+					res.send({
+						'status' : 'Success'
+					});
+				}
+			})
+		} else {
+			mongo.collection('metadata').insert({
+				userId : userId,
+				fields : [{
+				fieldName :  fieldNa,
+				fieldType :  fieldVa
+				}]
+			}, function(err, resu) {
+				if (err) {
+					res.send({
+						'status' : 'Failed'
+					});
+				} else {
+					res.send({
+						'status' : 'Success'
+					});
+				}
+			})
+		}
+	});
+};
+
+
+
+
 exports.create = function(req,res)
 {
 	res.render('create');
@@ -1238,6 +1368,8 @@ exports.view = function(req,res)
 {
 	res.render('view');
 };
+
+
 
 /**
  * @TODO

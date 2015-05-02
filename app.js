@@ -28,7 +28,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.post('/signUp', login.signUp);
+
 app.post('/signOut', login.signOut);
 //app.post('/updateCardStatus', users.updateCardStatus);
 //app.put('/updateTaskStatus', users.updateTaskStatus);
@@ -66,7 +66,8 @@ app.get('/', login.start);
 app.get('/backlog', login.backlog);
 
 app.get('/loadCards', users.loadCards);
-
+app.get('/createCustomField', users.createCustomField);
+app.get('/getCustomFields', users.getCustomFields);
 app.post('/selectProject', users.getData);
 //app.post('/selectProject', users.temp);
 
