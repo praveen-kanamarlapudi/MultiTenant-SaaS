@@ -613,6 +613,9 @@
             $scope.waterfallPageShow = false;
             $scope.scrumPageShow = false;
 
+            //For displaying custom fields..
+            $scope.customFields = [];
+
             //For Waterfall..
             $scope.tasks=[];
         	$scope.visible = [];
@@ -714,11 +717,25 @@
 					console.log(res.modelType);
 					if(res.modelType === 'waterfall'){
 						$scope.Waterfall(res);
+						$scope.getCustomFeilds()
 					} else if (res.modelType === 'scrum'){
+						$scope.getCustomFeilds()
 						$scope.scrumInit(res);
 					} else {
 						console.log('Its by mistake.. :)');
 						window.location = "/loadCards";
+					}
+				})
+			}
+
+			$scope.getCustomFeilds = function(){
+				$http({
+					method : 'GET',
+					url : '/getCustomFields'
+				}).success(function(res){
+					console.log(res);
+					if(res.success === 'Success'){
+						$scope.customFields = res.fields;
 					}
 				})
 			}

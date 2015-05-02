@@ -3,6 +3,7 @@
  */
 
 var db = require("./db");
+var login = require('./login');
 
 var projectStatus;
 var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
@@ -11,178 +12,170 @@ var taskStatusData = [];
 /**
  * Gets user project data depending on user tenant type
  */
-function getCards(result,req,res)
-{
+function getCards(result, req, res) {
 	var mongo = db.mongo;
 	var userId = req.session.userId;
 	var projectName = req.param("projectName");
-	
-	if (result.length > 0) 
-	{
+	firstData = [], secondData = [], thirdData = [], fourthData = [],
+			fifthData = [];
+	if (result.length > 0) {
 		var cards = result[0].cards;
-		for(var i = 0; i < cards.length ; i++)
-		{
-			if(cards[i].status === null || cards[i].status === undefined)
-			{
+		for (var i = 0; i < cards.length; i++) {
+			if (cards[i].status === null || cards[i].status === undefined) {
 				firstData.push(cards[i]);
-			}
-			else if(cards[i].status === "Ready for Dev")
-			{
+			} else if (cards[i].status === "Ready for Dev") {
 				secondData.push(cards[i]);
-			}
-			else if(cards[i].status === "In progress")
-			{
+			} else if (cards[i].status === "In progress") {
 				thirdData.push(cards[i]);
-			}
-			else if(cards[i].status === "Testing")
-			{
+			} else if (cards[i].status === "Testing") {
 				fourthData.push(cards[i]);
-			}
-			else if(cards[i].status === "Finished")
-			{
+			} else if (cards[i].status === "Finished") {
 				fifthData.push(cards[i]);
 			}
 		}
 	}
-	
-	console.log('AL  data.. '+JSON.stringify({ title: 'Express'
-        , firstdata:firstData
-        , seconddata:secondData 
-        , thirddata:thirdData 
-        , forthdata:fourthData 
-        , fifthdata:fifthData }));
-	res.send({"modelType" : "kanban"});
+
+	console.log('AL  data.. ' + JSON.stringify({
+		title : 'Express',
+		firstdata : firstData,
+		seconddata : secondData,
+		thirddata : thirdData,
+		forthdata : fourthData,
+		fifthdata : fifthData
+	}));
+	res.send({
+		"modelType" : "kanban"
+	});
 }
 
-exports.getProjectStatusWaterfall = function(req,res)
-{
+exports.getProjectStatusWaterfall = function(req, res) {
 	console.log("got project status" + taskStatusData);
-	res.render('waterfallgraph', { title: 'Waterfall Status Graph', status: taskStatusData});
+	res.render('waterfallgraph', {
+		title : 'Waterfall Status Graph',
+		status : taskStatusData
+	});
 };
 
-exports.getWaterfallStatus = function(req,res)
-{
-	var mongo       = db.mongo;
+exports.getWaterfallStatus = function(req, res) {
+	var mongo = db.mongo;
 	var userId = req.session.userId;
 	var projectName = req.session.projectName;
 	mongo.collection("waterfall").find({
 		"userId" : userId,
-		'projectName' : projectName}).toArray(function(err, result) 
-	{
-		if (err || !result)
-		{
-			res.send({"error" : "Something went wrong",
-				      "status": "Failed"});
-		}	
-		else 
-		{
+		'projectName' : projectName
+	}).toArray(function(err, result) {
+		if (err || !result) {
+			res.send({
+				"error" : "Something went wrong",
+				"status" : "Failed"
+			});
+		} else {
 			console.log(result);
-			if (result.length > 0) 
-			{
+			if (result.length > 0) {
 				var tasks = result[0].tasks;
-				for(var i =0 ; i < tasks.length; i++)
-				{
+				for (var i = 0; i < tasks.length; i++) {
 					taskStatusData.push(tasks[i].completed);
 					console.log(tasks[i].completed);
 				}
 			}
-			res.send({"status": "success"});
+			res.send({
+				"status" : "success"
+			});
 		}
 	});
 };
 
-exports.getProjectStatus = function(req,res)
-{
+exports.getProjectStatus = function(req, res) {
 	console.log("got project status" + projectStatus.testingcount);
-	res.render('kanbangraph', { title: 'Kanban Status Graph', status: projectStatus});
+	res.render('kanbangraph', {
+		title : 'Kanban Status Graph',
+		status : projectStatus
+	});
 };
 
-exports.getCardsOnStatus = function (req,res)
-{
-	var mongo       = db.mongo;
+exports.getCardsOnStatus = function(req, res) {
+	var mongo = db.mongo;
 	var userId = req.session.userId;
 	var projectName = req.session.projectName;
 	console.log("project name is " + projectName);
-	mongo.collection("kanban").find({
-		"userId" : userId,
-		'projectName' : projectName}).toArray(function(err, result) 
-	{
-		if (err || !result)
-		{
-			res.send({"error" : "Something went wrong"});
-		}	
-		else 
-		{
-			console.log(result);
-			var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
-			if (result.length > 0) {
-				var cards = result[0].cards;
-				for(var i = 0; i < cards.length ; i++)
-				{
-					if(cards[i].status === null || cards[i].status === undefined)
-					{
-						firstData.push(cards[i]);
-					}
-					else if(cards[i].status === "Ready for Dev")
-					{
-						secondData.push(cards[i]);
-					}
-					else if(cards[i].status === "In progress")
-					{
-						thirdData.push(cards[i]);
-					}
-					else if(cards[i].status === "Testing")
-					{
-						fourthData.push(cards[i]);
-					}
-					else if(cards[i].status === "Finished")
-					{
-						fifthData.push(cards[i]);
-					}
-				}
-			}
-			projectStatus = { notsetcount:firstData.length
-			       , readyfordevcount:secondData.length
-			       , inprogresscount:thirdData.length
-			       , testingcount:fourthData.length
-			       , finishedcount:fifthData.length };
-			res.send({"success" : "load"});
-		}
-	});
+	mongo
+			.collection("kanban")
+			.find({
+				"userId" : userId,
+				'projectName' : projectName
+			})
+			.toArray(
+					function(err, result) {
+						if (err || !result) {
+							res.send({
+								"error" : "Something went wrong"
+							});
+						} else {
+							console.log(result);
+							var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
+							if (result.length > 0) {
+								var cards = result[0].cards;
+								for (var i = 0; i < cards.length; i++) {
+									if (cards[i].status === null
+											|| cards[i].status === undefined) {
+										firstData.push(cards[i]);
+									} else if (cards[i].status === "Ready for Dev") {
+										secondData.push(cards[i]);
+									} else if (cards[i].status === "In progress") {
+										thirdData.push(cards[i]);
+									} else if (cards[i].status === "Testing") {
+										fourthData.push(cards[i]);
+									} else if (cards[i].status === "Finished") {
+										fifthData.push(cards[i]);
+									}
+								}
+							}
+							projectStatus = {
+								notsetcount : firstData.length,
+								readyfordevcount : secondData.length,
+								inprogresscount : thirdData.length,
+								testingcount : fourthData.length,
+								finishedcount : fifthData.length
+							};
+							res.send({
+								"success" : "load"
+							});
+						}
+					});
 };
 
 /**
  * @author PraveenK
  */
-exports.scrumStatus = function(req, res){
-	
-	if(req.session === undefined || req.sesssion.userId === undefined){
-		
-	}
-	var userId = req.sesssion.userId;
-	
-	var mongo = db.mongo;
-	mongo.collection('scrum').find({
-		'userId' : userId
-	}, {
-		projectName : true,
-		_id : false
-	}).toArray(function(err, result) {
-		if (err) {
+exports.scrumStatus = function(req, res) {
+
+	if (req.session === undefined || req.session.userId === undefined) {
+		login.start(req, res);
+	} else {
+		var userId = req.session.userId;
+
+		var mongo = db.mongo;
+		mongo.collection('scrum').find({
+			'userId' : userId
+		}, {
+			projectName : true,
+			_id : false
+		}).toArray(function(err, result) {
+			if (err) {
+				res.send({
+					'status' : 'Failed',
+					'error' : 'User has not created any project yet.'
+				});
+			}
+			console.log(JSON.stringify(result));
 			res.send({
-				'status' : 'Failed',
-				'error' : 'User has not created any project yet.'
+				'status' : 'Success',
+				'projects' : result
 			});
-		}
-		console.log(JSON.stringify(result));
-		res.send({
-			'status' : 'Success',
-			'projects' : result
-		});
-	})
-	
-	
-	
+		})
+
+	}
+
 }
 
 exports.getProjects = function(req, res) {
@@ -216,25 +209,28 @@ exports.getProjects = function(req, res) {
 
 }
 
-
-exports.temp = function(req,res){
+exports.temp = function(req, res) {
 	res.render('view');
 }
 
-exports.loadCards = function(req,res)
-{
-	res.render('index', {
-				title : 'Kanban View',
-				firstdata : firstData,
-				seconddata : secondData,
-				thirddata : thirdData,
-				forthdata : fourthData,
-				fifthdata : fifthData
-			});
+exports.loadCards = function(req, res) {
+	if (req.session === undefined || req.session.userId === undefined) {
+		login.start(req, res);
+	} else {
+		console.log('first load.....');
+		console.log(firstData);
+		res.render('index', {
+			title : 'Kanban View',
+			firstdata : firstData,
+			seconddata : secondData,
+			thirddata : thirdData,
+			forthdata : fourthData,
+			fifthdata : fifthData
+		});
+	}
 };
 
-exports.getData = function(req, res) 
-{
+exports.getData = function(req, res) {
 
 	if (req.session === undefined || req.session.userId === undefined) {
 		res.render('homepage');
@@ -245,13 +241,11 @@ exports.getData = function(req, res)
 		var userId = req.session.userId;
 		var modelType = req.session.modelType;
 		var projectName = req.param('projectName');
-		
-		if(projectName !== null ||
-		   projectName !== undefined)
-		{
+
+		if (projectName !== null || projectName !== undefined) {
 			req.session.projectName = projectName;
 		}
-		
+
 		if (modelType === undefined) {
 			res
 					.send({
@@ -273,11 +267,14 @@ exports.getData = function(req, res)
 						console.log('Got data from db.. In waterfalllll');
 						console.log(result);
 						req.session.data = result[0];
-//						res.render('view', {
-//							session:session.data
-//						});
-						res.send({'data':result, 'modelType':modelType});
-//						res.render('view');
+						// res.render('view', {
+						// session:session.data
+						// });
+						res.send({
+							'data' : result,
+							'modelType' : modelType
+						});
+						// res.render('view');
 					} else {
 						res.send({
 							"Login" : "Fail",
@@ -291,18 +288,15 @@ exports.getData = function(req, res)
 				"userId" : userId,
 				'projectName' : projectName
 			}).toArray(function(err, result) {
-				if (err || !result) 
-				{
+				if (err || !result) {
 					res.send({
 						"error" : "Something went wrong"
 					});
-				} 
-				else 
-				{
+				} else {
 					console.log(result);
 					// load kanban project view in getCards
 					// function
-					getCards( result, req, res);
+					getCards(result, req, res);
 				}
 			});
 		} else if (modelType === "scrum") {
@@ -320,8 +314,11 @@ exports.getData = function(req, res)
 					if (result.length > 0) {
 						var proj = "projectNaame";
 						console.log(result.$proj);
-//						res.send(result);
-						res.send({'data':result, 'modelType':modelType});
+						// res.send(result);
+						res.send({
+							'data' : result,
+							'modelType' : modelType
+						});
 					} else {
 						res.send({
 							"Login" : "Fail",
@@ -359,42 +356,43 @@ exports.getData = function(req, res)
 	}
 };
 
+exports.getTasksOnStatus = function(req, res) {
+	if (req.session === undefined || req.session.userId === undefined) {
+		login.start(req, res);
+	} else {
+		var mongo = db.mongo;
+		var userId = req.param("userId");
+		var projectName = req.param("projectName");
+		var completed = req.param("completed");
 
-
-exports.getTasksOnStatus = function(req,res){
-	var mongo = db.mongo;
-	var userId = req.param("userId");
-	var projectName = req.param("projectName");
-	var completed = req.param("completed");
-	
-	mongo.collection("waterfall").find({
-		"userId" : userId,
-		'projectName' : projectName},
-		{
-			tasks:{
-				 $elemMatch : {
-			            'completed' : completed
-			        }
+		mongo.collection("waterfall").find({
+			"userId" : userId,
+			'projectName' : projectName
+		}, {
+			tasks : {
+				$elemMatch : {
+					'completed' : completed
+				}
 			}
-		
-	}).toArray(function(err, result) {
-		if (err || !result)
-			res.send({
-				"error" : "Something went wrong"
-			});
-		else {
-			console.log(result);
-			if (result.length > 0) {
-				var proj = "projectNaame";
-				console.log(result);
-				res.send(result[0].cards);
-			} else
+
+		}).toArray(function(err, result) {
+			if (err || !result)
 				res.send({
-					"Error" : "No records in requested status",
+					"error" : "Something went wrong"
 				});
-		}
-	});
-	
+			else {
+				console.log(result);
+				if (result.length > 0) {
+					var proj = "projectNaame";
+					console.log(result);
+					res.send(result[0].cards);
+				} else
+					res.send({
+						"Error" : "No records in requested status",
+					});
+			}
+		});
+	}
 }
 
 /**
@@ -404,11 +402,14 @@ exports.getTasksOnStatus = function(req,res){
  * @param res
  */
 exports.updateCard = function(req, res) {
-//	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
+	// if(req.session === undefined || req.session.userId === undefined){
+	// login.start(req,res);
+	// } else {
+	// var userId = req.param("userId");
+	// var projectName = req.param("projectName");
 	var userId = "g.apoorvareddy@gmail.com";
 	var projectName = "Testing Project";
-	
+
 	var cardId = req.param("cardId");
 	var description = req.param("editedDescription");
 	var startDate = req.param("plannedStart");
@@ -426,7 +427,7 @@ exports.updateCard = function(req, res) {
 	console.log(resources);
 	console.log(teamSize);
 	console.log(priority);
-	
+
 	if (!userId || !projectName || !cardId || userId === undefined
 			|| projectName === undefined || cardId === undefined) {
 		res.send({
@@ -444,25 +445,25 @@ exports.updateCard = function(req, res) {
 		}
 	}, {
 		$set : {
-			
-			'cards.$.description': description,
+
+			'cards.$.description' : description,
 			'cards.$.startDate' : startDate,
 			'cards.$.endDate' : endDate,
 			'cards.$.teamSize' : teamSize,
 			'cards.$.comments' : comments,
 			'cards.$.resources' : resources,
-			'cards.$.priority':priority
+			'cards.$.priority' : priority
 		}
 	}, function(err, result) {
 
-		//console.log(err);
-		//console.log(result);
+		// console.log(err);
+		// console.log(result);
 		res.send({
 			"result" : result
 		});
 	});
+	// }
 };
-
 
 /**
  * Update card status for kanban
@@ -471,38 +472,37 @@ exports.updateCard = function(req, res) {
  * @param res
  */
 exports.updateCardStatus = function(req, res) {
-//	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
+	// if(req.session === undefined || req.session.userId === undefined){
+	// login.start(req,res);
+	// } else {
+	// var userId = req.param("userId");
+	// var projectName = req.param("projectName");
 	var userId = "g.apoorvareddy@gmail.com";
 	var projectName = "Testing Project";
-	
+
 	var cardId = req.param("cardId");
 	var column = req.param("status");
 
 	console.log(column);
 	var status = null;
-	if(column === "secondcol")
-	{
+	if (column === "secondcol") {
 		status = "Ready for Dev";
 		console.log(status);
-	}
-	else if(column === "thirdcol")
-	{
+	} else if (column === "thirdcol") {
 		status = "In progress";
-	}
-	else if(column === "forthcol")
-	{
+	} else if (column === "forthcol") {
 		status = "Testing";
-	}
-	else if(column === "fifthcol")
-	{
+	} else if (column === "fifthcol") {
 		status = "Finished";
 	}
-	if (!userId || !projectName || !cardId || userId === undefined || 
-		projectName === undefined || cardId === undefined || status === undefined) {
-		res.send({"error" : "In Sufficient details"});
+	if (!userId || !projectName || !cardId || userId === undefined
+			|| projectName === undefined || cardId === undefined
+			|| status === undefined) {
+		res.send({
+			"error" : "In Sufficient details"
+		});
 	}
-	
+
 	var mongo = db.mongo;
 	console.log(cardId);
 	mongo.collection("kanban").update({
@@ -519,18 +519,20 @@ exports.updateCardStatus = function(req, res) {
 		}
 	}, function(err, result) {
 
-		if(err)
-		{
+		if (err) {
 			console.log("failed");
-			res.send({"error" : "failed to move card!"});
-		}
-		else
-		{
+			res.send({
+				"error" : "failed to move card!"
+			});
+		} else {
 			console.log("success");
-			res.send({"success" : "success"});
+			res.send({
+				"success" : "success"
+			});
 		}
-		
+
 	});
+	// }
 };
 
 /**
@@ -540,45 +542,54 @@ exports.updateCardStatus = function(req, res) {
  * @param res
  */
 exports.deleteCard = function(req, res) {
-//	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
-	var userId = "g.apoorvareddy@gmail.com";
-	var projectName = "Testing Project";
-	
-	var cardId = req.param("cardId");
-	
-	if (!userId || !projectName || !cardId || userId === undefined || 
-		projectName === undefined || cardId === undefined ) {
-		res.send({"error" : "In Sufficient details"});
-	}
-	
-	var mongo = db.mongo;
-	console.log(cardId);
-	mongo.collection("kanban").update(
-		{
-		"userId" : userId,
-		'projectName' : projectName},
-	 {
-		$pull : {'cards': { cardId: cardId}}
-	}, function(err, result) {
+	if (req.session === undefined || req.session.userId === undefined) {
+		login.start(req, res);
+	} else {
+		// var userId = req.param("userId");
+		// var projectName = req.param("projectName");
+		var userId = "g.apoorvareddy@gmail.com";
+		var projectName = "Testing Project";
 
-		if(err)
-		{
-			console.log("failed");
-			res.send({"error" : "failed to move card!"});
+		var cardId = req.param("cardId");
+
+		if (!userId || !projectName || !cardId || userId === undefined
+				|| projectName === undefined || cardId === undefined) {
+			res.send({
+				"error" : "In Sufficient details"
+			});
 		}
-		else
-		{
-			console.log("success");
-			res.send({"success" : "success"});
-		}
-		
-	});
+
+		var mongo = db.mongo;
+		console.log(cardId);
+		mongo.collection("kanban").update({
+			"userId" : userId,
+			'projectName' : projectName
+		}, {
+			$pull : {
+				'cards' : {
+					cardId : cardId
+				}
+			}
+		}, function(err, result) {
+
+			if (err) {
+				console.log("failed");
+				res.send({
+					"error" : "failed to move card!"
+				});
+			} else {
+				console.log("success");
+				res.send({
+					"success" : "success"
+				});
+			}
+
+		});
+	}
 };
 
+exports.getAllProjects = function(req, res) {
 
-exports.getAllProjects = function(req,res){
-	
 }
 
 /**
@@ -588,42 +599,52 @@ exports.getAllProjects = function(req,res){
  * @param res
  */
 exports.deleteTask = function(req, res) {
-	var userId = req.session.userId;
-	var projectName = req.session.projectName;
-//	var userId = "g.apoorvareddy@gmail.com";
-//	var projectName = "Testing Project";
-	
-	var taskId = req.param("taskId");
-	
-	if (!userId || !projectName || !taskId || userId === undefined || 
-		projectName === undefined || taskId === undefined ) {
-		res.send({"error" : "In Sufficient details"});
+	if (req.session === undefined || req.session.userId === undefined) {
+		login.start(req, res);
+	} else {
+		var userId = req.session.userId;
+		var projectName = req.session.projectName;
+		// var userId = "g.apoorvareddy@gmail.com";
+		// var projectName = "Testing Project";
+
+		var taskId = req.param("taskId");
+
+		if (!userId || !projectName || !taskId || userId === undefined
+				|| projectName === undefined || taskId === undefined) {
+			res.send({
+				"error" : "In Sufficient details"
+			});
+		}
+
+		var mongo = db.mongo;
+		console.log(taskId);
+		mongo.collection("waterfall").update({
+			"userId" : userId,
+			'projectName' : projectName
+		}, {
+			$pull : {
+				'tasks' : {
+					taskId : taskId
+				}
+			}
+		}, function(err, result) {
+
+			if (err) {
+				console.log("failed");
+				res.send({
+					"error" : "failed to move task!",
+					'status' : 'Failed'
+				});
+			} else {
+				console.log("success");
+				res.send({
+					"status" : "Success"
+				});
+			}
+
+		});
 	}
-	
-	var mongo = db.mongo;
-	console.log(taskId);
-	mongo.collection("waterfall").update(
-		{
-		"userId" : userId,
-		'projectName' : projectName},
-	 {
-		$pull : {'tasks': { taskId: taskId}}
-	}, function(err, result) {
-
-		if(err)
-		{
-			console.log("failed");
-			res.send({"error" : "failed to move task!", 'status' : 'Failed'});
-		}
-		else
-		{
-			console.log("success");
-			res.send({"status" : "Success"});
-		}
-		
-	});
 };
-
 
 /**
  * delete card for kanban
@@ -632,45 +653,50 @@ exports.deleteTask = function(req, res) {
  * @param res
  */
 exports.deleteUserstory = function(req, res) {
-//	var userId = req.param("userId");
-////	var projectName = req.param("projectName");
-//	var userId = "g.apoorvareddy@gmail.com";
-//	var projectName = "Testing Project";
+	// var userId = req.param("userId");
+	// // var projectName = req.param("projectName");
+	// var userId = "g.apoorvareddy@gmail.com";
+	// var projectName = "Testing Project";
 	var userId = req.session.userId;
 	var projectName = req.session.projectName;
-	
+
 	var id = req.param("id");
-	
-	if (!userId || !projectName || !id || userId === undefined || 
-		projectName === undefined || id === undefined ) {
-		res.send({"error" : "In Sufficient details"});
+
+	if (!userId || !projectName || !id || userId === undefined
+			|| projectName === undefined || id === undefined) {
+		res.send({
+			"error" : "In Sufficient details"
+		});
 	}
-	
+
 	var mongo = db.mongo;
 	console.log(id);
-	mongo.collection("scrum").update(
-		{
+	mongo.collection("scrum").update({
 		"userId" : userId,
-		'projectName' : projectName},
-	 {
-		$pull : {'userStories': { id: id}}
+		'projectName' : projectName
+	}, {
+		$pull : {
+			'userStories' : {
+				id : id
+			}
+		}
 	}, function(err, result) {
 
-		if(err)
-		{
+		if (err) {
 			console.log("failed");
-			res.send({"error" : "failed to move user story!", 'status' : 'Failed'});
-		}
-		else
-		{
+			res.send({
+				"error" : "failed to move user story!",
+				'status' : 'Failed'
+			});
+		} else {
 			console.log("success");
-			res.send({"status" : "Success"});
+			res.send({
+				"status" : "Success"
+			});
 		}
-		
+
 	});
 };
-
-
 
 /**
  * Updates task details in waterfall model
@@ -687,15 +713,15 @@ exports.updateTask = function(req, res) {
 	var resources = req.param("resources");
 	var risks = req.param("risks");
 	var completed = req.param("completed");
-//	console.log('predecessors '+predecessors);
-//	if(predecessors !== undefined){
-//		predecessors = predecessors.split(',');
-//	}
-//	if(resources !== undefined){
-//		resources = resources.split(',');
-//	}
-//	console.log(predecessors);
-	
+	// console.log('predecessors '+predecessors);
+	// if(predecessors !== undefined){
+	// predecessors = predecessors.split(',');
+	// }
+	// if(resources !== undefined){
+	// resources = resources.split(',');
+	// }
+	// console.log(predecessors);
+
 	if (!userId || !projectName || !taskId || userId === undefined
 			|| projectName === undefined || taskId === undefined) {
 		res.send({
@@ -731,7 +757,6 @@ exports.updateTask = function(req, res) {
 	}
 };
 
-
 /**
  * Updates task details in waterfall model
  */
@@ -741,8 +766,9 @@ exports.updateTaskStatus = function(req, res) {
 	var taskId = req.param("taskId");
 	var completed = req.param("completed");
 
-	if (!userId || !projectName || !taskId || !completed || userId === undefined
-			|| projectName === undefined || taskId === undefined || completed === undefined) {
+	if (!userId || !projectName || !taskId || !completed
+			|| userId === undefined || projectName === undefined
+			|| taskId === undefined || completed === undefined) {
 		res.send({
 			"error" : "Insufficient details"
 		});
@@ -772,29 +798,29 @@ exports.updateTaskStatus = function(req, res) {
  * Add task in waterfall model.
  */
 exports.addTask = function(req, res) {
-//	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
-	
+	// var userId = req.param("userId");
+	// var projectName = req.param("projectName");
+
 	var userId = req.session.userId;
 	var projectName = req.session.projectName;
 	var task = req.param("task");
-	console.log('In add task: '+JSON.stringify(task));
-	console.log('userId: '+userId);
-	console.log('projectName: '+projectName);
-//	var taskId = req.param("taskId");
-//	var taskName = req.param("taskName");
-//	var duration = req.param("duration");
-//	var startDate = req.param("startDate");
-//	var endDate = req.param("endDate");
-//	var predecessors = req.param("predecessors");
-//	var resources = req.param("resources");
-//	var risks = req.param("risks");
-//	var completed = req.param("completed");
+	console.log('In add task: ' + JSON.stringify(task));
+	console.log('userId: ' + userId);
+	console.log('projectName: ' + projectName);
+	// var taskId = req.param("taskId");
+	// var taskName = req.param("taskName");
+	// var duration = req.param("duration");
+	// var startDate = req.param("startDate");
+	// var endDate = req.param("endDate");
+	// var predecessors = req.param("predecessors");
+	// var resources = req.param("resources");
+	// var risks = req.param("risks");
+	// var completed = req.param("completed");
 
-	if (!userId || !projectName || !task.taskId || !task.duration || !task.startDate
-			|| !task.endDate || !task.completed || userId === undefined
-			|| projectName === undefined || task.taskId === undefined
-			|| task.duration === undefined
+	if (!userId || !projectName || !task.taskId || !task.duration
+			|| !task.startDate || !task.endDate || !task.completed
+			|| userId === undefined || projectName === undefined
+			|| task.taskId === undefined || task.duration === undefined
 			|| task.startDate === undefined || task.endDate === undefined
 			|| task.completed === undefined) {
 		res.send({
@@ -811,37 +837,44 @@ exports.addTask = function(req, res) {
 					'taskId' : task.taskId
 				}
 			}
-		}).toArray(function(err, results) {
-			if (results.length > 0) {
-				console.log('Task with id '+task.taskId+' already exists.');
-				res.send({
-					'error' : 'Task with given id already exists.'
-				});
-			} else {
-				console.log('Creating task with id'+task.taskId);
-				mongo.collection("waterfall").update({
-					"userId" : userId,
-					'projectName' : projectName,
-				}, {
-					$push : {
-						'tasks' : task
-					}
-				}, function(err, result) {
-					if (err) {
+		}).toArray(
+				function(err, results) {
+					if (results.length > 0) {
+						console.log('Task with id ' + task.taskId
+								+ ' already exists.');
 						res.send({
-							'status' : 'Failed',
-							error : 'err'
-						})
-					} else {
-						console.log('task with id '+task.taskId+' created successfully.');
-						res.send({
-							"result" : result,
-							'status' : 'Success'
+							'error' : 'Task with given id already exists.'
 						});
+					} else {
+						console.log('Creating task with id' + task.taskId);
+						mongo.collection("waterfall").update(
+								{
+									"userId" : userId,
+									'projectName' : projectName,
+								},
+								{
+									$push : {
+										'tasks' : task
+									}
+								},
+								function(err, result) {
+									if (err) {
+										res.send({
+											'status' : 'Failed',
+											error : 'err'
+										})
+									} else {
+										console.log('task with id '
+												+ task.taskId
+												+ ' created successfully.');
+										res.send({
+											"result" : result,
+											'status' : 'Success'
+										});
+									}
+								});
 					}
 				});
-			}
-		});
 
 	}
 };
@@ -875,7 +908,7 @@ exports.getSprints = function(req, res) {
 			}
 		}
 	});
-}	
+}
 
 /**
  * Updates task details in waterfall model
@@ -887,7 +920,8 @@ exports.updateUserStoryStatus = function(req, res) {
 	var status = req.param("status");
 
 	if (!userId || !projectName || !id || !status || userId === undefined
-			|| projectName === undefined || id === undefined || status === undefined) {
+			|| projectName === undefined || id === undefined
+			|| status === undefined) {
 		res.send({
 			"error" : "Insufficient details"
 		});
@@ -913,7 +947,6 @@ exports.updateUserStoryStatus = function(req, res) {
 	}
 };
 
-
 /**
  * Updates task details in waterfall model
  */
@@ -924,7 +957,8 @@ exports.updateUserStorySprint = function(req, res) {
 	var sprint = req.param("sprint");
 
 	if (!userId || !projectName || !id || !sprint || userId === undefined
-			|| projectName === undefined || id === undefined || sprint === undefined) {
+			|| projectName === undefined || id === undefined
+			|| sprint === undefined) {
 		res.send({
 			"error" : "Insufficient details"
 		});
@@ -950,9 +984,6 @@ exports.updateUserStorySprint = function(req, res) {
 	}
 };
 
-
-
-
 /**
  * Add task in waterfall model.
  */
@@ -969,66 +1000,75 @@ exports.addUserStory = function(req, res) {
 	var risks = req.param("risks");
 	var status = req.param("status");
 	var sprintId = req.param("sprint");
-	
+
 	if (!userId || !projectName || !backlogId || !userStoryId || !days
-			|| !points || userId === undefined
-			|| projectName === undefined || backlogId === undefined
-			|| userStoryId === undefined 
-			|| days === undefined || points === undefined
-			) {
+			|| !points || userId === undefined || projectName === undefined
+			|| backlogId === undefined || userStoryId === undefined
+			|| days === undefined || points === undefined) {
 		res.send({
 			"error" : "Insufficient details"
 		});
 	} else {
-		
-		if(status === undefined){
+
+		if (status === undefined) {
 			status = 'TO DO';
 		}
 		var mongo = db.mongo;
-		mongo.collection('scrum').find({
-			'userId' : userId,
-			'projectName' : projectName,
-			userStories : {
-				$elemMatch : {
-					'id' : userStoryId,
-					
-				}
-			}
-		}).toArray(function(err, results) {
-			console.log('checked whether user story with given id exists are not.'+JSON.stringify(results));
-			if (results.length > 0) {
-				res.send({
-					'error' : 'Task with given id already exists.'
-				});
-			} else {
-				mongo.collection("scrum").update({
-					"userId" : userId,
+		mongo
+				.collection('scrum')
+				.find({
+					'userId' : userId,
 					'projectName' : projectName,
-				}, {
-					$push : {
-						'userStories' : {
+					userStories : {
+						$elemMatch : {
 							'id' : userStoryId,
-							'name' : userStoryName,
-							'duration' : userStoryId,
-							'days' : days,
-							'points' : points,
-							'acceptanceCriteria' : acceptanceCriteria,
-							'resources' : resources,
-							'risks' : risks,
-							'status' : status,
-							'sprint' : sprintId,
-							'backlog' : backlogId
+
 						}
 					}
-				}, function(err, result) {
-//					console.log(result);
-//					console.log(res);
-					res.send({
-						"result" : result
-					});
-				});
-			}
-		});
+				})
+				.toArray(
+						function(err, results) {
+							console
+									.log('checked whether user story with given id exists are not.'
+											+ JSON.stringify(results));
+							if (results.length > 0) {
+								res
+										.send({
+											'error' : 'Task with given id already exists.'
+										});
+							} else {
+								mongo
+										.collection("scrum")
+										.update(
+												{
+													"userId" : userId,
+													'projectName' : projectName,
+												},
+												{
+													$push : {
+														'userStories' : {
+															'id' : userStoryId,
+															'name' : userStoryName,
+															'duration' : userStoryId,
+															'days' : days,
+															'points' : points,
+															'acceptanceCriteria' : acceptanceCriteria,
+															'resources' : resources,
+															'risks' : risks,
+															'status' : status,
+															'sprint' : sprintId,
+															'backlog' : backlogId
+														}
+													}
+												}, function(err, result) {
+													// console.log(result);
+													// console.log(res);
+													res.send({
+														"result" : result
+													});
+												});
+							}
+						});
 
 	}
 };
@@ -1040,36 +1080,36 @@ exports.addUserStory = function(req, res) {
  * @param res
  */
 exports.updateUserStory = function(req, res) {
-//	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
+	// var userId = req.param("userId");
+	// var projectName = req.param("projectName");
 	var userId = req.session.userId;
 	var projectName = req.session.projectName;
 	var story = req.param('data');
 	console.log(story);
-//	var id = req.param("id");
-//	var backlogId = req.param("backlogId");
-//	var name = req.param("name");
-//	var duration = req.param("duration");
-//	var days = req.param("days");
-//	var points = req.param("points");
-//	var resources = req.param("resources");
-//	var acceptanceCriteria = req.param("acceptanceCriteria");
-//	var priority = req.param("priority");
-//	var risks = req.param('risks');
-//	var status = req.param('status');
-//	var sprint = req.param('sprint');
+	// var id = req.param("id");
+	// var backlogId = req.param("backlogId");
+	// var name = req.param("name");
+	// var duration = req.param("duration");
+	// var days = req.param("days");
+	// var points = req.param("points");
+	// var resources = req.param("resources");
+	// var acceptanceCriteria = req.param("acceptanceCriteria");
+	// var priority = req.param("priority");
+	// var risks = req.param('risks');
+	// var status = req.param('status');
+	// var sprint = req.param('sprint');
 
-//	console.log(cardId);
-//	console.log(name);
-//	console.log(duration);
-//	console.log(days);
-//	console.log(points);
-//	console.log(resources);
-//	console.log(acceptanceCriteria);
-//	console.log(priority);
-	
-	if (!story.id || !projectName  || userId === undefined
-			|| projectName === undefined ) {
+	// console.log(cardId);
+	// console.log(name);
+	// console.log(duration);
+	// console.log(days);
+	// console.log(points);
+	// console.log(resources);
+	// console.log(acceptanceCriteria);
+	// console.log(priority);
+
+	if (!story.id || !projectName || userId === undefined
+			|| projectName === undefined) {
 		res.send({
 			"error" : "In Sufficient details"
 		});
@@ -1085,52 +1125,49 @@ exports.updateUserStory = function(req, res) {
 		}
 	}, {
 		$set : {
-			
-			'userStories.$.name': story.name,
+
+			'userStories.$.name' : story.name,
 			'userStories.$.comments' : story.comments,
 			'userStories.$.days' : story.days,
-//			'userStories.$.risks' : risks,
+			// 'userStories.$.risks' : risks,
 			'userStories.$.acceptanceCriteria' : story.acceptanceCriteria,
 			'userStories.$.points' : story.points,
 			'userStories.$.resources' : story.resources,
 			'userStories.$.sprint' : story.sprint,
-			'userStories.$.status':story.status
-//			'userStories.$.backlog':backlogId
+			'userStories.$.status' : story.status
+		// 'userStories.$.backlog':backlogId
 		}
 	}, function(err, result) {
 
-		//console.log(err);
-		//console.log(result);
+		// console.log(err);
+		// console.log(result);
 		res.send({
 			"result" : result
 		});
 	});
 };
 
-
-
 /**
  * Add card to kanban model.
  */
 exports.addCard = function(req, res) {
-//	var userId = req.param("userId");
-//	var projectName = req.param("projectName");
-	
+	// var userId = req.param("userId");
+	// var projectName = req.param("projectName");
+
 	var userId = "g.apoorvareddy@gmail.com";
 	var projectName = "Testing Project";
-	
+
 	var cardId = req.param("cardId");
 	var name = req.param("cardName");
 	var description = req.param("carddescription");
 
-	if (!userId || !projectName || !cardId || !description ||!name||
-			userId === undefined || projectName === undefined||
-			cardId === undefined || description === undefined) 
-	{
-		res.send({"error" : "Insufficient details"});
-	} 
-	else 
-	{
+	if (!userId || !projectName || !cardId || !description || !name
+			|| userId === undefined || projectName === undefined
+			|| cardId === undefined || description === undefined) {
+		res.send({
+			"error" : "Insufficient details"
+		});
+	} else {
 		var mongo = db.mongo;
 		mongo.collection('kanban').find({
 			'userId' : userId,
@@ -1146,9 +1183,7 @@ exports.addCard = function(req, res) {
 				res.send({
 					"error" : "Card with given id already exists."
 				});
-			} 
-			else
-			{
+			} else {
 				console.log("no elemnts found adding new");
 				mongo.collection("kanban").update({
 					"userId" : userId,
@@ -1162,17 +1197,18 @@ exports.addCard = function(req, res) {
 						}
 					}
 				}, function(err, result) {
-					if(err)
-					{
+					if (err) {
 						console.log(err);
-						res.send({"error" : result});
-					}
-					else
-					{
+						res.send({
+							"error" : result
+						});
+					} else {
 						console.log("success DB update");
-						res.send({"success" : result});
+						res.send({
+							"success" : result
+						});
 					}
-					
+
 				});
 			}
 		});
@@ -1262,23 +1298,31 @@ exports.createProject = function(req, res) {
 /*
  * Gets all custom fields and fieldTypes
  */
-exports.getCustomFields = function(req,res){
-	// var userId = req.session.userId;
+exports.getCustomFields = function(req, res) {
+	 var userId = req.session.userId;
 	// var userId = req.param('userId');
-	var userId = 'abcd@gm.com';
+//	var userId = 'abcd@gm.com';
 	var mongo = db.mongo;
-	
+
 	mongo.collection('metadata').find({
 		userId : userId
-	}).toArray(function(error, result){
-		if(error){
-			res.send({'status':'Failed'});
+	}).toArray(function(error, result) {
+		if (error) {
+			res.send({
+				'status' : 'Failed'
+			});
 		} else {
-			if(result.length>0){
+			if (result.length > 0) {
 				console.log(JSON.stringify(result));
-				res.send({'status':'Success',fields:result[0].fields});
+				res.send({
+					'status' : 'Success',
+					fields : result[0].fields
+				});
 			} else {
-				res.send({'status' : 'Success', fields : null});
+				res.send({
+					'status' : 'Success',
+					fields : null
+				});
 			}
 		}
 	});
@@ -1316,9 +1360,10 @@ exports.createCustomField = function(req, res) {
 				userId : userId
 			}, {
 				$push : {
-					fields:{
-					fieldName : fieldNa,
-					fieldType : fieldVa}
+					fields : {
+						fieldName : fieldNa,
+						fieldType : fieldVa
+					}
 				}
 			}, function(err, resu) {
 				if (err) {
@@ -1334,10 +1379,10 @@ exports.createCustomField = function(req, res) {
 		} else {
 			mongo.collection('metadata').insert({
 				userId : userId,
-				fields : [{
-				fieldName :  fieldNa,
-				fieldType :  fieldVa
-				}]
+				fields : [ {
+					fieldName : fieldNa,
+					fieldType : fieldVa
+				} ]
 			}, function(err, resu) {
 				if (err) {
 					res.send({
@@ -1353,25 +1398,16 @@ exports.createCustomField = function(req, res) {
 	});
 };
 
-
-
-
-exports.create = function(req,res)
-{
+exports.create = function(req, res) {
 	res.render('create');
 };
-exports.edit = function(req,res)
-{
+exports.edit = function(req, res) {
 	res.render('edit');
 };
-exports.view = function(req,res)
-{
+exports.view = function(req, res) {
 	res.render('view');
 };
 
-
-
 /**
- * @TODO
- * 3. Project status --> each status type and curresponding no of cards.
- */ 
+ * @TODO 3. Project status --> each status type and curresponding no of cards.
+ */
