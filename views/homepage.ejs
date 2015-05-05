@@ -489,7 +489,7 @@
 					<ul class="nav navbar-nav side-nav">
 						<li><a href="./"><i class="fa fa-bullseye"></i> Add Sprint</a></li>
 						<li><a href="./searchClients"><i class="fa fa-list-ol"></i> Add User Story</a></li>
-						<li><a href="./searchClients"><i class="fa fa-tasks"></i> Show Status</a></li>
+						<li><a data-ng-click=getScrumStatus()><i class="fa fa-tasks"></i> Show Status</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right navbar-user">                    
 						<li><a href="./logout"><i class="fa fa-power-off"></i> Log Out</a></li>                 
@@ -847,7 +847,20 @@
                 	}
             	})
 			}
-			
+			$scope.getScrumStatus = function()
+			{
+				$http({
+                	method : 'POST',
+                	url : '/getScrumStatus'
+            	}).success(function(res){
+                	console.log(res);
+                	if(res.status === 'Failed'){
+                    	alert(res.error);
+                	} else {
+                    	window.location = '/projectStatusScrum';
+                	}
+            	})
+			}
         	//functions for Scrum..
         	$scope.getSprints = function(){
         		$http({
