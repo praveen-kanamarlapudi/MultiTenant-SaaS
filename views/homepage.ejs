@@ -246,6 +246,14 @@
 		                                	    	<p class="form-control-static">{{task.completed}}</p>
 		                                		</div>
 			                            	</div>
+			                            	<div class="form-group" ng-repeat="customField in customFields">      
+		                	                	<label class="col-md-5">
+		                    	                	{{customField.fieldName}}:
+		                        	        	</label>
+		                            	    	<div class="col-md-6">
+		                                	    	<p class="form-control-static">{{task.newField}}</p>
+		                                		</div>
+			                            	</div>
 		    	                    	</fieldset>
 		                    		</form>
 			                	</div>
@@ -478,7 +486,7 @@
 	    			</div>
 				</div>	    		
 			</div>
-
+		</div>
 		<div class="modal-body" ng-show = "scrumPageShow">           
 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="navbar-header">
@@ -716,8 +724,8 @@
 					console.log(res);
 					console.log(res.modelType);
 					if(res.modelType === 'waterfall'){
-						$scope.Waterfall(res);
 						$scope.getCustomFeilds()
+						$scope.Waterfall(res);
 					} else if (res.modelType === 'scrum'){
 						$scope.getCustomFeilds()
 						$scope.scrumInit(res);
@@ -734,8 +742,10 @@
 					url : '/getCustomFields'
 				}).success(function(res){
 					console.log(res);
-					if(res.success === 'Success'){
+					if(res.status === 'Success'){
 						$scope.customFields = res.fields;
+						console.log('for test..'+$scope.customFields);
+						
 					}
 				})
 			}

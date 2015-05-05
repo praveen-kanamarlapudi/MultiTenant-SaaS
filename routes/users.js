@@ -104,6 +104,7 @@ exports.getWaterfallStatus = function(req, res) {
 		else 
 		{
 			console.log(result);
+			taskStatusData = [], taskStatusIDs = [], taskStatusCompleted = [];
 			if (result.length > 0) 
 			{
 				var tasks = result[0].tasks;
