@@ -7,7 +7,7 @@ var login = require('./login');
 
 var projectStatus;
 var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
-var taskStatusData = [];
+var taskStatusData = [], taskStatusIDs = [], taskStatusCompleted = [];
 
 /**
  * Gets user project data depending on user tenant type
@@ -50,37 +50,36 @@ function getCards(result, req, res) {
 
 exports.getProjectStatusWaterfall = function(req, res) {
 	console.log("got project status" + taskStatusData);
-	res.render('waterfallgraph', {
-		title : 'Waterfall Status Graph',
-		status : taskStatusData
-	});
+	res.render('waterfallgraph', { title: 'Waterfall Status Graph', taskIDs:taskStatusIDs, status: taskStatusCompleted});
 };
 
 exports.getWaterfallStatus = function(req, res) {
-	var mongo = db.mongo;
+	var mongo       = db.mongo;
 	var userId = req.session.userId;
 	var projectName = req.session.projectName;
 	mongo.collection("waterfall").find({
 		"userId" : userId,
-		'projectName' : projectName
-	}).toArray(function(err, result) {
-		if (err || !result) {
-			res.send({
-				"error" : "Something went wrong",
-				"status" : "Failed"
-			});
-		} else {
+		'projectName' : projectName}).toArray(function(err, result) 
+	{
+		if (err || !result)
+		{
+			res.send({"error" : "Something went wrong",
+				      "status": "Failed"});
+		}	
+		else 
+		{
 			console.log(result);
-			if (result.length > 0) {
+			if (result.length > 0) 
+			{
 				var tasks = result[0].tasks;
-				for (var i = 0; i < tasks.length; i++) {
-					taskStatusData.push(tasks[i].completed);
-					console.log(tasks[i].completed);
+				for(var i =0 ; i < tasks.length; i++)
+				{
+					taskStatusIDs.push(tasks[i].taskId);
+					taskStatusCompleted.push(tasks[i].completed);
 				}
+							
 			}
-			res.send({
-				"status" : "success"
-			});
+			res.send({"status": "success"});
 		}
 	});
 };

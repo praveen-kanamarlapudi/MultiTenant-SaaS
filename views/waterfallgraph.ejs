@@ -10,51 +10,54 @@
   </head>
   <body>
     <div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
-    
-    <div id="dataAccess1" style="display: none;"><%=status[0]%></div>
-    <div id="dataAccess2" style="display: none;"><%=status[1]%></div>
-    <div id="dataAccess3" style="display: none;"><%=status[2]%></div>
 
     
      <script>
-    var count1 = JSON.parse($('#dataAccess1').html());
-	var count2 = JSON.parse($('#dataAccess2').html());
-	var count3 = JSON.parse($('#dataAccess3').html());
 
-	alert(count1);
-	$(function () {
-    console.log(Highcharts);	
-    var chart = new Highcharts.Chart({
-        chart: {
-            renderTo: 'container',
-            type: 'bar'
-        },
-        title: {
-            text: 'Project Status'
-        },
-        xAxis: {
-            categories: ['Task3','Task2','Task1']
-        },
-        yAxis: {
-            min: 0,
-           allowDecimals : false,
-            title: {
-                text: '% completed'
-            }
-        },
-        legend: {
-            reversed: true
-        },
-        plotOptions: {
-            series: {
-                stacking: 'normal'
-            }
-        },
-        series: [{
-            name: '% completed',
-            data: [count3,count2,count1]
-        }]
-    });
-}); </script>
+        $(function () {
+            console.log(Highcharts);    
+            var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'container',
+                        type: 'bar'
+                    },
+                    title: {
+                        text: 'Project Status'
+                    },
+                    xAxis: {
+                        categories: [<% for(var i=0;i<taskIDs.length;i++){ %>
+                        <%=taskIDs[i]%>
+                        <% if(i != taskIDs.length-1){ %>
+                        ,
+                        <%}%>
+                        <%}%>]
+                    },
+                    yAxis: {
+                        min: 0,
+                       allowDecimals : false,
+                        title: {
+                            text: '% completed'
+                        }
+                    },
+                    legend: {
+                        reversed: true
+                    },
+                    plotOptions: {
+                        series: {
+                            stacking: 'normal'
+                        }
+                    },
+                    series: [{
+                        name: '% completed',
+                        data: [<% for(var i=0;i<status.length;i++){ %>
+                        <%=status[i]%>
+                        <% if(i != status.length-1){ %>
+                        ,
+                        <%}%>
+                        <%}%>]
+                    }]
+                });
+            }); 
+    </script>
   </body>
 </html>

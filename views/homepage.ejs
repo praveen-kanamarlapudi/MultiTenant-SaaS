@@ -467,7 +467,7 @@
 	    								<button type="submit" class="btn btn-info" ng-click="createTask()">
 	    									Save changes
 	    								</button>
-	    								<button class="btn btn-warning">
+	    								<button class="btn btn-warning" ng-click="backToShowTasks()">
 	    									Cancel
 	    								</button>
 
@@ -759,6 +759,11 @@
 			$scope.addTask = function(){
                 $scope.createTaskMode=true;
                 $scope.showMode = false;
+            }
+
+            $scope.backToShowTasks = function(){
+                $scope.createTaskMode=false;
+                $scope.showMode = true;
             }
 
             $scope.createTask = function(){
