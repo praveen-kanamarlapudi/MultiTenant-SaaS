@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+  </script>
+  </head>
+  
+  <body>
+    <div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+    
+
+    
+     <script>
+    
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Scrum Graph'
+        },
+        subtitle: {
+            text: 'Estimated remaining days'
+        },
+        xAxis: {
+            categories: ['April 1', 'April 2', 'April 3', 'April 4', 'April 5', 'April 6', 'April 7', 'April 8', 'April 9', 'April 10', 'April 11','April 12']
+        },
+        yAxis: {
+            title: {
+                text: 'Points'
+            }
+        },
+        plotOptions: {
+            
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+            name: 'Actual',
+            data: [<%=status1%>]
+        }, {
+            name: 'Estimated',
+            data: [30, 27.5, 25, 22.5, 20, 17.5, 15, 12.5, 10, 7.5, 5, 2.5]
+        }]
+    });
+}); </script>
+  </body>
+</html>

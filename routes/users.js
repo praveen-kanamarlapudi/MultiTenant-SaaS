@@ -8,6 +8,7 @@ var login = require('./login');
 var projectStatus;
 var firstData = [], secondData = [], thirdData = [], fourthData = [], fifthData = [];
 var taskStatusData = [], taskStatusIDs = [], taskStatusCompleted = [];
+var points = [];
 
 /**
  * Gets user project data depending on user tenant type
@@ -51,6 +52,40 @@ function getCards(result, req, res) {
 exports.getProjectStatusWaterfall = function(req, res) {
 	console.log("got project status" + taskStatusData);
 	res.render('waterfallgraph', { title: 'Waterfall Status Graph', taskIDs:taskStatusIDs, status: taskStatusCompleted});
+};
+
+exports.getProjectStatusScrum = function(req, res) {
+	console.log("got project status" + points);
+	res.render('scrumgraph', {
+		title : 'Scrum Status Graph',
+		status1 : points
+	});
+};
+
+exports.getScrumStatus = function(req, res) {
+	var mongo = db.mongo;
+	var userId = req.session.userId;
+	var projectName = req.session.projectName;
+	mongo.collection("scrum").find({
+		"userId" : userId,
+		'projectName' : projectName
+	}).toArray(function(err, result) {
+		if (err || !result) {
+			res.send({
+				"error" : "Something went wrong",
+				"status" : "Failed"
+			});
+		} else {
+			console.log(result);
+			if (result!='null') {
+				points = result[0].points;
+				console.log(points);
+			}
+			res.send({
+				"status" : "success"
+			});
+		}
+	});
 };
 
 exports.getWaterfallStatus = function(req, res) {

@@ -847,7 +847,20 @@
                 	}
             	})
 			}
-			
+			$scope.getScrumStatus = function()
+			{
+				$http({
+                	method : 'POST',
+                	url : '/getScrumStatus'
+            	}).success(function(res){
+                	console.log(res);
+                	if(res.status === 'Failed'){
+                    	alert(res.error);
+                	} else {
+                    	window.location = '/projectStatusScrum';
+                	}
+            	})
+			}
         	//functions for Scrum..
         	$scope.getSprints = function(){
         		$http({
