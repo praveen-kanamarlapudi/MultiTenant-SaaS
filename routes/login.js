@@ -43,7 +43,6 @@ exports.signUp = function(req,res) {
 };
 
 exports.signIn = function(req, res) {
-	
 	var email = req.param("email");
     var password = req.param("password");
 	
@@ -91,5 +90,6 @@ exports.backlog = function(req, res){
 exports.signOut = function(req,res){
 	if(req.session){
 		req.session.destroy();
-	}
+	} 
+	res.send({status:'Success'});
 }

@@ -24,144 +24,158 @@
 </head>
 
 <body ng-app="" ng-controller="loginController" background="/images/db.jpg">
-	<div>
-		<div class="modal-body row" ng-show="signInPageShow">
+		<div class="row" ng-show="signInPageShow">
 			<div class="container im-centered">
-			
-				<div class="col-md-12">
-					<div class="main-well">
-						<div class="row text-center main-title">
+			    
+			    <div class="col-md-12">
+						<div class="row text-center main-title" style="height: 100px">
 							<h1> Multi-Tenant System</h1>
 						</div>
-					</div>
 				</div>
-
-			<div class="col-md-6 main">
-
-				<div class="container" id="wrap">
+				
+			    <div class="col-md-6 main">
+			      <div class="container" id="wrap">
+				
 					<div class="row">
-						<div class="col-md-4">
-							<form method="post" accept-charset="utf-8" class="form" role="form">   <legend>Sign Up</legend>
+						<div class="col-md-4" style="border: solid 3px #000000; background: #FAFAFA">
+							<form method="post" accept-charset="utf-8" class="form" role="form">  
+							 <legend>Sign Up</legend>
+								
 								<div class="row">
 									<div class="col-xs-6 col-md-6">
-										<input type="text" ng-model="firstName" name="firstname" value="" class="form-control input-lg" placeholder="First Name"  />                       
+										<input type="text" ng-model="firstName" name="firstname" value="" class="form-control input-lg" placeholder="First Name" style="background-color:#FCF5D8;color:#AD8C08;" />                       
 									</div>
 									<div class="col-xs-6 col-md-6">
-										<input type="text" ng-model="lastName" name="lastname" value="" class="form-control input-lg" placeholder="Last Name"  />                  
+										<input type="text" ng-model="lastName" name="lastname" value="" class="form-control input-lg" placeholder="Last Name" style="background-color:#FCF5D8;color:#AD8C08;"/>                  
 									</div>
 								</div>
+
 								<br>
-								<input type="text" ng-model="email" name="email" value="" class="form-control input-lg" placeholder="Your Email"  /><br><input type="password" ng-model="password" name="password" value="" class="form-control input-lg" placeholder="Password"  /><br>
+								<input type="text" ng-model="email" name="email" value="" class="form-control input-lg" placeholder="Your Email" style="background-color:#FCF5D8;color:#AD8C08;" /><br><input type="password" ng-model="password" name="password" value="" class="form-control input-lg" placeholder="Password" style="background-color:#FCF5D8;color:#AD8C08;" /><br>
 
 								<div class="row">
 									<div class="col-xs-4 col-md-3">
 										<label>Model Type</label>
 									</div>                           
 									<div class="col-xs-4 col-md-4">
-										<select ng-model="modelType" name="model type" class = "form-control input-lg">
+										<select ng-model="modelType" class = "form-control input-lg" style="background-color:#FCF5D8;color:#AD8C08;">
 											<option value="kanban">Kanban</option>
 											<option value="waterfall">Waterfall</option>
 											<option value="scrum">Scrum</option>
-										</select>                        </div>
+										</select>  
 									</div>
-									<br>
-
-									<span class="help-block">By clicking Create my account, you agree to our Terms and that you have read our Data Use Policy, including our Cookie Use.</span>
-									<!-- <input type = "button" onClick="/signup/kanban/create" class="btn btn-lg btn-block signup-btn" type="submit"> -->
-									<button type="submit" ng-click=signUp() class="btn btn-primary btn-block">Sign Up</button>	
 								</div>
+								<br>
+									<hr style="border: solid 2px #000000";>
+									<span class="help-block"><h5>By clicking Create my account, you agree to our Terms and that you have read our Data Use Policy.</h5></span>
+									<button type="submit" ng-click="signUp()" class="btn btn-success btn-block">Sign Up</button>
+									</div>	
 							</form>
 						</div>
 					</div>
 				</div>  
-			
-				<div class="col-md-6 main-grid"> 
+			   
+					<div class="col-md-6 main-grid">
+					  	<div class="main-well" style="border: solid 3px #000000; background: #FAFAFA"> 
 
-					<div class="main-well">	
-						<form class="form-horizontal">  					
-							<fieldset>    			
-								<h4> Login here </h4><br>										
-								<div class="form-group">      
-									<div class="col-lg-12">
-										<input type="email" ng-model="inputEmail" class="form-control" id="inputEmail" placeholder="Email address" required>  
+							<form class="form-horizontal">  					
+								<fieldset>    			
+									<h4> Login here </h4><br>										
+									<div class="form-group">      
+										<div class="col-lg-12">
+											<input type="email" ng-model="inputEmail" class="form-control" id="inputEmail" placeholder="Email address" style="background-color:#FCF5D8;color:#AD8C08;" required >  
+										</div>
 									</div>
-								</div>
 
-								<div class="form-group">
-									<div class="col-lg-12">      							
-										<input type="password" ng-model="inputPassword" class="form-control" id="inputPassword" placeholder="Password (6 or more characters)" required>
+									<div class="form-group">
+										<div class="col-lg-12">      							
+											<input type="password" ng-model="inputPassword" class="form-control" id="inputPassword" placeholder="Password" style="background-color:#FCF5D8;color:#AD8C08;" required>
+										</div>
 									</div>
-								</div>
-								<br>
+									<br>
 
-								<div class="form-group">
-									<div class="col-lg-12">								
-										<p>									
-											<button type="submit" ng-click="login()" class="btn btn-primary btn-block">Login</button>	
+									<div class="form-group">
+										<div class="col-lg-12">								
+											<p>									
+												<button type="submit" ng-click="login()" class="btn btn-success btn-block">Login</button>	
+										</div>
 									</div>
-								</div>
-							</fieldset>
-						</form>
+								</fieldset>
+							</form>
+						</div>
 					</div>
-				</div> 
+    	      </div>
+        </div>
 
-        	</div>
-    	</div>
 
-	    <div ng-show="projectPageShow">
-	     	<div class="row">
-				<div class="col-md-9 row text-center">
-					<h2> Project List </h2>
-				</div>
-				<div class="col-md-3 row text-center"> 
-					<button type="button" class="btn-lg btn-warning" ng-click="switchToEdit()">
-						Create Project
-					</button>
 
-					<div class="col-lg-12" ng-show="true">
-						<input type="text" ng-model="projectName" ng-click="createproject()" placeholder="Project name" required>  
-					</div>
-					    
-				</div>
-			</div>                
-				<br>            
-			<div class="row">  
-				<div class="col-md-2">
-				</div>
-				<div class="col-md-10">
-					<select name="model type" class="place_holder dropdown" ng-model="project" ng-change="selectProject(project)" style='width: 30%; height: 30%'>
-						<option ng:repeat="project in projects" value="{{project.projectName}}">{{project.projectName}}</option>
-	            	</select>
-				</div>
-
-					<br><br><br><br><br><br>
-			</div>
-		</div>
-
-	    <div id="wrapper" ng-show="waterfallPageShow">
+	    <div id="wrapper" ng-show="projectPageShow">
 	        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	            <div class="navbar-header">
-	                <a class="navbar-brand" href="index.html">Back to Admin</a>
+	            <div>
+	                <a class="navbar-brand" href="index.html">Kanban</a>
 	            </div>
 	            <div class="collapse navbar-collapse navbar-ex1-collapse">
 	                <ul class="nav navbar-nav side-nav">
-	                    <li><a href="./"><i class="fa fa-bullseye"></i> Dashboard</a></li>
-	                    
-	                    <li  class="active"><a href="./searchGuards"><i class="fa fa-tasks"></i> Tasks</a></li>
-	                    
-	                    <li><a data-ng-click=getWaterfallStatus()><i class="fa fa-globe"></i> Status</a></li>
-	                    <li><a href="./displaySchedule? Not sure"><i class="fa fa-list-ol"></i> Schedule</a></li>
-	                    <li><a href="./searchBuildings"><i class="fa fa-globe"></i> Buildings</a></li>                    
-	                </ul>
+	                    <li><a href="./searchClients"><i class="fa fa-bullseye"></i> Create Project</a></li>
+	                 </ul>
 	                <ul class="nav navbar-nav navbar-right navbar-user">                    
-	                    <li><a href="./logout"><i class="fa fa-power-off"></i> Log Out</a></li>                       
+	                    <li><a href="#" data-ng-click=signOut()><i class="fa fa-power-off"></i> Log Out</a></li>                  
+	                </ul>
+	            </div>
+	        </nav>
+			<div class="row" style="padding-top: 90px; padding-left: 270px">
+	 			<div class="col-md-4" style="border: solid 3px #000000;">
+	 				<form method="post" accept-charset="utf-8" class="form" role="form">  
+	 					<legend>Enter Your Project Details</legend>
+	 					
+	 					<input type="text" ng-model="projectName" class="form-control input-lg" placeholder="Project Name" style="background-color:#FCF5D8;color:#AD8C08;" /><br>
+	 					<input type="password" ng-model="projectDescription" class="form-control input-lg" placeholder="Project Description" style="background-color:#FCF5D8;color:#AD8C08;"/><br>
+	 					<div class="row">
+	 						<div class="col-xs-6 col-md-6">
+	 							<button type="submit" ng-click="createProject()" class="btn btn-success btn-block">Save</button>	
+	 						</div>
+	 						<div class="col-xs-6 col-md-6">
+	 							<button type="submit" ng-click="cancel()" class="btn btn-warning btn-block">Cancel</button>	
+	 						</div>
+	 					</div>
+	 				</form>
+	 			</div>
+
+	 			<div class="col-md-1">
+	 			</div>
+	 			<div class="col-md-4"> <h4>Select your project from the list</h4>
+	 				<div class="scrollit">
+	 					<select name="model type" class="form-control input-lg" ng-model="project" ng-change="selectProject(project)" style="background-color:#FCF5D8;color:#AD8C08;">
+	 					
+	 					<option ng:repeat="project in projects" value="{{project.projectName}}">{{project.projectName}}</option>
+	 				
+	 				</select>
+	 			    </div>
+	 			</div>
+	 		</div>
+	 	</div>
+
+
+	     	
+	    <div id="wrapper" ng-show="waterfallPageShow">
+	        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	            <div>
+	                <a class="navbar-brand" href="index.html">Waterfall</a>
+	            </div>
+	            <div class="collapse navbar-collapse navbar-ex1-collapse">
+	                <ul class="nav navbar-nav side-nav">
+	                    <li><a data-ng-click ="addTask()"><i class="fa fa-bullseye"></i> Add task</a></li>
+	                    <li><a data-ng-click=getWaterfallStatus()><i class="fa fa-globe"></i> Status</a></li>
+	                    </ul>
+	                <ul class="nav navbar-nav navbar-right navbar-user">                    
+	                    <li><a href="#" data-ng-click=signOut()><i class="fa fa-power-off"></i> Log Out</a></li>                     
 	                </ul>
 	            </div>
 	        </nav>
 	    	<div class="row">
 	        	<div class="modal-body" ng-show="showMode">           
 	            	<div class="row text-center">
-	                	<h2> Task Details </h2>
+	                	<h2> TASK DETAILS </h2>
 	            	</div>
 	        	
 	        		<br>  
@@ -169,7 +183,8 @@
 		    		<div class="col-md-6" ng-repeat="task in tasks"> 
 		        		<div class="scrollit" ng-show = 'visible[task.taskId]'>
 		            		<table border="1">
-		                		<div class="content">                   
+		            			
+								<div class="content">                   
 		                    		<form class="form-horizontal">                      
 		                        		<fieldset>    
 		                            		<div class="form-group">      
@@ -257,23 +272,19 @@
 		    	                    	</fieldset>
 		                    		</form>
 			                	</div>
-								<div class="row"> 
-		        	            	<label class='col-md-1'></label>
-		            	        	<div class="col-md-3"> 
-		                	        	<button type="button" class="btn btn-primary" ng-click="editTask(task.taskId)">
+			                	<div class="row" border="1"> 
+		        	            	<div class='col-md-1'></div>
+		    	                	<div class="col-md-2"> 
+		        	                    <button type="button" class="btn btn-success" ng-click="editTask(task.taskId)">
 		                    	        	Edit Task
 		                        		</button>
-			                    	</div>
-		    	                	<div class="col-md-2"> 
-		        	                	<button type="button" class="btn btn-danger" ng-click ="deleteTask(task)">
-		            	                	Delete Tasks
-		                	        	</button>
-		                    		</div> 
+			                    	</div> 
+		                    		<div class='col-md-1'></div>
 		                    		<div class="col-md-2"> 
-		        	                	<button type="button" class="btn btn-danger" ng-click ="addTask()">
-		            	                	Add Tasks
+		        	                	<button type="button" class="btn btn-danger" ng-click ="deleteTask(task)">
+		            	                	Delete Task
 		                	        	</button>
-		                    		</div> 
+		                	        </div> 
 		                		</div>
 							</table>
 		        		</div>
@@ -298,7 +309,7 @@
 		                	                    	Task Name:
 		                    	            	</label>
 		                        	        	<div class="col-md-6">
-		                            	        	<input type="text" class="form-control" ng-model="task.taskName">
+		                            	        	<input type="text" class="form-control" ng-model="task.taskName" style="background-color:#FCF5D8;color:#AD8C08;"/>
 		                                		</div>
 		                            		</div>
 		                            		<div class="form-group">      
@@ -306,7 +317,7 @@
 		    	                                	Duration:
 		        	                        	</label>
 		            	                    	<div class="col-md-6">
-		                	                    	<input type="text" class="form-control"  ng-model="task.duration"/>
+		                	                    	<input type="text" class="form-control"  ng-model="task.duration" style="background-color:#FCF5D8;color:#AD8C08;"/>
 		                    	            	</div>
 		                        	    	</div>
 		                            		<div class="form-group">
@@ -315,7 +326,7 @@
 		                                		</label>
 			                                	<div class="col-md-6">                
 		    	                                	<div id='startDate'>
-		        	                                	<input type='date' class="form-control" ng-model="task.startDate"/>
+		        	                                	<input type='date' class="form-control" ng-model="task.startDate" style="background-color:#FCF5D8;color:#AD8C08;"/>
 		            	                        	</div>                        
 		                	                	</div>
 		                    	        	</div>
@@ -325,7 +336,7 @@
 		                                		</label>
 			                                	<div class="col-md-6">                
 		    	                                	<div id='endDate'>
-		        	                                	<input type='date' class="form-control" ng-model="task.endDate"/>
+		        	                                	<input type='date' class="form-control" ng-model="task.endDate" style="background-color:#FCF5D8;color:#AD8C08;"/>
 		            	                        	</div>                        
 		                	                	</div>
 		                    	        	</div>  
@@ -334,7 +345,7 @@
 		                                	    	Predecessors for this task:
 		                                		</label>
 			                                	<div class="col-md-6">
-		    	                                	<input type="text" class="form-control" ng-model="task.predecessors"/>
+		    	                                	<input type="text" class="form-control" ng-model="task.predecessors" style="background-color:#FCF5D8;color:#AD8C08;"/>
 		        	                        	</div>
 		            	                	</div>
 		                	            	<div class="form-group">      
@@ -342,7 +353,7 @@
 		                        	            	Resources allocated to this task:
 		                            	    	</label>
 		                                		<div class="col-md-6">
-		                                    		<input type="text" class="form-control" ng-model="task.resources"/>
+		                                    		<input type="text" class="form-control" ng-model="task.resources" style="background-color:#FCF5D8;color:#AD8C08;"/>
 			                                	</div>
 		    	                        	</div>
 		        	                    	<div class="form-group">      
@@ -350,7 +361,7 @@
 		                	                    	Risks
 		                    	            	</label>
 		                        	        	<div class="col-md-6">
-		                            	        	<input type="text" class="form-control" ng-model="task.risks"/>
+		                            	        	<input type="text" class="form-control" ng-model="task.risks" style="background-color:#FCF5D8;color:#AD8C08;"/>
 		                                		</div>
 		                            		</div>
 			                            	<div class="form-group">      
@@ -358,14 +369,14 @@
 		        	                            	% Completed
 		            	                    	</label>
 		                	                	<div class="col-md-6">
-		                    	                	<input type="text" class="form-control" ng-model="task.completed"/>
+		                    	                	<input type="text" class="form-control" ng-model="task.completed" style="background-color:#FCF5D8;color:#AD8C08;"/>
 		                        	        	</div>
 		                            		</div>
 		                            		<div class="row text-center">
 			                            		<button type="submit" class="btn btn-info" ng-click="saveTask(task)">
 		    	                        			Save changes
 		        	                    		</button>
-		            	                		<button class="btn btn-warning" ng-click = "visible[task.taskId] = !visible[task.taskId]">
+		            	                		<button class="btn btn-warning" ng-click = "visible[task.taskId] = !visible[task.taskId]" >
 			                            			Cancel
 		    	                        		</button>
 		        	                    	</div>
@@ -389,7 +400,7 @@
 	    									Task ID:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="number" class="form-control" ng-model="newTtask.taskId">
+	    									<input type="number" class="form-control" ng-model="newTtask.taskId" style="background-color:#FCF5D8;color:#AD8C08;">
 	    								</div>
 	    							</div>
 	    							<div class="form-group">      
@@ -397,7 +408,7 @@
 	    									Task Name:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="text" class="form-control" ng-model="newTtask.taskName">
+	    									<input type="text" class="form-control" ng-model="newTtask.taskName" style="background-color:#FCF5D8;color:#AD8C08;">
 	    								</div>
 	    							</div>
 	    							<div class="form-group">      
@@ -405,7 +416,7 @@
 	    									Duration:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="number" class="form-control" ng-model="newTtask.duration"/>
+	    									<input type="number" class="form-control" ng-model="newTtask.duration" style="background-color:#FCF5D8;color:#AD8C08;"/>
 	    								</div>
 	    							</div>
 
@@ -415,7 +426,7 @@
 	    								</label>
 	    								<div class="col-md-6">                
 	    									<div id='startDate'>
-	    										<input type='date' class="form-control" id="startDate" ng-model="newTtask.startDate"/>
+	    										<input type='date' class="form-control" id="startDate" ng-model="newTtask.startDate" style="background-color:#FCF5D8;color:#AD8C08;"/>
 	    									</div>                        
 	    								</div>
 	    							</div>
@@ -426,7 +437,7 @@
 	    								</label>
 	    								<div class="col-md-6">                
 	    									<div id='endDate'>
-	    										<input type='date' class="form-control" id="endDate" ng-model="newTtask.endDate"/>
+	    										<input type='date' class="form-control" id="endDate" ng-model="newTtask.endDate" style="background-color:#FCF5D8;color:#AD8C08;"/>
 	    									</div>                        
 	    								</div>
 	    							</div>  
@@ -436,7 +447,7 @@
 	    									Predecessors for this task:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="text" class="form-control" id="cost" ng-model="newTtask.predecessors"/>
+	    									<input type="text" class="form-control" id="cost" ng-model="newTtask.predecessors" style="background-color:#FCF5D8;color:#AD8C08;"/>
 	    								</div>
 	    							</div>
 
@@ -446,7 +457,7 @@
 	    									Resources allocated to this task:
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="text" class="form-control" id="street" ng-model="newTtask.resources"/>
+	    									<input type="text" class="form-control" id="street" ng-model="newTtask.resources" style="background-color:#FCF5D8;color:#AD8C08;"/>
 	    								</div>
 	    							</div>
 
@@ -456,7 +467,7 @@
 	    									Risks
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="text" class="form-control" ng-model="newTtask.risks"/>
+	    									<input type="text" class="form-control" ng-model="newTtask.risks" style="background-color:#FCF5D8;color:#AD8C08;"/>
 	    								</div>
 	    							</div>
 
@@ -466,7 +477,7 @@
 	    									% Completed
 	    								</label>
 	    								<div class="col-md-6">
-	    									<input type="number" class="form-control" ng-model="newTtask.completed"/>
+	    									<input type="number" class="form-control" ng-model="newTtask.completed" style="background-color:#FCF5D8;color:#AD8C08;"/>
 	    								</div>
 	    							</div>
 
@@ -484,35 +495,31 @@
 	    					</div>
 	    				</div>                  
 	    			</div>
-				</div>	    		
+				</div>
+				<!-- <div ng-show="waterfallGraph">
+					<div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+				</div> 	 -->	
 			</div>
-		</div>
+			
+
 		<div class="modal-body" ng-show = "scrumPageShow">           
 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-				<div class="navbar-header">
-					<div align="center">
-					</div>
-				</div>
-				<div class="collapse navbar-collapse navbar-ex1-collapse">
-					<ul class="nav navbar-nav side-nav">
-						<li><a href="./"><i class="fa fa-bullseye"></i> Add Sprint</a></li>
+	            <div>
+	                <a class="navbar-brand" href="index.html">Scrum</a>
+	            </div>
+	            <div class="collapse navbar-collapse navbar-ex1-collapse">
+	                <ul class="nav navbar-nav side-nav">
+	                    <li><a href="./"><i class="fa fa-bullseye"></i> Add Sprint</a></li>
 						<li><a href="./searchClients"><i class="fa fa-list-ol"></i> Add User Story</a></li>
 						<li><a data-ng-click=getScrumStatus()><i class="fa fa-tasks"></i> Show Status</a></li>
 					</ul>
-					<ul class="nav navbar-nav navbar-right navbar-user">                    
-						<li><a href="./logout"><i class="fa fa-power-off"></i> Log Out</a></li>                 
-					</ul>
-					<ul class="nav navbar-nav navbar-center navbar-user">                    
-						<li><a href="">SCRUM</a></li>                 
-					</ul>
-
-				</div>
-			</nav>
-			<div class="row">
+	                <ul class="nav navbar-nav navbar-right navbar-user">                    
+	                    <li><a href="#" data-ng-click=signOut()><i class="fa fa-power-off"></i> Log Out</a></li>                       
+	                </ul>
+	            </div>
+	        </nav>
+	    	<div class="row">
 				<div class="col-md-3 row text-center">
-					<!-- <button type="button" class="btn-sm btn-primary" ng-click="switchToEdit()">
-						Add Sprint
-					</button> -->
 				</div>
 
 				<div class="col-md-7 row text-center">
@@ -531,52 +538,11 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12"> 
+				<div class="col-md-3"></div>
+				<div class="col-md-5"> 
 					<div class="scrollit">
-
-						<table style='table-layout:fixed;width:100%;height:100px' border='1'>
-							<tr style='height: 45px;'>
-								<th style='width: 3%;'>ID</th>
-								<th style='width: 9%;'>User Story</th>
-								<th style='width: 12%;'>Acceptable Criteri</th>
-								<th style='width: 7%;'>Sprint</th>
-								<th style='width: 10%;'>Comments</th>
-								<th style='width: 5%;'>Days</th>
-								<th style='width: 5%;'>Points</th>
-								<th style='width: 9%;'>Status</th>
-								<th style='width: 9%;'>Resources</th>
-								<th colspan="2" style='width: 8%;'></th>
-							</tr>
-						
-							<br>
-							
-							<tr style='height: 45px;' ng-repeat="userStory in userStories" ng-show="visible2[userStory.id]">
-								<th><p>{{userStory.id}}</p></th>
-								<th><p>{{userStory.name}}</p></th>
-								<th><p>{{userStory.acceptanceCriteria}}</p></th>
-
-								<!--th style='width: 15%;'> 
-									<select name="model type" default='b' class = "form-control">
-										<option value="01" ng-repeat = "sprint in sprints" value='sprint'>{{userStory.sprint}}</option>
-									</select>
-								</th-->
-								<th><p>{{userStory.sprint}}</p></th>
-								<th><p>{{userStory.comments}}</p></th>
-								<th><p>{{userStory.days}}</p></th>
-								<th><p>{{userStory.points}}</p></th>
-								<th><p>{{userStory.status}}</p></th>
-								<th><p>{{userStory.resources}}</p></th>
-								<!-- <th type="button" ng-click="editUserStory(userStory.id)" class="btn btn-primary btn-block">Edit </th>
-
-								    </tr> -->
-
-									<td type="button" ng-click="editUserStory(userStory.id)" class="btn-xs btn-primary btn-block"><center>Edit</center> </td>
-									<td type="button" ng-click="deleteUserStory(userStory)" class="btn-xs btn-warning btn-block"><center>Delete</center></td>
-
-									</tr>
-
-
-							<tr style='height: 45px;' ng-repeat="userStory in userStories" ng-show="!visible2[userStory.id]">
+							<!-- 
+					<tr style='height: 45px;' ng-repeat="userStory in userStories" ng-show="!visible2[userStory.id]">
 								<th style='width: 10%;'><input type="text" class="form-control" id="text" ng-model="userStory.id"/></th>
 								<th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="userStory.name"/></th>
 								<th style='width: 15%;'><input type="text" class="form-control" id="text" ng-model="userStory.acceptanceCriteria"/></th>
@@ -599,15 +565,168 @@
 								</th>
 
 								<th style='width: 9%;'><input type="text" class="form-control" id="text" ng-model="userStory.resources"/></th>
-								<!-- <th type="button" ng-click="editUserStory(userStory.id)" class="btn btn-primary btn-block">Cancel </th> -->
 								<td type="button" ng-click="saveStory(userStory)" class="btn-xs btn-success btn-block"><center>Save</center> </td>
 								<td type="button" ng-click="editUserStory(userStory.id)" class="btn-xs btn-danger btn-block"><center>Cancel</center></td>
 							</tr>
-
+ -->
+						<TABLE border='2' ng-repeat="userStory in userStories" ng-show="visible2[userStory.id]" cellpadding=4 style="width: 300px">
+							<TR style='height: 45px;' > <TH COLSPAN=2>User Story 1</TH> </TR>
+							<TR> 
+								<TD width="125px">ID</TD> 
+								<TD width="175px"><p>{{userStory.id}}</p></TD> 
+							</TR>
+							<TR> 
+								<TD>User Story</TD> 
+								<TD><p>{{userStory.name}}</p></TD> 
+							</TR>
+							<TR> 
+								<TD>Acceptable Criteria</TD> 
+								<TD><p>{{userStory.acceptanceCriteria}}</p></TD> 
+							</TR>
+							<TR> 
+								<TD>Sprint</TD> 
+								<TD><p>{{userStory.sprint}}</p></TD>
+							</TR>
+							<TR> 
+								<TD>Comments</TD> 
+								<TD><p>{{userStory.comments}}</p></TD> 
+							</TR>
+							<TR> 
+								<TD>Days</TD>      
+								<TD><p>{{userStory.days}}</p></TD> 
+							</TR>
+							<TR> 
+								<TD>Points</TD> 
+								<TD><p>{{userStory.points}}</p></TD> 
+							</TR>
+							<TR> 
+								<TD>Status</TD> 
+								<TD><p>{{userStory.status}}</p></TD> 
+							</TR>
+							<TR> 
+								<TD>Resources</TD> 
+								<TD><p>{{userStory.resources}}</p></TD> 
+							</TR>
+							<TR> 
+								<TD type="button" ng-click="editUserStory(userStory.id)" class="btn-xs btn-primary btn-block"><center>Edit</center></TD>      
+								<TD type="button" ng-click="deleteUserStory(userStory)" class="btn-xs btn-warning btn-block"><center>Delete</center></TD> </TR>
 							<br>
-						</table>   
+						</TABLE>  
 					</div>
 				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-3"></div> 
+					<div class="col-md-8"> 
+	    			<div class="row text-center">
+	    				<h2>Add User Story</h2>
+	    			</div>
+	    			<div class="col-md-10 container">                           
+	    				<div class="content">                   
+	    					<form class="form-horizontal">                      
+	    						<fieldset>    
+	    							<div class="form-group">      
+	    								<label class="col-md-3">
+	    									ID:
+	    								</label>
+	    								<div class="col-md-6">
+	    									<input type="number" class="form-control" ng-model="newTtask.taskId" style="background-color:#FCF5D8;color:#AD8C08;">
+	    								</div>
+	    							</div>
+	    							<div class="form-group">      
+	    								<label class="col-md-3">
+	    									User Story:
+	    								</label>
+	    								<div class="col-md-6">
+	    									<input type="text" class="form-control" ng-model="newTtask.taskName" style="background-color:#FCF5D8;color:#AD8C08;">
+	    								</div>
+	    							</div>
+	    							<div class="form-group">      
+	    								<label class="col-md-3">
+	    									Acceptable Criteria:
+	    								</label>
+	    								<div class="col-md-6">
+	    									<input type="number" class="form-control" ng-model="newTtask.duration" style="background-color:#FCF5D8;color:#AD8C08;"/>
+	    								</div>
+	    							</div>
+
+	    							<div class="form-group">
+	    								<label class="col-md-3">
+	    									Sprint:
+	    								</label>
+	    								<div class="col-md-6">                
+	    									<div id='startDate'>
+	    										<input type='date' class="form-control" id="startDate" ng-model="newTtask.startDate" style="background-color:#FCF5D8;color:#AD8C08;"/>
+	    									</div>                        
+	    								</div>
+	    							</div>
+
+	    							<div class="form-group">
+	    								<label class="col-md-3">
+	    									Comments:
+	    								</label>
+	    								<div class="col-md-6">                
+	    									<div id='endDate'>
+	    										<input type='date' class="form-control" id="endDate" ng-model="newTtask.endDate" style="background-color:#FCF5D8;color:#AD8C08;"/>
+	    									</div>                        
+	    								</div>
+	    							</div>  
+
+	    							<div class="form-group">      
+	    								<label class="col-md-3">
+	    									Days:
+	    								</label>
+	    								<div class="col-md-6">
+	    									<input type="text" class="form-control" id="cost" ng-model="newTtask.predecessors" style="background-color:#FCF5D8;color:#AD8C08;"/>
+	    								</div>
+	    							</div>
+
+
+	    							<div class="form-group">      
+	    								<label class="col-md-3">
+	    									Points:
+	    								</label>
+	    								<div class="col-md-6">
+	    									<input type="text" class="form-control" id="street" ng-model="newTtask.resources" style="background-color:#FCF5D8;color:#AD8C08;"/>
+	    								</div>
+	    							</div>
+
+
+	    							<div class="form-group">      
+	    								<label class="col-md-3">
+	    									Status:
+	    								</label>
+	    								<div class="col-md-6">
+	    									<input type="text" class="form-control" ng-model="newTtask.risks" style="background-color:#FCF5D8;color:#AD8C08;"/>
+	    								</div>
+	    							</div>
+
+
+	    							<div class="form-group">      
+	    								<label class="col-md-3">
+	    									Resources:
+	    								</label>
+	    								<div class="col-md-6">
+	    									<input type="number" class="form-control" ng-model="newTtask.completed" style="background-color:#FCF5D8;color:#AD8C08;"/>
+	    								</div>
+	    							</div>
+
+	    							<div class="row text-center">
+
+	    								<button type="submit" class="btn btn-info" ng-click="createTask()">
+	    									Save changes
+	    								</button>
+	    								<button class="btn btn-warning">
+	    									Cancel
+	    								</button>
+
+	    							</fieldset>
+	    						</form> 
+	    					</div>
+	    				</div>                  
+	    			</div>
+	    		</div>
 			</div>
 		</div>
 	</div>
@@ -621,13 +740,12 @@
             $scope.waterfallPageShow = false;
             $scope.scrumPageShow = false;
 
-            //For displaying custom fields..
-            $scope.customFields = [];
 
             //For Waterfall..
             $scope.tasks=[];
         	$scope.visible = [];
         	$scope.waterfallPageShow = false;
+        	$scope.waterfallGraph = false;
 			// $scope.taskAdd=true;
 			$scope.newTtask = {};
 			$scope.showMode = false;
@@ -857,6 +975,7 @@
                 	}
             	})
 			}
+			
 			$scope.getScrumStatus = function()
 			{
 				$http({
@@ -922,10 +1041,47 @@
             	})
         	}
 
+        	$scope.displayWaterfallGraph = function(){
+        		$scope.waterfallGraph = true;
+        		$scope.createTaskMode = false;
+        		$scope.showMode = false;
+        	}
+
+        	
+        	$scope.createProject = function(){
+            	$http({
+                	method : 'PUT',
+                	url : '/createProject',
+                	data : {'projectName':$scope.projectName, 'projectDescription':$scope.projectDescription}
+            	}).success(function(res){
+                	console.log(res);
+                	if(res.status === 'Failed'){
+                    	alert(res.error);
+                	} else {
+                    	alert('Saved successfully.');
+                    	$scope.projects.push({projectName:$scope.projectName});
+                	}
+            	})
+        	}
+
+        	$scope.signOut = function(){
+            	$http({
+                	method : 'POST',
+                	url : '/signOut'
+                	
+            	}).success(function(res){
+                	console.log(res);
+                	if(res.status === 'Failed'){
+                    	alert(res.error);
+                	} else {
+                    	alert('Successfully Logged Out.');
+                    	window.location = '/';
+                	}
+            	})
+        	}
+
+
         	$scope.saveStory = function(story){
-            	// story.userId = 'k.praveen@outlook.com';
-            	// story.projectName = 'Test1'
-            	console.log(story);
             	$http({
                 	method : 'POST',
                 	url : '/updateUserStory',
@@ -941,5 +1097,7 @@
             	})
         	}
     	}
+
+
 	</script>
 </html>

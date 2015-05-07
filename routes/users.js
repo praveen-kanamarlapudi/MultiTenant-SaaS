@@ -1306,10 +1306,11 @@ exports.updateUser = function(req, res) {
  * Creates a project of tenant type.
  */
 exports.createProject = function(req, res) {
-	var userId = req.param('userId');
+	var userId = req.session.userId;
 	var projectName = req.param('projectName');
 	var projectDescription = req.param('projectDescription');
-	var modelType = req.param('modelType');
+	var modelType = req.session.modelType;
+	console.log(modelType);
 	var taskType;
 	if (modelType === 'waterfall') {
 		taskType = 'tasks';

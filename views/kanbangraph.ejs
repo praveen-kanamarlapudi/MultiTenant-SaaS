@@ -17,15 +17,15 @@
     <div id="dataAccess4" style="display: none;"><%=status.testingcount%></div>
     <div id="dataAccess5" style="display: none;"><%=status.finishedcount%></div>
      <script>
-	var count1 = JSON.parse($('#dataAccess1').html());
-	var count2 = JSON.parse($('#dataAccess2').html());
-	var count3 = JSON.parse($('#dataAccess3').html());
-	var count4 = JSON.parse($('#dataAccess4').html());
-	var count5 = JSON.parse($('#dataAccess5').html());
-	//alert(count1);
+    var count1 = JSON.parse($('#dataAccess1').html());
+    var count2 = JSON.parse($('#dataAccess2').html());
+    var count3 = JSON.parse($('#dataAccess3').html());
+    var count4 = JSON.parse($('#dataAccess4').html());
+    var count5 = JSON.parse($('#dataAccess5').html());
+    //alert(count1);
 
     $(function () {
-    console.log(Highcharts);	
+    console.log(Highcharts);    
     var chart = new Highcharts.Chart({
         chart: {
             renderTo: 'container',
@@ -42,7 +42,7 @@
             min: 0,
            allowDecimals : false,
            plotLines:[{
-          	    color: '#FF0000',
+                color: '#FF0000',
                 width: 2,
                 value: 2,
                 label: {
