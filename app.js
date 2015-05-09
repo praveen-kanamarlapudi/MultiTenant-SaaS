@@ -11,7 +11,7 @@ var express = require('express')
 var app = express();
 
 //all environments
-app.set('port', process.env.PORT || 2200);
+app.set('port', process.env.PORT || 1111);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.cookieParser());
@@ -39,6 +39,8 @@ app.post('/removeProject', users.removeProject);
 app.get('/projectStatusKanban', users.getProjectStatus);
 app.get('/projectStatusWaterfall', users.getProjectStatusWaterfall);
 app.get('/projectStatusScrum', users.getProjectStatusScrum);
+app.get('/projectStatusScrum', users.getProjectStatusScrum);
+
 
 
 app.put('/updateUser', users.updateUser);
@@ -59,6 +61,7 @@ app.post('/deleteUserstory',users.deleteUserstory);
 app.post('/deleteTask',users.deleteTask);
 app.post('/getWaterfallStatus', users.getWaterfallStatus);
 app.post('/getScrumStatus', users.getScrumStatus);
+
 
 app.get('/create',users.create);
 app.get('/edit',users.edit);

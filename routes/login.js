@@ -90,6 +90,6 @@ exports.backlog = function(req, res){
 exports.signOut = function(req,res){
 	if(req.session){
 		req.session.destroy();
-	} 
-	res.send({status:'Success'});
+	}
+	res.send({'status':'Success'});
 }

@@ -51,7 +51,12 @@ function getCards(result, req, res) {
 
 exports.getProjectStatusWaterfall = function(req, res) {
 	console.log("got project status" + taskStatusData);
-	res.render('waterfallgraph', { title: 'Waterfall Status Graph', taskIDs:taskStatusIDs, status: taskStatusCompleted});
+	var total = 0;
+	for (var i = taskStatusCompleted.length - 1; i >= 0; i--) {
+		total += taskStatusCompleted[i];
+	};
+	total = total/taskStatusCompleted.length;
+	res.render('waterfallgraph', { title: 'Waterfall Status Graph', taskIDs:taskStatusIDs, status: taskStatusCompleted, avg : total});
 };
 
 exports.getProjectStatusScrum = function(req, res) {
@@ -396,7 +401,7 @@ exports.getTasksOnStatus = function(req, res) {
 		login.start(req, res);
 	} else {
 		var mongo = db.mongo;
-		var userId = req.param("userId");
+		var userId = req.session.userId;
 		var projectName = req.param("projectName");
 		var completed = req.param("completed");
 
@@ -442,7 +447,7 @@ exports.updateCard = function(req, res) {
 	// } else {
 	// var userId = req.param("userId");
 	// var projectName = req.param("projectName");
-	var userId = "g.apoorvareddy@gmail.com";
+	var userId = req.session.userId;
 	var projectName = "Testing Project";
 
 	var cardId = req.param("cardId");
@@ -512,7 +517,7 @@ exports.updateCardStatus = function(req, res) {
 	// } else {
 	// var userId = req.param("userId");
 	// var projectName = req.param("projectName");
-	var userId = "g.apoorvareddy@gmail.com";
+	var userId = req.session.userId;
 	var projectName = "Testing Project";
 
 	var cardId = req.param("cardId");
@@ -582,7 +587,7 @@ exports.deleteCard = function(req, res) {
 	} else {
 		// var userId = req.param("userId");
 		// var projectName = req.param("projectName");
-		var userId = "g.apoorvareddy@gmail.com";
+		var userId = req.session.userId;
 		var projectName = "Testing Project";
 
 		var cardId = req.param("cardId");
@@ -639,8 +644,6 @@ exports.deleteTask = function(req, res) {
 	} else {
 		var userId = req.session.userId;
 		var projectName = req.session.projectName;
-		// var userId = "g.apoorvareddy@gmail.com";
-		// var projectName = "Testing Project";
 
 		var taskId = req.param("taskId");
 
@@ -688,10 +691,6 @@ exports.deleteTask = function(req, res) {
  * @param res
  */
 exports.deleteUserstory = function(req, res) {
-	// var userId = req.param("userId");
-	// // var projectName = req.param("projectName");
-	// var userId = "g.apoorvareddy@gmail.com";
-	// var projectName = "Testing Project";
 	var userId = req.session.userId;
 	var projectName = req.session.projectName;
 
@@ -737,7 +736,7 @@ exports.deleteUserstory = function(req, res) {
  * Updates task details in waterfall model
  */
 exports.updateTask = function(req, res) {
-	var userId = req.param("userId");
+	var userId = req.session.userId;
 	var projectName = req.param("projectName");
 	var taskId = req.param("taskId");
 	var taskName = req.param("taskName");
@@ -796,7 +795,7 @@ exports.updateTask = function(req, res) {
  * Updates task details in waterfall model
  */
 exports.updateTaskStatus = function(req, res) {
-	var userId = req.param("userId");
+	var userId = req.session.userId;
 	var projectName = req.param("projectName");
 	var taskId = req.param("taskId");
 	var completed = req.param("completed");
@@ -986,7 +985,7 @@ exports.updateUserStoryStatus = function(req, res) {
  * Updates task details in waterfall model
  */
 exports.updateUserStorySprint = function(req, res) {
-	var userId = req.param("userId");
+	var userId = req.session.userId;
 	var projectName = req.param("projectName");
 	var id = req.param("id");
 	var sprint = req.param("sprint");
@@ -1023,28 +1022,47 @@ exports.updateUserStorySprint = function(req, res) {
  * Add task in waterfall model.
  */
 exports.addUserStory = function(req, res) {
-	var userId = req.param("userId");
+	var userId = req.session.userId;
+	var newStory = req.param('newStory');
+
 	var projectName = req.param("projectName");
-	var backlogId = req.param("backlogId");
-	var userStoryName = req.param("name");
-	var userStoryId = req.param("userStoryId");
-	var acceptanceCriteria = req.param('acceptanceCriteria');
-	var days = req.param("days");
-	var points = req.param("points");
-	var resources = req.param("resources");
-	var risks = req.param("risks");
-	var status = req.param("status");
-	var sprintId = req.param("sprint");
+	newStory.projectName = projectName;
 
-	if (!userId || !projectName || !backlogId || !userStoryId || !days
-			|| !points || userId === undefined || projectName === undefined
-			|| backlogId === undefined || userStoryId === undefined
-			|| days === undefined || points === undefined) {
-		res.send({
-			"error" : "Insufficient details"
-		});
-	} else {
+	var userId = req.session.userId;
+	var newStory = req.param('newStory');
 
+	var projectName = req.param("projectName");
+	newStory.projectName = projectName;
+	var backlogId = newStory.backlog;
+	var userStoryName = newStory.name;
+	var userStoryId = newStory.id;
+	var acceptanceCriteria = newStory.acceptanceCriteria;
+	var days = newStory.days;
+	var points = newStory.points;
+	var resources = newStory.resources;
+	var risks = newStory.risks;
+	var status = newStory.status;
+	var sprintId = newStory.sprint;
+	// var backlogId = req.param("backlogId");
+	// var userStoryName = req.param("name");
+	// var userStoryId = req.param("userStoryId");
+	// var acceptanceCriteria = req.param('acceptanceCriteria');
+	// var days = req.param("days");
+	// var points = req.param("points");
+	// var resources = req.param("resources");
+	// var risks = req.param("risks");
+	// var status = req.param("status");
+	// var sprintId = req.param("sprint");
+
+	// if (!userId || !projectName || !backlogId || !userStoryId || !days
+	// 		|| !points || userId === undefined || projectName === undefined
+	// 		|| backlogId === undefined || userStoryId === undefined
+	// 		|| days === undefined || points === undefined) {
+	// 	res.send({
+	// 		"error" : "Insufficient details"
+	// 	});
+	// } else {
+console.log('project name '+projectName+userId);
 		if (status === undefined) {
 			status = 'TO DO';
 		}
@@ -1084,7 +1102,6 @@ exports.addUserStory = function(req, res) {
 														'userStories' : {
 															'id' : userStoryId,
 															'name' : userStoryName,
-															'duration' : userStoryId,
 															'days' : days,
 															'points' : points,
 															'acceptanceCriteria' : acceptanceCriteria,
@@ -1105,7 +1122,7 @@ exports.addUserStory = function(req, res) {
 							}
 						});
 
-	}
+	// }
 };
 
 /**
@@ -1189,8 +1206,11 @@ exports.addCard = function(req, res) {
 	// var userId = req.param("userId");
 	// var projectName = req.param("projectName");
 
-	var userId = "g.apoorvareddy@gmail.com";
-	var projectName = "Testing Project";
+	var userId = req.session.userId;
+	var projectName = req.param("projectName");
+	if(projectName===undefined){
+		projectName = "Testing Project";
+	}
 
 	var cardId = req.param("cardId");
 	var name = req.param("cardName");
@@ -1254,7 +1274,7 @@ exports.addCard = function(req, res) {
  * Removes project from any type of tenant.
  */
 exports.removeProject = function(req, res) {
-	var userId = req.param("userId");
+	var userId = req.session.userId;
 	var projectName = req.param("projectName");
 	var modelType = req.param("modelType");
 
@@ -1273,8 +1293,8 @@ exports.removeProject = function(req, res) {
  * Updates user details.
  */
 exports.updateUser = function(req, res) {
-	var userId = req.param("userId");
-	var modelType = req.param("modelType");
+	var userId = req.session.userId;
+	var modelType = req.session.modelType;
 	var firstName = req.param("firstName");
 	var lastName = req.param("lastName");
 
@@ -1310,7 +1330,6 @@ exports.createProject = function(req, res) {
 	var projectName = req.param('projectName');
 	var projectDescription = req.param('projectDescription');
 	var modelType = req.session.modelType;
-	console.log(modelType);
 	var taskType;
 	if (modelType === 'waterfall') {
 		taskType = 'tasks';
@@ -1370,7 +1389,7 @@ exports.getCustomFields = function(req, res) {
 exports.createCustomField = function(req, res) {
 	// var userId = req.session.userId;
 	// var userId = req.param('userId');
-	var userId = 'abcd@gm.com';
+	var userId = req.session.userId;
 	var mongo = db.mongo;
 
 	// var fieldNa = req.param('fieldName');
